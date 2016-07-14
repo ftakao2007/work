@@ -1,0 +1,9 @@
+jenkins:
+   image: jenkins:latest
+   container_name: jenkins
+   tty: true
+   environment:
+     - JAVA_OPTS="-Duser.timezone=Asia/Tokyo -Djava.awt.headless=true -Dorg.apache.commons.jelly.tags.fmt.timeZone=Asia/Tokyo"
+   ports:
+     - "8080:8080"
+     - "50000:50000"

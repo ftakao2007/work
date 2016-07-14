@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  roles:
+
+    # dockerのインストール
+    - {role: ../common-roles/docker.ubuntu, docker_user: vagrant}

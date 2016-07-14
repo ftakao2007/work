@@ -1,0 +1,6 @@
+registry:
+   image: registry
+   container_name: registry
+   tty: true
+   ports:
+     - "5000:5000"

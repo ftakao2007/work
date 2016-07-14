@@ -1,0 +1,5 @@
+sample:
+ image: ubuntu:latest
+ tty: true
+ container_name: sample
+ command: /bin/bash --login
