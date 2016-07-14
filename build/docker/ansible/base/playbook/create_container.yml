@@ -1,0 +1,9 @@
+- hosts: docker_hosts
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: deploy centos container
+      docker: image=centos:centos6 name=base tty=yes
+
+
+#      docker: image=centos:centos6 name=base ports=8081:80 expose=80 tty=yes docker_api_version=1.21
