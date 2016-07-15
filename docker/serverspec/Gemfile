@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'serverspec'
+gem 'rake'
+gem 'highline'
+gem 'specinfra-backend-extension-ssh_su'

@@ -1,0 +1,1 @@
+../specfile/base_package_spec.rb

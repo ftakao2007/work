@@ -1,0 +1,5 @@
+127.0.0.1:    ### localhost   テスト
+  :roles:
+    - base
+  :listen_port_ssh: 22
+  :host_name: localhost

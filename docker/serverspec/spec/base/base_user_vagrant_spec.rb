@@ -1,0 +1,1 @@
+../specfile/base_user_vagrant_spec.rb
