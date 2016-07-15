@@ -1,1 +1,5 @@
 *retry
+serverspec/vendor
+serverspec/test_result
+serverspec/.bundle
+serverspec/.rspec

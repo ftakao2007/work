@@ -1,0 +1,22 @@
+#jenkins_data_volume:
+#   image: busybox:latest
+#   container_name: jenkins_data_volume
+#   tty: true
+#   volumes:
+#     - /var/lib/jenkins_home
+
+jenkins:
+   image: jenkins:latest
+   container_name: jenkins
+   tty: true
+   environment:
+     - JAVA_OPTS="-Duser.timezone=Asia/Tokyo -Djava.awt.headless=true -Dorg.apache.commons.jelly.tags.fmt.timeZone=Asia/Tokyo"
+   volumes:
+     - /home/vagrant/containers/jenkins_home:/var/jenkins_home 
+   #volumes_from:
+   #  - jenkins_data_volume:rw
+   ports:
+     - "8080:8080"
+     - "50000:50000"
+
+

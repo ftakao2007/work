@@ -3,7 +3,11 @@
   become: yes
   tasks:
     - name: deploy centos container
-      docker: image=centos:centos6 name=base tty=yes
-
+      docker: 
+        image=centos:centos6
+        name=base
+        ports=2222:22
+        expose=22
+        tty=yes
 
 #      docker: image=centos:centos6 name=base ports=8081:80 expose=80 tty=yes docker_api_version=1.21
