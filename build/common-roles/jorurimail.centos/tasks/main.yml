@@ -45,6 +45,9 @@
 - name: DB初期化方法のメモを転送
   copy: src=init_db.txt dest=/root/init_db.txt mode=0644
 
+- name: 起動スクリプトを転送
+  copy: src=init_jorurimail_webdb.sh dest=/root/init_jorurimail_webdb.sh mode=0755
+
 - name: 所有者を変更
   command: chown -R {{ user }}:{{ group }} /var/share/jorurimail
 
