@@ -1,5 +1,5 @@
 ---
-- hosts: containers
+- hosts: all
   gather_facts: yes
   become: yes
   connection: docker
