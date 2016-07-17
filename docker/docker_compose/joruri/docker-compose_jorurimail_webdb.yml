@@ -1,0 +1,8 @@
+jorurimail_webdb:
+   image: ftakao2007/jorurimail_webdb:latest
+   container_name: jorurimail_webdb
+   tty: true
+   ports:
+     - "8082:80"
+   command: sh -c '/root/init_jorurimail_webdb.sh'
+   #command: sh -c ' service httpd start && /bin/bash --login'

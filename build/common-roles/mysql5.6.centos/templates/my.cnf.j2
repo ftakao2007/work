@@ -1,0 +1,96 @@
+[client]
+port = 3306
+socket = /var/lib/mysql/mysql.sock
+default-character-set = utf8
+
+[mysqld]
+# base
+port = 3306
+socket = /var/lib/mysql/mysql.sock
+datadir = /var/lib/mysql
+user = mysql
+symbolic-links = 0
+character-set-server = utf8
+sql_mode = NO_ENGINE_SUBSTITUTION
+bind-address = 0.0.0.0
+
+# slow query
+slow_query_log = 1
+slow_query_log_file = mysql-slow.log 
+long_query_time = 10
+
+# network
+max_allowed_packet = 1G
+wait_timeout = 1200
+max_connections = 1000
+
+# cache, memory
+thread_cache_size = 1000
+table_open_cache = 3072
+table_definition_cache = 1000
+sort_buffer_size = 2M
+read_buffer_size = 2M
+read_rnd_buffer_size = 4M
+query_cache_size = 64M
+join_buffer_size = 1M
+tmp_table_size=256M
+max_heap_table_size=256M
+
+# replication
+server-id = {{ my_conf_server_id }}
+log-bin = mysql-bin
+binlog_format = mixed
+expire_logs_days = 7
+skip-slave-start
+
+# replication Master
+plugin-load=rpl_semi_sync_master=semisync_master.so
+rpl_semi_sync_master_enabled = 1
+rpl_semi_sync_master_timeout = 100
+
+# replication Slave
+#plugin-load=rpl_semi_sync_slave=semisync_slave.so
+#rpl_semi_sync_slave_enabled = 1
+#log_slave_updates
+
+# myisam
+skip-external-locking
+key_buffer = 8M
+myisam_sort_buffer_size = 64K
+
+# innodb
+default-storage-engine = InnoDB
+innodb_log_group_home_dir = /var/lib/mysql
+innodb_data_home_dir = /var/lib/mysql
+innodb_file_per_table
+innodb_data_file_path = ibdata1:10M:autoextend
+innodb_buffer_pool_size = 2G
+innodb_log_file_size = 256M
+innodb_log_files_in_group = 3
+innodb_file_io_threads = 4
+innodb_thread_concurrency = 25
+innodb_flush_log_at_trx_commit = 1
+innodb_log_buffer_size = 16M
+innodb_max_dirty_pages_pct = 90
+innodb_lock_wait_timeout = 120
+innodb_additional_mem_pool_size = 20M
+
+[mysql]
+no-auto-rehash
+
+[mysqldump]
+quick
+max_allowed_packet = 1G
+
+[mysqld_safe]
+log-error = /var/log/mysqld.log
+pid-file = /var/run/mysqld/mysqld.pid
+
+[myisamchk]
+key_buffer = 128M
+sort_buffer_size = 128M
+read_buffer = 2M
+write_buffer = 2M
+
+[mysqlhotcopy]
+interactive-timeout

@@ -1,0 +1,23 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - httpd
+    - httpd-devel
+    - openssl
+    - openssl-devel
+
+- name: /etc/httpd/conf/httpd.confの設置
+  template: src={{ httpd_conf_template }} dest=/etc/httpd/conf/httpd.conf owner=root group=root mode=644
+  tags: httpd.conf
+  notify: httpd restart
+
+- name: /etc/logrotate.d/httpdの設定
+  template: src={{ httpd_logrotate_template }} dest=/etc/logrotate.d/httpd owner=root group=root mode=644
+  tags: logrotate_httpd
+
+- name: apacheの起動と自動起動設定
+  service: name=httpd  state=started enabled=yes
+
+- name: /var/log/httpdディレクトリの権限の変更
+  command: chmod 755 /var/log/httpd

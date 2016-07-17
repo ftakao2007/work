@@ -1,0 +1,37 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - zlib-devel
+    - openssl-devel
+
+- name: ruby-1.9.2-p290.tar.gzのダウンロード
+  get_url: url=https://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p290.tar.gz dest=/usr/local/src/ruby-1.9.2-p290.tar.gz mode=0440
+
+- name: ruby-1.9.2-p290.tar.gzの展開
+  command: tar zxvf /usr/local/src/ruby-1.9.2-p290.tar.gz chdir=/usr/local/src
+  #unarchive: src=/usr/local/src/ruby-1.9.2-p320.tar.gz dest=/usr/local/src copy=no
+
+- name: エラー対応パッチのダウンロード
+  get_url: url=http://joruri.org/download/jorurimail/ruby1.9.2-p290-ossl_pkey_ec.patch dest=/usr/local/src/ruby-1.9.2-p290/ext/openssl/ruby1.9.2-p290-ossl_pkey_ec.patch mode=0440
+
+- name: パッチの適用
+  shell: patch < ruby1.9.2-p290-ossl_pkey_ec.patch chdir=/usr/local/src/ruby-1.9.2-p290/ext/openssl creates=/usr/local/bin/ruby
+  
+- name: ruby-1.9.2-p290のconfigure実行
+  command: ./configure chdir=/usr/local/src/ruby-1.9.2-p290 creates=/usr/local/bin/ruby
+
+- name: ruby-1.9.2-p290のmake実行
+  command: make chdir=/usr/local/src/ruby-1.9.2-p290 creates=/usr/local/bin/ruby
+
+- name: ruby-1.9.2-p290のmake install実行
+  command: make install chdir=/usr/local/src/ruby-1.9.2-p290 creates=/usr/local/bin/ruby
+
+- name: RubyGemsのインストール
+  gem: name=rubygems-update user_install=no version=1.6.2
+
+- name: Update RubyGems
+  shell: update_rubygems
+
+#- name: bundlerのインストール
+#  gem: name=bundler user_install=no version=1.0.15 

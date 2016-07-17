@@ -1,0 +1,8 @@
+---
+# varss file for ansible-role-passenger
+
+passenger_packages:
+- httpd
+- httpd-devel
+- libcurl-devel
+- gcc-c++

@@ -1,0 +1,11 @@
+- hosts: docker_hosts
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: deploy centos container
+      docker: 
+        image=centos:centos6
+        name=jorurimail_webdb
+        ports=8082:80
+        expose=80
+        tty=yes

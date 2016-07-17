@@ -1,0 +1,87 @@
+---
+- hosts: containers
+  gather_facts: yes
+  become: yes
+  connection: docker
+  vars:
+    user_name: joruri
+    user_uid: 1001
+    user_passwd: $1$SomeSalt$ZSU2MwC9RbVz5E6EYFgjV1
+  tasks:
+    - name: localeをja_JP.UTF-8に変更(yum reinstall glibc-common)
+      shell: yum reinstall -y glibc-common
+
+    - name: localeをja_JP.UTF-8に変更(localedef -v -c -i ja_JP -f UTF-8 ja_JP.UTF-8; echo "";)
+      shell: localedef -v -c -i ja_JP -f UTF-8 ja_JP.UTF-8; echo "";
+
+    - name: localeをja_JP.UTF-8に変更(/etc/profileにexport LANG=ja_JP.UTF-8を設定)
+      lineinfile: "dest=/etc/profile backup=no state=present regexp='^LANG=' line='export LANG=ja_JP.UTF-8'"
+
+    - name: localeをja_JP.UTF-8に変更(/etc/sysconfig/i18nにLANG=ja_JP.UTF-8を設定)
+      lineinfile: "dest=/etc/sysconfig/i18n backup=no state=present regexp='^LANG=' line='LANG=ja_JP.UTF-8'"
+      when: ansible_distribution_major_version=="6"
+
+    - name: TimezoneをJSTに変更(/etc/localtimeを削除)
+      file: path=/etc/localtime state=absent
+
+    - name: TimezoneをJSTに変更(/etc/localtimeから/usr/share/zoneinfo/Asia/Tokyoにsymlinkをはる)
+      file: src=/usr/share/zoneinfo/Asia/Tokyo dest=/etc/localtime owner=root group=root state=link
+
+    - name: TERMにxtermを設定(/etc/profileにexport TERM=xtermを設定)
+      lineinfile: "dest=/etc/profile backup=no state=present regexp='^LANG=' line='export TERM=xterm'"
+
+    - name: yum update
+      yum: name=* state=latest
+
+    - name: epelリポジトリの追加
+      yum: name=epel-release state=present
+      tags: epel
+    
+    - name: 必要なパッケージのインストール
+      yum: name={{ item }} state=latest
+      with_items:
+        - make
+        - gcc-c++
+        - wget
+        - git
+        - openssh-clients
+        - telnet
+        - traceroute
+        - perl
+        - patch
+        - tcpdump
+        - screen
+        - bind-utils
+        - strace
+        - sysstat
+        - lsof
+        - mailx
+        - zip
+        - unzip
+        - bzip2
+        - net-tools
+        - sudo
+        - pv
+        - which
+        - openssh-server
+
+    - name: sshdの起動
+      shell: /etc/init.d/sshd restart
+
+    - name: ユーザを作成
+      user: name={{ user_name }}
+            uid={{ user_uid }}
+            groups="wheel"
+            generate_ssh_key=yes
+            ssh_key_bits=2048
+            password="{{ user_passwd }}"
+            state=present
+
+    - name: sudoers設定
+      lineinfile: "dest=/etc/sudoers backup=no state=present regexp='^{{ user_name }}' line='{{ user_name }} ALL=(ALL) NOPASSWD: ALL'"
+
+    - name: sudoersの設定(secure_path)
+      lineinfile: dest=/etc/sudoers state=present backrefs=yes regexp='^Defaults\s*secure_path' line='Defaults        secure_path = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+    - name: sudoersの設定(requiretty)
+      lineinfile: dest=/etc/sudoers state=present backrefs=yes regexp='^Defaults\s*requiretty' line='#Defaults requiretty'

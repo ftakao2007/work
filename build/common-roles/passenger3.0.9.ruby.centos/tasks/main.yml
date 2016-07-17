@@ -1,0 +1,13 @@
+---
+- name: passengerに必要なパッケージをインストール
+  yum: name={{ passenger_packages | join(",") }}
+
+- name: passengerをインストール
+  gem: name=passenger user_install=no version={{ passenger_version }}
+
+- name: passenger module のインストール
+  command: passenger-install-apache2-module --auto
+
+- name: バーチャルホスト用confファイルの配置
+  template: src={{ passenger_conf_template }} dest=/etc/httpd/conf.d/passenger.conf
+  notify: httpd restart
