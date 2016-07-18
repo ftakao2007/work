@@ -6,7 +6,7 @@
   vars:
     user_name: joruri
     user_uid: 1001
-    user_passwd: $1$SomeSalt$ZSU2MwC9RbVz5E6EYFgjV1
+    user_passwd: $1$SomeSalt$xg7BaTdMtPm8RHKM70Veb0
   tasks:
     - name: localeをja_JP.UTF-8に変更(yum reinstall glibc-common)
       shell: yum reinstall -y glibc-common
