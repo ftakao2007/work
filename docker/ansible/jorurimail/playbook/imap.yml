@@ -1,0 +1,17 @@
+---
+- hosts: imap
+  become: yes
+  connection: docker
+  gather_facts: no
+  vars:
+    web_server_ip: XXX.XXX.XXX.XXX
+    user: joruri
+    group: joruri
+    user_uid: 1001
+    user_passwd: $1$SomeSalt$ZSU2MwC9RbVz5E6EYFgjV1
+  roles:
+
+    # dovecotのインストール
+    - {role: ../common-roles/dovecot.centos,
+       tags: dovecot
+      }

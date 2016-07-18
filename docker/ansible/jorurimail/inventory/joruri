@@ -9,3 +9,6 @@ jorurimail_web
 
 [jorurimail_db]
 jorurimail_db
+
+[imap]
+imap
