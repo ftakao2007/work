@@ -1,0 +1,42 @@
+smtp:
+   image: ftakao2007/smtp:latest
+   container_name: smtp
+   tty: true
+   volumes:
+     - /home
+   expose:
+     - "25"
+     - "587"
+   command: sh -c 'service postfix restart && /bin/bash --login'
+
+imap:
+   image: ftakao2007/imap:latest
+   container_name: imap
+   tty: true
+   volumes_from:
+     - smtp
+   expose:
+     - "143"
+   command: sh -c 'service dovecot restart && /bin/bash --login'
+
+jorurimail_db:
+   image: ftakao2007/jorurimail_db:latest
+   container_name: jorurimail_db
+   tty: true
+   expose:
+     - "3306"
+   command: sh -c 'service mysqld restart && /bin/bash --login'
+
+jorurimail_web:
+   image: ftakao2007/jorurimail_web:latest
+   container_name: jorurimail_web
+   tty: true
+   links:
+     - jorurimail_db
+     - imap
+     - smtp
+   ports:
+     - "8082:80"
+   command: sh -c '/root/init_jorurimail_web_imap.sh'
+   #command: sh -c '/root/init_jorurimail_web.sh'
+   #command: sh -c ' service httpd start && /bin/bash --login'

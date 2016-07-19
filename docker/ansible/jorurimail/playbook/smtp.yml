@@ -1,0 +1,11 @@
+---
+- hosts: smtp
+  become: yes
+  connection: docker
+  gather_facts: no
+  roles:
+
+    # postfixのインストール
+    - {role: ../common-roles/postfix.centos,
+       tags: postfix
+      }

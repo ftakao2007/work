@@ -12,3 +12,6 @@ jorurimail_db
 
 [imap]
 imap
+
+[smtp]
+smtp
