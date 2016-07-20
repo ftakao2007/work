@@ -1,0 +1,11 @@
+---
+- hosts: ldap
+  become: yes
+  connection: docker
+  gather_facts: no
+  roles:
+
+    # openldapのインストール
+    - {role: ../common-roles/openldap.centos,
+       tags: openldap
+      }

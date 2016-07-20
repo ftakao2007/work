@@ -1,0 +1,36 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - compat-openldap
+    - openldap-clients
+    - openldap-servers
+    - openldap
+    - apr-util-ldap
+    - nss-pam-ldapd
+    - pam_ldap
+    - openssh-clients
+
+#- name: /dataディレクトリの作成
+#  file: path=/data state=directory owner={{ user }} group={{ group }} mode=0755
+
+#- name: /data配下に/var/lib/ldapを移動
+#  command: mv /var/lib/ldap /data creates=/data/ldap
+
+#- name: /var/lib配下に /data/ldapへのsymlink作成
+#  file: src=/data/ldap dest=/var/lib/ldap owner={{ user }} group={{ group }} state=link
+
+#- name: /etc/init.d/slapdをhomeに移動
+#  command: mv /etc/init.d/slapd /home/{{ user }} creates=/home/{{ user }}/slapd
+
+- name: /etc/openldap/slapd.dディレクトリをリネーム
+  command: mv /etc/openldap/slapd.d /etc/openldap/slapd.d.old creates=/etc/openldap/slapd.d.old
+
+#- name: 本番の/etc/openldap/slapd.conf を転送 (fsldp006 2016/05/19)
+#  copy: src=slapd.conf dest=/etc/openldap/slapd.conf owner=ldap group=ldap mode=644
+
+#- name: 本番の/etc/init.d/slapd を転送 (fsldp006 2016/05/19)
+#  copy: src=slapd dest=/etc/init.d/slapd owner=root group=root mode=755
+
+- name: slapdの起動と自動起動設定
+  service: name=slapd state=started enabled=yes
