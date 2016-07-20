@@ -18,3 +18,9 @@ smtp
 
 [ldap]
 ldap
+
+[imap_ldap]
+imap_ldap
+
+[smtp_ldap]
+smtp_ldap

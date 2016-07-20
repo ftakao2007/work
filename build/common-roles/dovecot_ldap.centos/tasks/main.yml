@@ -1,0 +1,46 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - dovecot
+    - openldap-clients
+    - nscd
+    - nss-pam-ldapd
+    - authconfig
+    - openssh-server
+
+- name: /etc/dovecot/dovecot.confの設置
+  copy: src=dovecot.conf dest=/etc/dovecot/dovecot.conf owner=root group=root mode=644
+
+- name: /etc/dovecot/conf.d/10-auth.confの設置
+  copy: src=10-auth.conf dest=/etc/dovecot/conf.d/10-auth.conf owner=root group=root mode=644
+
+- name: /etc/dovecot/conf.d/10-mail.confの設置
+  copy: src=10-mail.conf dest=/etc/dovecot/conf.d/10-mail.conf owner=root group=root mode=644
+
+- name: /etc/dovecot/conf.d/20-pop3.confの設置
+  copy: src=20-pop3.conf dest=/etc/dovecot/conf.d/20-pop3.conf owner=root group=root mode=644
+
+- name: dovecotの起動と自動起動設定
+  service: name=dovecot state=started enabled=yes
+
+- name: /etc/nslcd.confの設置
+  copy: src=nsldc.conf dest=/etc/nslcd.conf owner=root group=root mode=644
+
+- name: /etc/pam_ldap.confの設置
+  copy: src=pam_ldap.conf dest=/etc/pam_ldap.conf owner=root group=root mode=644
+
+- name: /etc/openldap/ldap.confの設置
+  copy: src=ldap.conf dest=/etc/openldap/ldap.conf owner=root group=root mode=644
+
+- name: /etc/pam.d/system-authの設置
+  copy: src=system-auth dest=/etc/pam.d/system-auth owner=root group=root mode=644
+
+- name: /etc/pam.d/sshdの設置
+  copy: src=sshd dest=/etc/pam.d/sshd owner=root group=root mode=644
+
+- name: ログインすると自動的にホームディレクトリが作成される設定に変更
+  shell: authconfig --enablemkhomedir --update
+
+- name: nslcdの起動と自動起動設定
+  service: name=nslcd state=started enabled=yes

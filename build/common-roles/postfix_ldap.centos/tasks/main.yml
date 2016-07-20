@@ -1,0 +1,14 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - postfix
+    - openldap-clients
+    - nscd
+    - nss-pam-ldapd
+
+- name: /etc/postfix/main.cfの設置
+  copy: src=main.cf dest=/etc/postfix/main.cf owner=root group=root mode=644
+
+- name: postfixの起動と自動起動設定
+  service: name=postfix  state=started enabled=yes

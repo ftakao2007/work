@@ -1,0 +1,9 @@
+ldap:
+   image: ftakao2007/ldap:latest
+   container_name: ldap
+   tty: true
+   expose:
+     - "389"
+   ports:
+     - "389:389"
+   command: sh -c 'service slapd restart && service rsyslog restart && /bin/bash --login'

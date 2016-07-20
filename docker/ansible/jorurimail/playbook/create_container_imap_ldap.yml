@@ -1,0 +1,10 @@
+- hosts: docker_hosts
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: deploy centos container
+      docker: 
+        image=centos:centos6
+        name=imap_ldap
+        expose=143
+        tty=yes

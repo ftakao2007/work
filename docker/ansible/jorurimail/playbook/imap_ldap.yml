@@ -1,0 +1,11 @@
+---
+- hosts: imap_ldap
+  become: yes
+  connection: docker
+  gather_facts: no
+  roles:
+
+    # dovecotのインストール
+    - {role: ../common-roles/dovecot_ldap.centos,
+       tags: dovecot_ldap
+      }

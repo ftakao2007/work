@@ -1,0 +1,32 @@
+ldap:
+   image: ftakao2007/ldap:latest
+   container_name: ldap
+   tty: true
+   expose:
+     - "389"
+   ports:
+     - "389:389"
+   command: sh -c 'service slapd restart && service rsyslog restart && /bin/bash --login'
+
+jorurimail_db:
+   image: ftakao2007/jorurimail_db:latest
+   container_name: jorurimail_db
+   tty: true
+   expose:
+     - "3306"
+   command: sh -c 'service mysqld restart && service rsyslog restart && /bin/bash --login'
+
+jorurimail_web:
+   image: ftakao2007/jorurimail_web:latest
+   container_name: jorurimail_web
+   tty: true
+   links:
+     - jorurimail_db
+     - ldap
+   ports:
+     - "8082:80"
+   command: sh -c '/root/init_jorurimail_web_imap_smtp_ldap.sh'
+   #command: sh -c '/root/init_jorurimail_web_imap_smtp.sh'
+   #command: sh -c '/root/init_jorurimail_web_imap.sh'
+   #command: sh -c '/root/init_jorurimail_web.sh'
+   #command: sh -c ' service httpd start && /bin/bash --login'
