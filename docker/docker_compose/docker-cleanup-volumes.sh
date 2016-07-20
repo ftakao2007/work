@@ -1,0 +1,1 @@
+../bin/docker-cleanup-volumes.sh
