@@ -25,7 +25,7 @@
   service: name=dovecot state=started enabled=yes
 
 - name: /etc/nslcd.confの設置
-  copy: src=nsldc.conf dest=/etc/nslcd.conf owner=root group=root mode=644
+  copy: src=nslcd.conf dest=/etc/nslcd.conf owner=root group=root mode=644
 
 - name: /etc/pam_ldap.confの設置
   copy: src=pam_ldap.conf dest=/etc/pam_ldap.conf owner=root group=root mode=644
