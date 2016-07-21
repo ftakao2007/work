@@ -14,6 +14,8 @@
   service: name=docker state=started enabled=yes
   when: ansible_virtualization_type != "docker"
   
-
 - name: add user to docker group
   shell: usermod -aG docker {{ docker_user }}
+
+- name: install docker-py
+  pip: name=docker-py 

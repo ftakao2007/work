@@ -4,5 +4,8 @@
   become: yes
   roles:
 
+    # pipのインストール
+    - {role: ../common-roles/pip.ubuntu}
+
     # dockerのインストール
     - {role: ../common-roles/docker.ubuntu, docker_user: vagrant}
