@@ -1,0 +1,19 @@
+---
+- name: yum update
+  yum: name=* state=latest
+
+- name: add docker.repo
+  copy: src=docker.repo dest=/etc/yum.repos.d/docker.repo owner=root group=root mode=0644
+
+- name: install docker
+  yum: name={{ item }} state=latest
+  with_items:
+    - docker-engine
+
+- name: enable and start docker
+  service: name=docker state=started enabled=yes
+  when: ansible_virtualization_type != "docker"
+  
+
+- name: add user to docker group
+  shell: usermod -aG docker {{ docker_user }}

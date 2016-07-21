@@ -1,0 +1,3 @@
+---
+- name: pipのインストール
+  shell: curl -kL https://bootstrap.pypa.io/get-pip.py | python

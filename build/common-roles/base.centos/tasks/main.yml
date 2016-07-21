@@ -1,0 +1,38 @@
+---
+- name: yum update
+  yum: name=* state=latest
+
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - make
+    - gcc-c++
+    - wget
+    - git
+    - openssh-clients
+    - telnet
+    - traceroute
+    - perl
+    - patch
+    - tcpdump
+    - screen
+    - bind-utils
+    - strace
+    - sysstat
+    - lsof
+    - mailx
+    - zip
+    - unzip
+    - bzip2
+    - net-tools
+    - sudo
+    - pv
+    - which
+    - openssh-server
+
+- name: epelリポジトリの追加
+  yum: name=epel-release state=present
+  tags: epel
+
+- name: sudoersの設定(requiretty)
+  lineinfile: dest=/etc/sudoers state=present backrefs=yes regexp='^Defaults\s*requiretty' line='#Defaults requiretty'

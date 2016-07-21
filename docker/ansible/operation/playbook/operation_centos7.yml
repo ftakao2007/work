@@ -1,0 +1,37 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+  connection: docker
+  vars:
+    user_name: ftakao2007
+  roles:
+
+    # pipのインストール
+    - {role: ../common-roles/pip.centos,
+       tags: pip
+      }
+
+    # ansibleのインストール
+    - {role: ../common-roles/ansible.centos,
+       tags: ansible
+      }
+
+    # rbenvのインストール
+    - {role: ../common-roles/ftakao2007.rbenv.centos, rbenv_ruby_version: 2.3.1,
+       tags: rbenv
+      }
+
+    # dockerのインストール
+    - {role: ../common-roles/docker.centos, docker_user: '{{ user_name }}',
+       tags: docker
+      }
+
+    # docker-composeのインストール
+    - {role: ../common-roles/docker-compose.centos,
+       tags: docker-compose
+      }
+
+  post_tasks:
+    - name: ftakao2007/workをcloneする
+      git: dest=/home/{{ user_name }}/work repo=https://github.com/ftakao2007/work.git

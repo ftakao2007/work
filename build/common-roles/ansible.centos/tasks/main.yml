@@ -1,0 +1,14 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - gcc
+    - python-devel
+    - python-yaml
+    - openssl-devel
+
+- name: ansibleのインストール
+  command: pip install ansible
+
+- name: setuptoolsのupgrade
+  command: pip install --upgrade setuptools
