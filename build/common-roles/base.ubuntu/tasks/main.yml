@@ -1,0 +1,35 @@
+---
+- name: updates a server
+  apt: update_cache=yes
+
+- name: install apt requirements
+  apt: pkg=aptitude
+
+- name: upgrade a server
+  apt: upgrade=full
+
+- name: 必要なパッケージのインストール
+  apt: name={{ item }} state=latest
+  with_items:
+    - build-essential
+    - wget
+    - git
+    - telnet
+    - traceroute
+    - perl
+    - patch
+    - tcpdump
+    - screen
+    - strace
+    - sysstat
+    - lsof
+    - zip
+    - unzip
+    - bzip2
+    - sudo
+    - pv
+    - openssh-server
+    - curl
+
+- name: sudoersの設定(requiretty)
+  lineinfile: dest=/etc/sudoers state=present backrefs=yes regexp='^Defaults\s*requiretty' line='#Defaults requiretty'

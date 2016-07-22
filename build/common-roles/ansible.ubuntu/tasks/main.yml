@@ -1,0 +1,14 @@
+---
+- name: 必要なパッケージのインストール
+  apt: name={{ item }} state=latest
+  with_items:
+    - build-essential
+    - libssl-dev
+    - libffi-dev
+    - python-dev
+
+- name: ansibleのインストール
+  command: pip install ansible
+
+- name: setuptoolsのupgrade
+  command: pip install --upgrade setuptools
