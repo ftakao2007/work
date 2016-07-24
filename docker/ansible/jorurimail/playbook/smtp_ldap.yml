@@ -1,5 +1,5 @@
 ---
-- hosts: smtp
+- hosts: all
   become: yes
   connection: docker
   gather_facts: no

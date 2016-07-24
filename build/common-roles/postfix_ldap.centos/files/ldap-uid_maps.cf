@@ -1,0 +1,6 @@
+server_host = 10.136.11.55:389
+search_base = dc=joruri,dc=example,dc=com
+bind = no
+
+query_filter = mail=%s
+result_attribute = uid

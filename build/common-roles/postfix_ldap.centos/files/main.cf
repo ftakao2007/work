@@ -676,3 +676,7 @@ sample_directory = /usr/share/doc/postfix-2.6.6/samples
 # readme_directory: The location of the Postfix README files.
 #
 readme_directory = /usr/share/doc/postfix-2.6.6/README_FILES
+
+virtual_mailbox_domains = joruri.example.com
+virtual_alias_maps = ldap:/etc/postfix/ldap-aliases.cf
+virtual_uid_maps = ldap:/etc/postfix/ldap-uid_maps.cf
