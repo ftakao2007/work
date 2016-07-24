@@ -18,15 +18,19 @@ smtp:
      - "587"
    command: sh -c 'service postfix restart && service rsyslog restart && /bin/bash --login'
 
-imap:
-   image: ftakao2007/imap:latest
-   container_name: imap
+imap_ldap:
+   image: ftakao2007/imap_ldap:latest
+   container_name: imap_ldap
    tty: true
+   privileged: true
    volumes_from:
      - smtp
+   links:
+     - ldap
    expose:
      - "143"
-   command: sh -c 'service dovecot restart && service rsyslog restart && /bin/bash --login'
+   command: sh -c '/bin/sh /root/init_imap_ldap.sh'
+   #command: sh -c 'service dovecot restart && service rsyslog restart && /bin/bash --login'
 
 jorurimail_db:
    image: ftakao2007/jorurimail_db:latest
@@ -42,12 +46,13 @@ jorurimail_web:
    tty: true
    links:
      - jorurimail_db
-     - imap
+     - imap_ldap
      - smtp
      - ldap
    ports:
      - "8082:80"
-   command: sh -c '/root/init_jorurimail_web_imap_smtp.sh'
+   command: sh -c '/root/init_jorurimail_web_imap_smtp_ldap.sh'
+   #command: sh -c '/root/init_jorurimail_web_imap_smtp.sh'
    #command: sh -c '/root/init_jorurimail_web_imap.sh'
    #command: sh -c '/root/init_jorurimail_web.sh'
    #command: sh -c ' service httpd start && /bin/bash --login'
