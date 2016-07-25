@@ -1,5 +1,5 @@
 ---
-- hosts: jorurimail_web
+- hosts: jorurigw_web
   become: yes
   connection: docker
   gather_facts: no
@@ -9,12 +9,12 @@
     group: joruri
     user_uid: 1001
     user_passwd: $1$SomeSalt$ZSU2MwC9RbVz5E6EYFgjV1
-    ruby_library_version: "2.2.0"
+    ruby_library_version: "2.3.0"
     passenger_version: "4.0.58"
   roles:
 
-    # ruby-2.2.2のインストール
-    - {role: ../common-roles/ruby-2.2.2.centos,
+    # ruby-2.3.1のインストール
+    - {role: ../common-roles/ruby-2.3.1.centos,
        tags: ruby
       }
 
@@ -34,7 +34,7 @@
    
     # JoruriGwの設定
     - {role: ../common-roles/jorurigw.centos, 
-       delayed_job_template: delayed_job.j2
-       jorurigw_conf_template: jorurigw.conf.j2
+       delayed_job_template: delayed_job.j2,
+       jorurigw_conf_template: jorurigw.conf.j2,
        tags: jorurigw
       }

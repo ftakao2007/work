@@ -1,0 +1,39 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - zlib-devel
+    - openssl-devel
+
+#- name: yaml-0.1.6.tar.gzのダウンロード
+#  get_url: url=http://pyyaml.org/download/libyaml/yaml-0.1.6.tar.gz dest=/usr/local/src/yaml-0.1.6.tar.gz mode=0440
+
+#- name: yaml-0.1.6.tar.gzの展開
+#  unarchive: src=/usr/local/src/yaml-0.1.6.tar.gz dest=/usr/local/src copy=no
+
+#- name: yaml-0.1.6のconfigure実行
+#  command: ./configure chdir=/usr/local/src/yaml-0.1.6
+
+#- name: yaml-0.1.6のmake実行
+#  command: make chdir=/usr/local/src/yaml-0.1.6
+
+#- name: yaml-0.1.6のmake install実行
+#  command: make install chdir=/usr/local/src/yaml-0.1.6
+
+- name: ruby-2.3.1.tar.gzのダウンロード
+  get_url: url=https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz dest=/usr/local/src/ruby-2.3.1.tar.gz mode=0440
+
+- name: ruby-2.3.1.tar.gzの展開
+  unarchive: src=/usr/local/src/ruby-2.3.1.tar.gz dest=/usr/local/src copy=no
+
+- name: ruby-2.3.1のconfigure実行
+  command: ./configure --prefix=/usr/local chdir=/usr/local/src/ruby-2.3.1
+
+- name: ruby-2.3.1のmake実行
+  command: make chdir=/usr/local/src/ruby-2.3.1
+
+- name: ruby-2.3.1のmake install実行
+  command: make install chdir=/usr/local/src/ruby-2.3.1
+
+- name: bundlerのインストール
+  gem: name=bundler user_install=no state=latest
