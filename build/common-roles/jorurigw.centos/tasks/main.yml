@@ -1,0 +1,53 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - libxslt
+    - libxslt-devel
+    - libxml2-devel
+    - libjpeg-devel
+    - libpng-devel
+    - ImageMagick
+    - ImageMagick-devel
+    - curl-devel    
+    - libevent
+    - libevent-devel
+    - openssl
+    - openssl-devel
+    - mysql-devel
+
+- name: /var/shareディレクトリの作成
+  file: path=/var/share state=directory owner={{ user }} group={{ group }} mode=0755
+
+- name: jorurigwをcloneする
+  git: dest=/var/share/jorurigw repo=https://github.com/joruri/joruri-gw.git
+
+- name: bundle installの実行
+  command: bundle install chdir=/var/share/jorurigw
+
+- name: rake assets:precompile RAILS_ENV=productionの実行
+  command: rake assets:precompile RAILS_ENV=production chdir=/var/share/jorurigw
+
+- name: cronによる定期実行処理を設定
+  command: whenever -w --set 'environment=production' chdir=/var/share/jorurigw
+
+- name: 所有者を変更
+  command: chown -R {{ user }}:{{ group }} /var/share/jorurigw
+
+- name: delayed_jobの設定ファイルの設置
+  template: src={{ delayed_job_template }} dest=/etc/init.d/delayed_job owner=root group=root mode=755
+
+- name: delayed_jobをchkconfigに追加
+  command: /sbin/chkconfig --add delayed_job
+
+- name: delayed_jobの自動起動設定
+  command: /sbin/chkconfig delayed_job on
+
+- name: delayed_jobの起動
+  command: /etc/init.d/delayed_job start
+
+- name: /etc/httpd/conf.d配下にjorurigw.confの設置
+  template: src={{ jorurigw_conf_template }} dest=/etc/httpd/conf.d/jorurigw.conf owner=root group=root mode=644
+
+- name: httpdの再起動
+  service: name=httpd state=restarted
