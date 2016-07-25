@@ -2,21 +2,26 @@ ldap:
    image: ftakao2007/ldap:latest
    container_name: ldap
    tty: true
+   ports:
+     - "389:389"
    expose:
      - "389"
    command: sh -c 'service slapd restart && service rsyslog restart && /bin/bash --login'
 
-smtp:
-   image: ftakao2007/smtp:latest
-   container_name: smtp
+smtp_ldap:
+   image: ftakao2007/smtp_ldap:latest
+   container_name: smtp_ldap
    tty: true
    privileged: true
    volumes:
      - /home
+   links:
+     - ldap
    expose:
      - "25"
      - "587"
-   command: sh -c 'service postfix restart && service rsyslog restart && /bin/bash --login'
+   command: sh -c '/bin/sh /root/init_smtp_ldap.sh'
+   #command: sh -c 'service postfix restart && service rsyslog restart && /bin/bash --login'
 
 imap_ldap:
    image: ftakao2007/imap_ldap:latest
@@ -24,7 +29,7 @@ imap_ldap:
    tty: true
    privileged: true
    volumes_from:
-     - smtp
+     - smtp_ldap
    links:
      - ldap
    expose:
@@ -47,7 +52,7 @@ jorurimail_web:
    links:
      - jorurimail_db
      - imap_ldap
-     - smtp
+     - smtp_ldap
      - ldap
    ports:
      - "8082:80"

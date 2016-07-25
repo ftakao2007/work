@@ -1,4 +1,4 @@
-server_host = 10.136.11.55:389
+server_host = 172.16.0.3:389
 search_base = dc=joruri,dc=example,dc=com
 bind = no
 

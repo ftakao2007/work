@@ -25,10 +25,16 @@
   copy: src=ldap.conf dest=/etc/openldap/ldap.conf owner=root group=root mode=644
 
 - name: /etc/pam.d/system-auth-acの設置
-  copy: src=system-auth dest=/etc/pam.d/system-auth-ac owner=root group=root mode=644
+  copy: src=system-auth-ac dest=/etc/pam.d/system-auth-ac owner=root group=root mode=644
 
 - name: /etc/pam.d/sshdの設置
   copy: src=sshd dest=/etc/pam.d/sshd owner=root group=root mode=644
+
+- name: /etc/postfix/ldap-aliases.cfの設置
+  copy: src=ldap-aliases.cf dest=/etc/postfix/ldap-aliases.cf owner=root group=root mode=644
+
+- name: /etc/postfix/ldap-uid_maps.cfの設置
+  copy: src=ldap-uid_maps.cf dest=/etc/postfix/ldap-uid_maps.cf owner=root group=root mode=644
 
 - name: ログインすると自動的にホームディレクトリが作成される設定に変更
   shell: authconfig --enablemkhomedir --update
@@ -37,13 +43,13 @@
   shell: chmod 777 /home
 
 - name: ldapが使われるようにnsswitch.confを修正(passwd)
-  lineinfile: dest=/etc/nsswitch.conf state=present backrefs=yes regexp='^passwd:\s*files' line='passwd:     files ldap'
+  lineinfile: 'dest=/etc/nsswitch.conf state=present backrefs=yes regexp="^passwd:\s*files" line="passwd:     files ldap"'
 
 - name: ldapが使われるようにnsswitch.confを修正(shadow)
-  lineinfile: dest=/etc/nsswitch.conf state=present backrefs=yes regexp='^shadow:\s*files' line='shadow:     files ldap'
+  lineinfile: 'dest=/etc/nsswitch.conf state=present backrefs=yes regexp="^shadow:\s*files" line="shadow:     files ldap"'
 
 - name: ldapが使われるようにnsswitch.confを修正(group)
-  lineinfile: dest=/etc/nsswitch.conf state=present backrefs=yes regexp='^group:\s*files' line='group:     files ldap'
+  lineinfile: 'dest=/etc/nsswitch.conf state=present backrefs=yes regexp="^group:\s*files" line="group:     files ldap"'
 
 - name: nslcdの起動と自動起動設定
   service: name=nslcd state=started enabled=yes
