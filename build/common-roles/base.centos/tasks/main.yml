@@ -2,6 +2,10 @@
 - name: yum update
   yum: name=* state=latest
 
+- name: epelリポジトリの追加
+  yum: name=epel-release state=present
+  tags: epel
+
 - name: 必要なパッケージのインストール
   yum: name={{ item }} state=latest
   with_items:
@@ -30,10 +34,6 @@
     - which
     - openssh-server
   ignore_errors: True
-
-- name: epelリポジトリの追加
-  yum: name=epel-release state=present
-  tags: epel
 
 - name: sudoersの設定(requiretty)
   lineinfile: dest=/etc/sudoers state=present backrefs=yes regexp='^Defaults\s*requiretty' line='#Defaults requiretty'
