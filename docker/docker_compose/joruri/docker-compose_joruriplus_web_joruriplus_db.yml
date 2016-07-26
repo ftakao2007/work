@@ -1,0 +1,18 @@
+joruriplus_db:
+   image: ftakao2007/joruriplus_db:latest
+   container_name: joruriplus_db
+   tty: true
+   expose:
+     - "3306"
+   command: sh -c 'service mysqld restart && service mongod restart && /bin/bash --login'
+
+joruriplus_web:
+   image: ftakao2007/joruriplus_web:latest
+   container_name: joruriplus_web
+   tty: true
+   links:
+     - joruriplus_db
+   ports:
+     - "8086:80"
+   command: sh -c '/root/init_joruriplus_web.sh'
+   #command: sh -c ' service httpd start && /bin/bash --login'

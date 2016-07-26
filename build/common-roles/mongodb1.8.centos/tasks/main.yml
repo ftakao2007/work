@@ -1,0 +1,12 @@
+---
+- name: リポジトリの追加
+  copy: src=mongodb.repo dest=/etc/yum.repos.d/mongodb.repo mode=0644
+
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} enablerepo=10gen state=latest
+  with_items:
+    - mongo18-10gen.x86_64
+    - mongo18-10gen-server.x86_64
+
+- name: mongodbの起動と自動起動設定
+  service: name=mongod  state=started enabled=yes

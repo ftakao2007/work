@@ -1,0 +1,10 @@
+- hosts: docker_hosts
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: deploy centos container
+      docker: 
+        image=centos:centos6
+        name=joruriplus_db
+        expose=3306
+        tty=yes

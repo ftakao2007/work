@@ -1,0 +1,44 @@
+---
+- hosts: joruriplus_web
+  become: yes
+  connection: docker
+  gather_facts: no
+  vars:
+    web_server_ip: XXX.XXX.XXX.XXX
+    user: joruri
+    group: joruri
+    user_uid: 1001
+    user_passwd: $1$SomeSalt$ZSU2MwC9RbVz5E6EYFgjV1
+    ruby_library_version: "1.9.1"
+    passenger_version: "3.0.9"
+  roles:
+
+    # ruby-1.9.2-p290のインストール
+    - {role: ../common-roles/ruby-1.9.2-p290.centos,
+       tags: ruby
+      }
+
+    # railsのインストール
+    - {role: ../common-roles/rails.centos,
+       rails_version: 3.0.0
+      }
+
+    # httpdのインストール
+    - {role: ../common-roles/httpd2.2.centos,
+       httpd_server_ip: "{{ web_server_ip }}",
+       httpd_conf_template: httpd.conf.j2,
+       httpd_logrotate_template: httpd.logrotate.j2,
+       tags: httpd
+      }
+
+    # passenger3.0.9のインストール
+    - {role: ../common-roles/passenger3.0.9.ruby.centos,
+       passenger_conf_template: passenger.conf.ruby.tj2,
+       tags: passenger
+      }
+   
+    # Joruriplusの設定
+    - {role: ../common-roles/joruriplus.centos, 
+       joruriplus_conf_template: joruriplus.conf.j2,
+       tags: joruriplus
+      }

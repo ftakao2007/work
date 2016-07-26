@@ -5,9 +5,12 @@ jorurigw_db:
    environment:
      - DOCKER_HOST_PORT_8082_TCP_ADDR
      - DOCKER_HOST_PORT_8082_TCP_PORT
+     - DOCKER_HOST_PORT_8086_TCP_ADDR
+     - DOCKER_HOST_PORT_8086_TCP_PORT
    expose:
      - "3306"
-   command: sh -c '/bin/sh /root/init_compose_jorurigw_db.sh'
+   command: sh -c '/bin/sh /root/init_compose_jorurigw_jorurimail_joruriplus.sh'
+   #command: sh -c '/bin/sh /root/init_compose_jorurigw_db.sh'
    #command: sh -c 'service mysqld restart && service rsyslog restart && /bin/bash --login'
 
 jorurimail_db:
@@ -17,6 +20,14 @@ jorurimail_db:
    expose:
      - "3306"
    command: sh -c 'service mysqld restart && service rsyslog restart && /bin/bash --login'
+
+joruriplus_db:
+   image: ftakao2007/joruriplus_db:latest
+   container_name: joruriplus_db
+   tty: true
+   expose:
+     - "3306"
+   command: sh -c 'service mysqld restart && service mongod restart && /bin/bash --login'
 
 ldap:
    image: ftakao2007/ldap:latest
@@ -74,6 +85,20 @@ jorurimail_web:
    #command: sh -c '/root/init_jorurimail_web.sh'
    #command: sh -c ' service httpd start && /bin/bash --login'
 
+joruriplus_web:
+   image: ftakao2007/joruriplus_web:latest
+   container_name: joruriplus_web
+   tty: true
+   links:
+     - smtp_ldap
+     - joruriplus_db
+     - ldap
+   ports:
+     - "8086:80"
+   command: sh -c '/root/init_joruriplus_web_ldap.sh'
+   #command: sh -c '/root/init_joruriplus_web.sh'
+   #command: sh -c ' service httpd start && /bin/bash --login'
+
 jorurigw_web:
    image: ftakao2007/jorurigw_web:latest
    container_name: jorurigw_web
@@ -88,3 +113,4 @@ jorurigw_web:
    #command: sh -c '/root/init_jorurigw_web_ldap.sh'
    #command: sh -c '/root/init_jorurigw_web.sh'
    #command: sh -c ' service httpd start && /bin/bash --login'
+

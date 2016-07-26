@@ -1,0 +1,80 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - libxslt
+    - libxslt-devel
+    - libxml2-devel
+    - curl-devel    
+    - openssl
+    - openssl-devel
+    - libjpeg-devel
+    - libpng-devel
+    - librsvg2-devel
+    - ghostscript-devel
+    - ImageMagick
+    - ImageMagick-devel
+    - shared-mime-info
+    - file-devel
+    - mysql
+    - mysql-devel
+
+- name: /var/shareディレクトリの作成
+  file: path=/var/share state=directory owner={{ user }} group={{ group }} mode=0755
+
+- name: joruriplusをcloneする
+  git: dest=/var/share/joruriplus repo=https://github.com/joruri/joruri-plus.git
+  ignore_errors: True
+
+- name: 所有者を変更
+  command: chown -R {{ user }}:{{ group }} /var/share/joruriplus
+
+- name: RubyGemsのダウンロード
+  get_url: url=http://pkgs.fedoraproject.org/repo/pkgs/rubygems/rubygems-1.6.2.tgz/0c95a9869914ba1a45bf71d3b8048420/rubygems-1.6.2.tgz dest=/usr/local/src/rubygems-1.6.2.tgz mode=0440
+
+- name: RubyGemsの展開
+  shell: tar zxvf rubygems-1.6.2.tgz chdir=/usr/local/src
+  #unarchive: src=/usr/local/src/rubygems-1.6.2.tgz dest=/usr/local/src copy=no
+
+- name: RubyGemsのインストール
+  shell: ruby setup.rb chdir=/usr/local/src/rubygems-1.6.2
+
+- name: gemのインストール
+  gem: name=shared-mime-info user_install=no
+
+- name: shared-mime-infoがバイナリモードで動くようにソースを修正
+  copy: src=shared-mime-info.rb dest=/usr/local/lib/ruby/gems/1.9.1/gems/shared-mime-info-0.2.5/lib/shared-mime-info.rb mode=0644
+
+- name: Gemfileを転送(mime-types 2.6.1を指定)
+  copy: src=Gemfile dest=/var/share/joruriplus/Gemfile mode=0644
+
+- name: bundle installの実行
+  command: bundle install chdir=/var/share/joruriplus
+
+- name: joruriplus.confを/etc/httpd/conf.d 配下に配置
+  template: src={{ joruriplus_conf_template }} dest=/etc/httpd/conf.d/joruriplus.conf owner={{ user }} group={{ group }} mode=664
+ 
+- name: ログディレクトリの作成
+  file: path=/var/share/joruriplus/log state=directory owner={{ user }} group={{ group }} mode=0755
+ 
+- name: ログファイルtouch
+  file: path=/var/share/joruriplus/log/production.log state=touch owner={{ user }} group={{ group }} mode=0755
+ 
+#- name: テーブルを作成
+#  command: rake db:schema:load RAILS_ENV=production chdir=/var/share/joruriplus
+#  tags: db
+ 
+#- name: 初期データを登録
+#  command: rake db:seed RAILS_ENV=production chdir=/var/share/joruriplus
+#  tags: db
+ 
+#- name: サンプルデータを登録
+#  command: rake db:seed:demo RAILS_ENV=production chdir=/var/share/joruriplus
+#  tags: db
+ 
+- name: httpdの再起動
+  service: name=httpd state=restarted
+
+#- name: 定期的に1行メッセージを削除するcron設定
+#  lineinfile: 'dest=/var/spool/cron/joruri backup=no state=present create=no regexp="nfs_client.sh$" line="00 3 * * * /usr/local/bin/ruby /var/share/joruriplus/script/rails runner -e production 'Sns::Script::Tool.message_reset'" owner=joruri group=joruri mode=600'
+#  notify: restart crond
