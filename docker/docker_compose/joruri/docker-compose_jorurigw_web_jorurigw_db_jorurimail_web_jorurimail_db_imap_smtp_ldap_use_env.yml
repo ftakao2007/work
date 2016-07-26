@@ -3,8 +3,8 @@ jorurigw_db:
    container_name: jorurigw_db
    tty: true
    environment:
-     - DOCKER_HOST_PORT_8082_TCP_ADDR=10.136.3.189
-     - DOCKER_HOST_PORT_8082_TCP_PORT=8082
+     - DOCKER_HOST_PORT_8082_TCP_ADDR=${DOCKER_HOST_PORT_8082_TCP_ADDR}
+     - DOCKER_HOST_PORT_8082_TCP_PORT=${DOCKER_HOST_PORT_8082_TCP_PORT}
    expose:
      - "3306"
    command: sh -c '/bin/sh /root/init_compose_jorurigw_db.sh'
