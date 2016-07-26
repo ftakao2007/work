@@ -1,13 +1,3 @@
-#ldap_pref:
-#   image: localhost:4001/openldap_centos6
-#   container_name: ldap_pref
-#   privileged: true
-#   tty: true
-#   expose:
-#     - 389
-#   command: sh -c '/bin/sh /root/init.sh'
-#   #command: sh -c 'service slapd restart && service rsyslog restart && /bin/bash --login'
-
 ldap:
    image: ftakao2007/ldap
    container_name: ldap
