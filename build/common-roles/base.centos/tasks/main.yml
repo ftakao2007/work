@@ -29,6 +29,7 @@
     - pv
     - which
     - openssh-server
+  ignore_errors: True
 
 - name: epelリポジトリの追加
   yum: name=epel-release state=present
