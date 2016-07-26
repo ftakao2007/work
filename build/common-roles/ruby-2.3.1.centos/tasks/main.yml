@@ -24,7 +24,8 @@
   get_url: url=https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz dest=/usr/local/src/ruby-2.3.1.tar.gz mode=0440
 
 - name: ruby-2.3.1.tar.gzの展開
-  unarchive: src=/usr/local/src/ruby-2.3.1.tar.gz dest=/usr/local/src copy=no
+  shell: tar zxvf ruby-2.3.1.tar.gz chdir=/usr/local/src
+#  unarchive: src=/usr/local/src/ruby-2.3.1.tar.gz dest=/usr/local/src copy=no
 
 - name: ruby-2.3.1のconfigure実行
   command: ./configure --prefix=/usr/local chdir=/usr/local/src/ruby-2.3.1

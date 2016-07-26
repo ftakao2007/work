@@ -1,0 +1,8 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - memcached
+
+- name: memcachedの起動と自動起動設定
+  service: name=memcached state=started enabled=yes

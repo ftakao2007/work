@@ -1,0 +1,18 @@
+jorurigw_db:
+   image: ftakao2007/jorurigw_db:latest
+   container_name: jorurigw_db
+   tty: true
+   expose:
+     - "3306"
+   command: sh -c 'service mysqld restart && /bin/bash --login'
+
+jorurigw_web:
+   image: ftakao2007/jorurigw_web:latest
+   container_name: jorurigw_web
+   tty: true
+   links:
+     - jorurigw_db
+   ports:
+     - "8084:80"
+   command: sh -c '/root/init_jorurigw_web.sh'
+   #command: sh -c ' service httpd start && /bin/bash --login'

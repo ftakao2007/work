@@ -25,8 +25,8 @@
 - name: bundle installの実行
   command: bundle install chdir=/var/share/jorurigw
 
-- name: rake assets:precompile RAILS_ENV=productionの実行
-  command: rake assets:precompile RAILS_ENV=production chdir=/var/share/jorurigw
+#- name: rake assets:precompile RAILS_ENV=productionの実行
+#  command: rake assets:precompile RAILS_ENV=production chdir=/var/share/jorurigw
 
 - name: cronによる定期実行処理を設定
   command: whenever -w --set 'environment=production' chdir=/var/share/jorurigw
@@ -48,6 +48,9 @@
 
 - name: /etc/httpd/conf.d配下にjorurigw.confの設置
   template: src={{ jorurigw_conf_template }} dest=/etc/httpd/conf.d/jorurigw.conf owner=root group=root mode=644
+
+- name: 所有者を変更
+  command: chown -R {{ user }}:{{ group }} /var/share/jorurigw
 
 - name: httpdの再起動
   service: name=httpd state=restarted

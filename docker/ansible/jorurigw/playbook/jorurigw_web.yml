@@ -26,6 +26,11 @@
        tags: httpd
       }
 
+    # memcachedのインストール
+    - {role: ../common-roles/memcached.centos,
+       tags: memcached
+      }
+
     # passenger4.0.58のインストール
     - {role: ../common-roles/passenger4.0.58.ruby.centos,
        passenger_conf_template: passenger.conf.ruby.tj2,
