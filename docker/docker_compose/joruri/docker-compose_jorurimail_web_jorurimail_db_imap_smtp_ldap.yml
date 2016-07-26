@@ -61,3 +61,96 @@ jorurimail_web:
    #command: sh -c '/root/init_jorurimail_web_imap.sh'
    #command: sh -c '/root/init_jorurimail_web.sh'
    #command: sh -c ' service httpd start && /bin/bash --login'
+ldap:
+   image: ftakao2007/ldap:latest
+   container_name: ldap
+   tty: true
+   ports:
+     - "389:389"
+   expose:
+     - "389"
+   command: sh -c 'service slapd restart && service rsyslog restart && /bin/bash --login'
+
+jorurigw_db:
+   image: ftakao2007/jorurigw_db:latest
+   container_name: jorurigw_db
+   tty: true
+   expose:
+     - "3306"
+   command: sh -c 'service mysqld restart && /bin/bash --login'
+
+jorurigw_web:
+   image: ftakao2007/jorurigw_web:latest
+   container_name: jorurigw_web
+   tty: true
+   links:
+     - jorurigw_db
+     - ldap
+   ports:
+     - "8084:80"
+   command: sh -c '/root/init_jorurigw_web_ldap.sh'
+   #command: sh -c '/root/init_jorurigw_web.sh'
+   #command: sh -c ' service httpd start && /bin/bash --login'
+ldap:
+   image: ftakao2007/ldap:latest
+   container_name: ldap
+   tty: true
+   ports:
+     - "389:389"
+   expose:
+     - "389"
+   command: sh -c 'service slapd restart && service rsyslog restart && /bin/bash --login'
+
+smtp_ldap:
+   image: ftakao2007/smtp_ldap:latest
+   container_name: smtp_ldap
+   tty: true
+   privileged: true
+   volumes:
+     - /home
+   links:
+     - ldap
+   expose:
+     - "25"
+     - "587"
+   command: sh -c '/bin/sh /root/init_smtp_ldap.sh'
+   #command: sh -c 'service postfix restart && service rsyslog restart && /bin/bash --login'
+
+imap_ldap:
+   image: ftakao2007/imap_ldap:latest
+   container_name: imap_ldap
+   tty: true
+   privileged: true
+   volumes_from:
+     - smtp_ldap
+   links:
+     - ldap
+   expose:
+     - "143"
+   command: sh -c '/bin/sh /root/init_imap_ldap.sh'
+   #command: sh -c 'service dovecot restart && service rsyslog restart && /bin/bash --login'
+
+jorurimail_db:
+   image: ftakao2007/jorurimail_db:latest
+   container_name: jorurimail_db
+   tty: true
+   expose:
+     - "3306"
+   command: sh -c 'service mysqld restart && service rsyslog restart && /bin/bash --login'
+
+jorurimail_web:
+   image: ftakao2007/jorurimail_web:latest
+   container_name: jorurimail_web
+   tty: true
+   links:
+     - jorurimail_db
+     - imap_ldap
+     - smtp_ldap
+     - ldap
+   ports:
+     - "8082:80"
+   command: sh -c '/root/init_jorurimail_web_imap_smtp_ldap.sh'
+   #command: sh -c '/root/init_jorurimail_web_imap_smtp.sh'
+   #command: sh -c '/root/init_jorurimail_web_imap.sh'
+   #command: sh -c '/root/init_jorurimail_web.sh'
+   #command: sh -c ' service httpd start && /bin/bash --login'
