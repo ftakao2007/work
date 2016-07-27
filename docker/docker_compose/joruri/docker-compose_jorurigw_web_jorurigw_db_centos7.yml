@@ -5,7 +5,7 @@ jorurigw_db_centos7:
    privileged: true
    expose:
      - "3306"
-   command: /sbin/init && /root/jorurigw_db_centos7.sh
+   command: /sbin/init && sh -c '/root/jorurigw_db_centos7.sh'
 
 jorurigw_web_centos7:
    image: ftakao2007/jorurigw_web_centos7:latest
@@ -16,5 +16,5 @@ jorurigw_web_centos7:
      - jorurigw_db_centos7
    ports:
      - "8094:80"
-   command: /sbin/init && /root/init_jorurigw_web_centos7.sh
+   command: /sbin/init && sh -c '/root/init_jorurigw_web_centos7.sh'
    #command: /sbin/init && /usr/local/apache/bin/apachectl start

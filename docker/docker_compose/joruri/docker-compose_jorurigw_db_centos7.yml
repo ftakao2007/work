@@ -5,6 +5,7 @@ jorurigw_db_centos7:
    privileged: true
    expose:
      - "3306"
-   #command: sh -c 'systemctl restart mysqld && /bin/init'
+   #command: /sbin/init && systemctl restart mysqld
    #command: /sbin/init
-   command: /sbin/init && /root/jorurigw_db.sh
+   #command: sh -c '/root/init_jorurigw_web_centos7.sh' && /sbin/init
+   command: /sbin/init && sh -c '/root/init_jorurigw_web_centos7.sh'
