@@ -6,3 +6,9 @@ jorurigw_web
 
 [jorurigw_db]
 jorurigw_db
+
+[jorurigw_web_centos7]
+jorurigw_web_centos7
+
+[jorurigw_db_centos7]
+jorurigw_db_centos7

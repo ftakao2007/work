@@ -1,0 +1,21 @@
+---
+- hosts: jorurigw_db_centos7
+  become: yes
+  connection: docker
+  gather_facts: no
+  vars:
+    db_user: joruri
+    db_user_password: 'pass'
+    db_user_root_password: 'pass'
+  roles:
+
+    # mysql5.6.centos7のインストール
+    - {role: ../common-roles/mysql5.6.centos7,
+       my_conf_template: my.cnf.j2,
+       my_conf_server_id: 78910,
+       mysql_root_password: '{{ db_user_root_password }}',
+       mysql_operation_user: '{{ db_user }}',
+       mysql_operation_user_password: '{{ db_user_password }}',
+       create_database: 'production_jorurigw',
+       tags: mysql
+      }

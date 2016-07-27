@@ -1,0 +1,14 @@
+NameVirtualHost *:80
+
+<Directory "/var/share/jorurigw/public">
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+</Directory>
+
+<VirtualHost *:80>
+    ServerName default
+    DocumentRoot /var/share/jorurigw/public
+    RackEnv production
+    PassengerHighPerformance on
+</VirtualHost>

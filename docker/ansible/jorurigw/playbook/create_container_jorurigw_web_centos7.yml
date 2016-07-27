@@ -1,0 +1,13 @@
+- hosts: docker_hosts
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: deploy centos container
+      docker: 
+        image=centos:centos7
+        name=jorurigw_web_centos7
+        ports=8084:80
+        expose=80
+        privileged=yes
+        tty=yes
+        command=/sbin/init

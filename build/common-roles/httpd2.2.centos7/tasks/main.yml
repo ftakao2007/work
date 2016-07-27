@@ -1,0 +1,42 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - wget
+    - gcc
+    - openssl
+    - openssl-devel
+
+- name: httpd-2.2.31.tar.gzのダウンロード
+  get_url: url=http://ftp.kddilabs.jp/infosystems/apache/httpd/httpd-2.2.31.tar.gz dest=/usr/local/src/httpd-2.2.31.tar.gz mode=0440
+
+- name: httpd-2.2.31.tar.gzの展開
+  shell: tar zxvf httpd-2.2.31.tar.gz chdir=/usr/local/src
+
+- name: httpd-2.2.31のconfigure実行
+  command: ./configure --prefix=/usr/local chdir=/usr/local/src/httpd-2.2.31
+
+- name: httpd-2.2.31のconfigure実行
+  command: ./configure --prefix=/usr/local/apache --enable-so --enable-ssl --enable-rewrite chdir=/usr/local/src/httpd-2.2.31
+  #command: ./configure --prefix=/usr/local/apache --enable-so --enable-ssl --enable-rewrite --enable-module=all --enable-mods-shared=all chdir=/usr/local/src/httpd-2.2.31
+
+- name: httpd-2.2.31のmake実行
+  command: make chdir=/usr/local/src/httpd-2.2.31
+
+- name: httpd-2.2.31のmake install実行
+  command: make install chdir=/usr/local/src/httpd-2.2.31
+
+- name: /usr/local/apache/conf/httpd.confの設置
+  template: src={{ httpd_conf_template }} dest=/usr/local/apache/conf/httpd.conf owner=root group=root mode=644
+  tags: httpd.conf
+
+- name: /etc/logrotate.d/httpdの設定
+  template: src={{ httpd_logrotate_template }} dest=/etc/logrotate.d/httpd owner=root group=root mode=644
+  tags: logrotate_httpd
+
+#- name: /var/log/httpdディレクトリの権限の変更
+#  command: chmod 755 /var/log/httpd
+
+- name: apacheの起動
+  shell: /usr/local/apache/bin/apachectl start
+

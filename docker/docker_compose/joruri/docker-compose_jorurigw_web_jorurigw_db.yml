@@ -13,6 +13,6 @@ jorurigw_web:
    links:
      - jorurigw_db
    ports:
-     - "8084:80"
+     - "8085:80"
    command: sh -c '/root/init_jorurigw_web.sh'
    #command: sh -c ' service httpd start && /bin/bash --login'

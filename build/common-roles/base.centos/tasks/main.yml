@@ -33,6 +33,7 @@
     - pv
     - which
     - openssh-server
+    - rsyslog
   ignore_errors: True
 
 - name: sudoersの設定(requiretty)

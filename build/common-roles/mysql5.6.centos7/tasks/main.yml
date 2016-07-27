@@ -1,0 +1,35 @@
+---
+
+- name: MySQL Communityのrpmのインストール(MySQL5.6をインストールするため)
+  yum: name=http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
+
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - mysql-community-client.x86_64
+    - mysql-community-devel.x86_64
+    - mysql-community-server.x86_64
+
+- name: my.cnfの設置
+  template: src={{ my_conf_template }} dest=/etc/my.cnf owner=root group=root mode=644
+
+- name: MySQL データディレクトリを初期化し、システムテーブルを作成
+  command: /usr/bin/mysql_install_db --user=mysql
+
+- name: mysqlの起動と自動起動設定
+  service: name=mysqld state=started enabled=yes
+
+- name: rootユーザのパスワード変更
+  command: /usr/bin/mysqladmin -uroot password '{{ mysql_root_password }}'
+  ignore_errors: True
+
+- name: mysqlユーザの作成
+  command: /usr/bin/mysql -u root -p'{{ mysql_root_password }}' -e "grant all on *.* to {{ mysql_operation_user }}@'{{ item }}' IDENTIFIED BY '{{ mysql_operation_user_password }}'"
+  with_items:
+    - "127.0.0.0/255.255.255.0"
+    - "localhost"
+    - "%"
+
+- name: データベースの作成
+  command: /usr/bin/mysql -u root -p'{{ mysql_root_password }}' -e "create database {{ create_database }}"
+  ignore_errors: True

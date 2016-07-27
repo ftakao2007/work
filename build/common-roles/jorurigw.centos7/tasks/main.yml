@@ -33,20 +33,20 @@
 - name: 所有者を変更
   command: chown -R {{ user }}:{{ group }} /var/share/jorurigw
 
-- name: delayed_jobの設定ファイルの設置
-  template: src={{ delayed_job_template }} dest=/etc/init.d/delayed_job owner=root group=root mode=755
+#- name: delayed_jobの設定ファイルの設置
+#  template: src={{ delayed_job_template }} dest=/etc/init.d/delayed_job owner=root group=root mode=755
 
-- name: delayed_jobをchkconfigに追加
-  command: /sbin/chkconfig --add delayed_job
+#- name: delayed_jobをchkconfigに追加
+#  command: /sbin/chkconfig --add delayed_job
 
-- name: delayed_jobの自動起動設定
-  command: /sbin/chkconfig delayed_job on
+#- name: delayed_jobの自動起動設定
+#  command: /sbin/chkconfig delayed_job on
 
-- name: delayed_jobの起動
-  command: /etc/init.d/delayed_job start
+#- name: delayed_jobの起動
+#  command: /etc/init.d/delayed_job start
 
-- name: /etc/httpd/conf.d配下にjorurigw.confの設置
-  template: src={{ jorurigw_conf_template }} dest=/etc/httpd/conf.d/jorurigw.conf owner=root group=root mode=644
+- name: /usr/local/apache/conf配下にjorurigw.confの設置
+  template: src={{ jorurigw_conf_template }} dest=/usr/local/apache/conf/extra/jorurigw.conf owner=root group=root mode=644
 
 - name: 所有者を変更
   command: chown -R {{ user }}:{{ group }} /var/share/jorurigw
