@@ -39,8 +39,6 @@
   post_tasks:
     - name: ftakao2007/workをcloneする
       git: dest=/home/{{ user_name }}/work repo=https://github.com/ftakao2007/work.git
-      tags: dev
 
     - name: ディレクトリの権限をユーザにする
-      shell: chown -R {{ user_name }} /home/{{ user_name }}/work
-      tags: dev
+      shell: chown -R {{ user_name }}:{{ user_name }} /home/{{ user_name }}/work

@@ -3,7 +3,7 @@
   gather_facts: yes
   become: yes
   vars:
-    user_name: vagrant
+    user_name: jsd
   roles:
 
     # 基本設定
@@ -41,4 +41,4 @@
       git: dest=/home/{{ user_name }}/work repo=https://github.com/ftakao2007/work.git
 
     - name: ディレクトリの権限をユーザにする
-      shell: chown -R {{ user_name }} /home/{{ user_name }}/work
+      shell: chown -R {{ user_name }}:{{ user_name }} /home/{{ user_name }}/work
