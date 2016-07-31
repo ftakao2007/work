@@ -1,0 +1,9 @@
+operation_centos6:
+   image: ftakao2007/centos6_base:latest
+   container_name: operation_centos6
+   privileged: true
+   tty: true
+   ports:
+     - "2222:22"
+   command: sh -c 'service sshd restart && service rsyslog restart && /bin/bash --login'
+
