@@ -1,6 +1,6 @@
-base:
-   image: ftakao2007/base:latest
-   container_name: base
+operation_centos6:
+   image: ftakao2007/operation_centos6:latest
+   container_name: operation_centos6
    privileged: true
    tty: true
    ports:
