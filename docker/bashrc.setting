@@ -1,0 +1,10 @@
+alias dps="docker ps -a"
+alias dim="docker images"
+alias drm="docker rm"
+alias drmi="docker rmi"
+alias dstop="docker stop"
+alias dstart="docker start"
+function dexec()
+{
+  docker exec -it $1 /bin/bash --login
+}
