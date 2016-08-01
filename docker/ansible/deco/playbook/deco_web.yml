@@ -1,0 +1,45 @@
+---
+- hosts: jorurigw_web
+  become: yes
+  connection: docker
+  gather_facts: no
+  vars:
+    web_server_ip: XXX.XXX.XXX.XXX
+    user: joruri
+    group: joruri
+    user_uid: 1001
+    user_passwd: $1$SomeSalt$ZSU2MwC9RbVz5E6EYFgjV1
+    ruby_library_version: "2.3.0"
+    passenger_version: "4.0.58"
+  roles:
+
+    # ruby-2.3.1のインストール
+    - {role: ../common-roles/ruby-2.3.1.centos,
+       tags: ruby
+      }
+
+    # httpdのインストール
+    - {role: ../common-roles/httpd2.2.centos,
+       httpd_server_ip: "{{ web_server_ip }}",
+       httpd_conf_template: httpd.conf.j2,
+       httpd_logrotate_template: httpd.logrotate.j2,
+       tags: httpd
+      }
+
+    # memcachedのインストール
+    - {role: ../common-roles/memcached.centos,
+       tags: memcached
+      }
+
+    # passenger4.0.58のインストール
+    - {role: ../common-roles/passenger4.0.58.ruby.centos,
+       passenger_conf_template: passenger.conf.ruby.tj2,
+       tags: passenger
+      }
+   
+    # JoruriGwの設定
+    - {role: ../common-roles/jorurigw.centos, 
+       delayed_job_template: delayed_job.j2,
+       jorurigw_conf_template: jorurigw.conf.j2,
+       tags: jorurigw
+      }

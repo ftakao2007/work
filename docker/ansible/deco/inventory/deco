@@ -1,0 +1,8 @@
+[docker_hosts]
+127.0.0.1
+
+[deco_web]
+deco_web
+
+[deco_db]
+deco_db
