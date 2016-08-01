@@ -1,0 +1,21 @@
+---
+- name: epelリポジトリの追加
+  yum: name=epel-release state=present
+  tags: epel
+
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - clamav
+    - clamd
+    - clamav-devel
+    - clamav-db
+
+- name: clamd.confの設定
+  copy: src=clamd.conf dest=/etc/clamd.conf owner=root group=root mode=0644
+
+- name: clamAVのデーモンは起動しない
+  service: name=clamd state=stopped enabled=no
+
+- name: ウィルス定義ファイルを更新
+  command: freshclam

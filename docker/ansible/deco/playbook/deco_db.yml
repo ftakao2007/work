@@ -16,6 +16,6 @@
        mysql_root_password: '{{ db_user_root_password }}',
        mysql_operation_user: '{{ db_user }}',
        mysql_operation_user_password: '{{ db_user_password }}',
-       create_database: 'production_jorurigw',
+       create_database: 'deco_production',
        tags: mysql
       }

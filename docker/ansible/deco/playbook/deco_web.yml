@@ -1,17 +1,29 @@
 ---
-- hosts: jorurigw_web
+- hosts: deco_web
   become: yes
   connection: docker
   gather_facts: no
   vars:
     web_server_ip: XXX.XXX.XXX.XXX
-    user: joruri
-    group: joruri
+    user: deco
+    group: deco
     user_uid: 1001
     user_passwd: $1$SomeSalt$ZSU2MwC9RbVz5E6EYFgjV1
     ruby_library_version: "2.3.0"
     passenger_version: "4.0.58"
+#    ruby_library_version: "1.9.1"
+#    passenger_version: "3.0.9"
   roles:
+
+#    # ruby-1.9.3-p125のインストール
+#    - {role: ../common-roles/ruby-1.9.3-p125.centos,
+
+#    # ruby-1.9.2-p290のインストール
+#    - {role: ../common-roles/ruby-1.9.2-p290.centos,
+#       owner: "{{ user }}",
+#       group: wheel,
+#       tags: ruby
+#      }
 
     # ruby-2.3.1のインストール
     - {role: ../common-roles/ruby-2.3.1.centos,
@@ -26,20 +38,36 @@
        tags: httpd
       }
 
-    # memcachedのインストール
-    - {role: ../common-roles/memcached.centos,
-       tags: memcached
-      }
+#    # passenger3.0.9のインストール
+#    - {role: ../common-roles/passenger3.0.9.ruby.centos,
+#       passenger_conf_template: passenger.conf.ruby.tj2,
+#       tags: passenger
+#      }
 
     # passenger4.0.58のインストール
     - {role: ../common-roles/passenger4.0.58.ruby.centos,
        passenger_conf_template: passenger.conf.ruby.tj2,
        tags: passenger
       }
-   
-    # JoruriGwの設定
-    - {role: ../common-roles/jorurigw.centos, 
-       delayed_job_template: delayed_job.j2,
-       jorurigw_conf_template: jorurigw.conf.j2,
-       tags: jorurigw
+
+    # clamAVのインストール
+    - {role: ../common-roles/clamav.centos,
+       tags: clamav
+      }
+    
+    # DECOの設定
+    - {role: ../common-roles/deco.centos, 
+       deco_conf_template: 'deco.conf.j2',
+       deco_database_yml_template: 'database.yml.j2',
+       xsendfile_conf_file: 'xsendfile.conf',
+       deco_db_server_ip: "XXX.XXX.XXX.XXX",
+       deco_db_user: "deco",
+       deco_db_user_password: "pass",
+       deco_smtp_address: "XXX.XXX.XXX.XXX",
+       deco_smtp_port: "25",
+       deco_smtp_domain: "joruri.example.com",
+       deco_smtp_user_name: "nil",
+       deco_smtp_password: "nil",
+       deco_production_rb_template: production.rb.j2,
+       tags: deco
       }

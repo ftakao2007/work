@@ -1,0 +1,71 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - libjpeg-devel
+    - libpng-devel
+    - ImageMagick
+    - ImageMagick-devel
+    - libevent
+    - libevent-devel
+    - zlib-devel
+    - openssl
+    - openssl-devel
+    - curl-devel
+    - mysql-devel
+
+- name: epelリポジトリの追加
+  yum: name=epel-release state=present
+
+- name: ModSecurityのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - mod_security
+    - mod_security_crs
+    - mod_security_crs-extras
+
+- name: ModSecurityの設定off
+  replace: " dest=/etc/httpd/conf.d/mod_security.conf regexp='^    SecRuleEngine On' replace='    SecRuleEngine Off'"
+
+- name: /etc/httpd/conf.d配下にdeco.confの設置
+  template: src={{ deco_conf_template }} dest=/etc/httpd/conf.d/deco.conf owner=root group=root mode=644
+
+- name: mod_xsendfile.cのダウンロード
+  get_url: url=https://tn123.org/mod_xsendfile/mod_xsendfile.c dest=/usr/local/src/mod_xsendfile.c mode=0440
+
+- name: apxsでapacheにxsendfileモジュールを追加
+  command: apxs -cia mod_xsendfile.c chdir=/usr/local/src
+
+- name: /etc/httpd/conf.d配下にxsendfile.confの設置
+  copy: src={{ xsendfile_conf_file }} dest=/etc/httpd/conf.d/xsendfile.conf owner=root group=root mode=644
+
+- name: deco_1.1.4.tar.gzのダウンロード
+  get_url: url=http://www.deco-project.org/wp-content/uploads/deco_1.1.4.tar.gz dest=/usr/local/deco_1.1.4.tar.gz mode=0440
+
+- name: deco_1.1.4.tar.gzの展開
+  shell: tar zxvf deco_1.1.4.tar.gz chdir=/usr/local
+#  unarchive: src=/usr/local/src/deco_1.1.4.tar.gz dest=/usr/local copy=no
+
+- name: bundle installの実行
+  command: bundle install chdir=/usr/local/deco
+
+- name: /usr/local/deco/config/database.ymlの配置
+  template: src={{ deco_database_yml_template }} dest=/usr/local/deco/config/database.yml owner=root group=root mode=644
+
+- name: /usr/local/deco/config/environments/production.rbの配置
+  template: src={{ deco_production_rb_template }} dest=/usr/local/deco/config/environments/production.rb owner=root group=root mode=644
+
+- name: rake db:migrate RAILS_ENV=production の実行
+  command: rake db:migrate RAILS_ENV=production chdir=/usr/local/deco
+
+- name: rake db:seed RAILS_ENV=productionの実行
+  command: rake db:seed RAILS_ENV=production chdir=/usr/local/deco
+
+- name: rake assets:precompile RAILS_ENV=productionの実行
+  command: rake assets:precompile RAILS_ENV=production chdir=/usr/local/deco
+
+- name: /usr/local/deco配下の権限をapacheにする
+  command: chown -R apache:apache /usr/local/deco
+
+- name: httpdの再起動
+  service: name=httpd state=restarted

@@ -1,0 +1,50 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - zlib-devel
+    - openssl-devel
+
+- name: yaml-0.1.4.tar.gzのダウンロード
+  get_url: url=http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz dest=/usr/local/src/yaml-0.1.4.tar.gz mode=0440
+
+- name: yaml-0.1.4.tar.gzの展開
+  shell: tar zxvf yaml-0.1.4.tar.gz chdir=/usr/local/src
+#  unarchive: src=/usr/local/src/yaml-0.1.4.tar.gz dest=/usr/local/src copy=no
+
+- name: yaml-0.1.4のconfigure実行
+  command: ./configure chdir=/usr/local/src/yaml-0.1.4
+
+- name: yaml-0.1.4のmake実行
+  command: make chdir=/usr/local/src/yaml-0.1.4
+
+- name: yaml-0.1.4のmake install実行
+  command: make install chdir=/usr/local/src/yaml-0.1.4
+
+- name: ruby-1.9.3-p125.tar.gzのダウンロード
+  get_url: url=ftp://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p125.tar.gz dest=/usr/local/src/ruby-1.9.3-p125.tar.gz mode=0440
+
+- name: ruby-1.9.3-p125.tar.gzの展開
+  shell: tar zxvf ruby-1.9.3-p125.tar.gz chdir=/usr/local/src
+  #unarchive: src=/usr/local/src/ruby-1.9.3-p125.tar.gz dest=/usr/local/src copy=no
+
+- name: OpenSSL 拡張に関係する既知のエラー対応
+  copy: src=ossl_pkey_ec.c dest=/usr/local/src/ruby-1.9.3-p125/ext/openssl/ossl_pkey_ec.c owner={{ owner }} group={{ group }} mode=0644
+  
+- name: ruby-1.9.3-p125のconfigure実行
+  command: ./configure chdir=/usr/local/src/ruby-1.9.3-p125
+
+- name: ruby-1.9.3-p125のmake実行
+  command: make chdir=/usr/local/src/ruby-1.9.3-p125
+
+- name: ruby-1.9.3-p125のmake install実行
+  command: make install chdir=/usr/local/src/ruby-1.9.3-p125
+
+- name: rubygems-updateのインストール
+  command: gem install rubygems-update -v 1.8.11
+
+- name: update_rubygemsの実行
+  command: update_rubygems
+
+- name: bundlerのインストール
+  gem: name=bundler state=latest user_install=no

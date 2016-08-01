@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+  ServerName {{ web_server_ip }}
+  DocumentRoot /usr/local/deco/public
+  RailsEnv production
+  <Directory /usr/local/deco/public>
+    AllowOverride all
+    Options -MultiViews
+  </Directory>
+</VirtualHost>
