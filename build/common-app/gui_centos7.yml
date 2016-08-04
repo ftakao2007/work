@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  roles:
+
+    # CentOS7 guiのインストール (パスワードは「vagrant」固定)
+    - {role: ../common-roles/gui.centos7, gui_user: ftakao2007, gui_group: ftakao2007 }

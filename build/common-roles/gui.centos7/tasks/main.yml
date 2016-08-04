@@ -1,0 +1,53 @@
+---
+- name: epelリポジトリの追加
+  yum: name=epel-release state=present
+
+- name: guiのインストール
+  yum: name="{{ item }}" state=present
+  with_items:
+    - "@X Window System"
+    - "@General Purpose Desktop"
+    - "@Desktop"
+    - "@Japanese Support"
+
+- name: GNOME Desktopのインストール
+  shell: yum -y groupinstall "GNOME Desktop"
+
+- name: xrdp tigervnc-serverのインストール
+  yum: name={{ item }} state=present
+  with_items:
+    - xrdp
+    - tigervnc-server
+
+- name: /etc/sysconfig/vncservers の設置
+  template: src=vncservers.tj2 dest=/etc/sysconfig/vncservers owner=root group=root mode=644
+
+- name: .vncディレクトリの作成
+  file: state=directory path=/home/{{ gui_user }}/.vnc owner={{ gui_user }} group={{ gui_group }} mode=0775
+
+- name: .vnc/passwd の設置
+  copy: src=passwd dest=/home/{{ gui_user }}/.vnc/passwd owner={{ gui_user }} group={{ gui_group }} mode=0600
+
+- name: 日本語キーボード対応1
+  get_url: url=http://www.mail-archive.com/xrdp-devel@lists.sourceforge.net/msg00263/km-e0010411.ini dest=/etc/xrdp/km-e0010411.ini mode=0644
+  
+- name: 日本語キーボード対応2
+  get_url: url=http://www.mail-archive.com/xrdp-devel@lists.sourceforge.net/msg00263/km-e0010411.ini dest=/etc/xrdp/km-0411.ini mode=0644
+  
+- name: 日本語キーボード対応3
+  get_url: url=http://www.mail-archive.com/xrdp-devel@lists.sourceforge.net/msg00263/km-e0010411.ini dest=/etc/xrdp/km-e0200411.ini mode=0644
+  
+- name: 日本語キーボード対応4
+  get_url: url=http://www.mail-archive.com/xrdp-devel@lists.sourceforge.net/msg00263/km-e0010411.ini dest=/etc/xrdp/km-e0210411.ini mode=0644
+
+- name: 設定ファイルの設置
+  template: src=vncserver@.service.tj2 dest=/etc/systemd/system/vncserver@.service owner=root group=root mode=0644
+
+- name: systemctlのデーモンをreloadする
+  shell: systemctl daemon-reload
+
+- name: max_bbpの変更
+  replace: dest=/etc/xrdp/xrdp.ini backup=no regexp='max_bpp=32' replace='max_bpp=24'
+
+- name: xrdpの起動
+  service: name=xrdp state=started enabled=yes
