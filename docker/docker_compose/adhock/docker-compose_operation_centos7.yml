@@ -1,0 +1,10 @@
+operation_centos7:
+   image: ftakao2007/operation_centos7:latest
+   container_name: operation_centos7
+   privileged: true
+   tty: true
+   ports:
+     - "2222:22"
+     - "3000:3000"
+   command: /sbin/init && systemctl restart sshd
+
