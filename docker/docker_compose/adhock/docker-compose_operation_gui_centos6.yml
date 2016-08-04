@@ -1,0 +1,10 @@
+operation_centos6_gui:
+   image: ftakao2007/operation_centos6:gui
+   container_name: operation_centos6_gui
+   privileged: true
+   tty: true
+   ports:
+     - "2222:22"
+     - "3000:3000"
+     - "3389:3389"
+   command: sh -c 'service xrdp restart && service sshd restart && service rsyslog restart && /bin/bash --login'

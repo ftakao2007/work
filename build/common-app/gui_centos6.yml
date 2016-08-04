@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  roles:
+
+    # CentOS6 guiのインストール (パスワードは「vagrant」固定)
+    - {role: ../common-roles/gui.centos6, gui_user: vagrant, gui_group: vagrant }
