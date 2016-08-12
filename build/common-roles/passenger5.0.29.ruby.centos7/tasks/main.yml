@@ -1,0 +1,16 @@
+---
+- name: passengerに必要なパッケージをインストール
+  yum: name={{ passenger_packages | join(",") }}
+
+#- name: rack1.6.4をインストール
+#  gem: name=rack user_install=no version=1.6.4
+
+- name: passengerをインストール
+  gem: name=passenger version={{ passenger_version }}
+  #gem: name=passenger user_install=no version={{ passenger_version }}
+
+- name: passenger module のインストール
+  shell: APXS2=/usr/bin/apxs PATH=/usr/bin:$PATH passenger-install-apache2-module --auto --languages=ruby
+
+- name: バーチャルホスト用confファイルの配置
+  template: src={{ passenger_conf_template }} dest=/etc/httpd/conf.d//passenger.conf
