@@ -1,0 +1,16 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - memcached
+
+- name: firewalldの設定
+  shell: firewall-cmd --add-port=11211/tcp --zone=public --permanent
+  when: ansible_virtualization_type != "docker"
+
+- name: firewalldの設定反映
+  shell: firewall-cmd --reload
+  when: ansible_virtualization_type != "docker"
+
+- name: memcachedの起動と自動起動設定
+  service: name=memcached state=started enabled=yes
