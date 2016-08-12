@@ -1,0 +1,12 @@
+/var/log/httpd/*log {
+    weekly
+    rotate 53
+    missingok
+    ifempty
+    compress
+    delaycompress
+    sharedscripts
+    postrotate
+        systemctl graceful httpd.service > /dev/null 2>/dev/null || true
+    endscript
+}
