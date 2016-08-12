@@ -1,3 +1,0 @@
----
-- name: 必要なパッケージをインストール
-  yum: name={{ rbenv_packages | join(",") }}
