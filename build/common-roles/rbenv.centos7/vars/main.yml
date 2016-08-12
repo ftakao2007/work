@@ -1,0 +1,39 @@
+---
+# vars file for ansible-role-rbenv
+
+rbenv_root: "/usr/local/rbenv"
+rbenv_ruby_version: "2.3.1"
+
+rbenv_packages:
+- git
+- gcc
+- gcc-c++
+- make
+- patch
+- unzip
+- bzip2
+- bzip2-devel
+- zlib
+- zlib-devel
+- openssl
+- openssl-devel
+- gdbm-devel
+- ncurses-devel
+- freetype-devel
+- readline-devel
+- sqlite-devel
+- libxml2-devel
+- libxslt-devel
+- libffi-devel
+- libjpeg-turbo-devel
+- libpng-devel
+- libyaml
+- libyaml-devel
+- libffi
+- libffi-devel
+
+
+# defaults file for ansible-role-rbenv
+rbenv_gems:
+- rbenv-rehash
+- bundler
