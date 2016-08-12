@@ -1,0 +1,11 @@
+jorurigw_db_centos7:
+   image: ftakao2007/jorurigw_db_centos7:latest
+   container_name: jorurigw_db_centos7
+   tty: true
+   privileged: true
+   expose:
+     - "3306"
+   #command: /sbin/init && systemctl restart mysqld
+   #command: /sbin/init
+   #command: sh -c '/root/init_jorurigw_web_centos7.sh' && /sbin/init
+   command: /sbin/init && sh -c '/root/init_jorurigw_web_centos7.sh'
