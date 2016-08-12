@@ -18,17 +18,22 @@
     - openldap
     - openldap-devel
 
+
 - name: /var/shareディレクトリの作成
   file: path=/var/share state=directory owner={{ user }} group={{ group }} mode=0755
 
 - name: jorurigwをcloneする
   git: dest=/var/share/jorurigw repo=https://github.com/joruri/joruri-gw.git
+  ignore_errors: True
+
+- name: v4-developブランチをチェックアウト
+  command: git checkout -b v4-develop origin/v4-develop chdir=/var/share/jorurigw
 
 - name: bundle installの実行
-  command: bundle install chdir=/var/share/jorurigw
+  shell: /usr/local/rbenv/shims/bundle install --path vendor/bundle --without development test chdir=/var/share/jorurigw
 
 - name: cronによる定期実行処理を設定
-  command: whenever -w --set 'environment=production' chdir=/var/share/jorurigw
+  command: /usr/local/rbenv/shims/bundle exec whenever -w --set 'environment=production' chdir=/var/share/jorurigw
 
 - name: 所有者を変更
   command: chown -R {{ user }}:{{ group }} /var/share/jorurigw
@@ -45,11 +50,14 @@
 #- name: delayed_jobの起動
 #  command: /etc/init.d/delayed_job start
 
-- name: /usr/local/apache/conf配下にjorurigw.confの設置
-  template: src={{ jorurigw_conf_template }} dest=/usr/local/apache/conf/extra/jorurigw.conf owner=root group=root mode=644
+- name: /etc/httpd/conf.d配下にjorurigw.confの設置
+  template: src={{ jorurigw_conf_template }} dest=/etc/httpd/conf.d/jorurigw.conf owner=root group=root mode=644
+  tags: dev
 
 - name: 所有者を変更
   command: chown -R {{ user }}:{{ group }} /var/share/jorurigw
+  tags: dev
 
 - name: apacheの再起動
-  shell: /usr/local/apache/bin/apachectl restart
+  service: name=httpd state=started enabled=yes
+  tags: dev

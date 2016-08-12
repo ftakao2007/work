@@ -2,45 +2,48 @@
 - hosts: jorurigw_web_centos7
   become: yes
   connection: docker
-  gather_facts: no
+  gather_facts: yes 
   vars:
     web_server_ip: XXX.XXX.XXX.XXX
     user: joruri
     group: joruri
     user_uid: 1001
     user_passwd: $1$SomeSalt$ZSU2MwC9RbVz5E6EYFgjV1
+    ruby_version: 2.3.1
     ruby_library_version: "2.3.0"
-    passenger_version: "4.0.58"
+    passenger_version: "5.0.29"
   roles:
 
-    # ruby-2.3.1のインストール
-    - {role: ../common-roles/ruby-2.3.1.centos,
-       tags: ruby
+    # rbenvのインストール
+    - {role: ../common-roles/rbenv.centos7,
+       rbenv_ruby_version: "{{ ruby_version }}",
+       tags: rbenv
       }
 
     # httpdのインストール
-    - {role: ../common-roles/httpd2.2.centos7,
+    - {role: ../common-roles/httpd2.4.centos7,
        httpd_server_ip: "{{ web_server_ip }}",
        apache_user: "{{ user }}",
        apache_group: "{{ group }}",
-       httpd_conf_template: httpd.conf.j2,
        httpd_logrotate_template: httpd.logrotate.j2,
+       httpd_conf_template: httpd.conf.j2,
        tags: httpd
       }
 
     # memcachedのインストール
-    - {role: ../common-roles/memcached.centos,
+    - {role: ../common-roles/memcached.centos7,
        tags: memcached
       }
 
-    # passenger4.0.58のインストール
-    - {role: ../common-roles/passenger4.0.58.ruby.centos7,
-       passenger_conf_template: passenger.conf.ruby.tj2,
+    # passenger5.0.29のインストール
+    - {role: ../common-roles/passenger5.0.29.ruby.centos7,
+       passenger_conf_template: passenger.conf.rbenv.tj2,
+       ruby_version: 2.3.1,
        tags: passenger
       }
    
     # JoruriGwの設定
-    - {role: ../common-roles/jorurigw.centos, 
+    - {role: ../common-roles/jorurigw.centos7, 
        delayed_job_template: delayed_job.j2,
        jorurigw_conf_template: jorurigw.conf.j2,
        tags: jorurigw
