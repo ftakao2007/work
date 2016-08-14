@@ -1,8 +1,8 @@
 ---
-- hosts: jorurigw_web_centos7
+- hosts: jorurimail_web_centos7
   become: yes
   connection: docker
-  gather_facts: yes 
+  gather_facts: no
   vars:
     web_server_ip: XXX.XXX.XXX.XXX
     user: joruri
@@ -11,6 +11,7 @@
     user_passwd: $1$SomeSalt$ZSU2MwC9RbVz5E6EYFgjV1
     ruby_version: 2.3.1
     ruby_library_version: "2.3.0"
+    #passenger_version: "5.0.30"
     passenger_version: "5.0.29"
   roles:
 
@@ -30,21 +31,14 @@
        tags: httpd
       }
 
-    # memcachedのインストール
-    - {role: ../common-roles/memcached.centos7,
-       tags: memcached
-      }
-
-    # passenger5.0.29のインストール
+    # passenger5のインストール
     - {role: ../common-roles/passenger5.rbenv.centos7,
        passenger_conf_template: passenger.conf.rbenv.tj2,
        ruby_version: 2.3.1,
        tags: passenger
       }
    
-    # JoruriGwの設定
-    - {role: ../common-roles/jorurigw.centos7, 
-       delayed_job_template: delayed_job.j2,
-       jorurigw_conf_template: jorurigw.conf.j2,
-       tags: jorurigw
+    # JoruriMailの設定
+    - {role: ../common-roles/jorurimail.centos7, 
+       tags: jorurimail
       }

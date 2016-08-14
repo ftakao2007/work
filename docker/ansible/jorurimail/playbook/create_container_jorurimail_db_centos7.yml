@@ -1,0 +1,12 @@
+- hosts: docker_hosts
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: deploy centos container
+      docker:
+        image=centos:centos7
+        name=jorurimail_db_centos7
+        expose=3306
+        privileged=yes
+        tty=yes
+        command=/sbin/init
