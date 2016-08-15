@@ -11,8 +11,7 @@
     user_passwd: $1$SomeSalt$ZSU2MwC9RbVz5E6EYFgjV1
     ruby_version: 2.3.1
     ruby_library_version: "2.3.0"
-    #passenger_version: "5.0.30"
-    passenger_version: "5.0.29"
+    passenger_version: "5.0.30"
   roles:
 
     # rbenvのインストール
@@ -31,8 +30,8 @@
        tags: httpd
       }
 
-    # passenger5のインストール
-    - {role: ../common-roles/passenger5.rbenv.centos7,
+    # passenger5.0.30のインストール
+    - {role: ../common-roles/passenger5.0.30.rbenv.centos7,
        passenger_conf_template: passenger.conf.rbenv.tj2,
        ruby_version: 2.3.1,
        tags: passenger

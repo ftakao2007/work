@@ -1,0 +1,15 @@
+### DB初期化
+### OSSのサンプルの初期データを投入します。
+### DBのデータが上書きされます
+
+### /var/share/jorurimailに移動
+$ cd /var/share/jorurimail
+
+### テーブルを作成
+$ rake db:schema:load RAILS_ENV=production
+
+### 初期データを登録
+$ rake db:seed RAILS_ENV=production
+
+### サンプルデータを登録
+$ rake db:seed:demo RAILS_ENV=production

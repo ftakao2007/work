@@ -1,0 +1,73 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - libxslt
+    - libxslt-devel
+    - libxml2-devel
+    - curl-devel    
+    - libjpeg-devel
+    - libpng-devel
+    - librsvg2-devel
+    - ghostscript-devel
+    - ImageMagick
+    - ImageMagick-devel
+    - shared-mime-info
+    - libmcrypt
+    - bzip2 
+    - libyaml-devel
+    - libffi-devel
+    - readline-devel
+    - zlib-devel
+    - gdbm-devel
+    - ncurses-devel
+    - mysql-devel
+    - openldap-devel
+    - shared-mime-info
+    - libicu-devel
+    - npm
+
+- name: /var/shareディレクトリの作成
+  file: path=/var/share state=directory owner={{ user }} group={{ group }} mode=0755
+
+- name: jorurimailをcloneする
+  git: dest=/var/share/jorurimail repo=https://github.com/joruri/joruri-mail.git
+
+- name: bowerのインストール
+  shell: npm install bower@1.7.9 -g
+
+- name: bundle installの実行
+  shell: /usr/local/rbenv/shims/bundle install --path vendor/bundle --without development test chdir=/var/share/jorurimail
+
+- name: 所有者を変更
+  command: chown -R {{ user }}:{{ group }} /var/share/jorurimail
+
+- name: bowerライブラリのインストール
+  shell: sudo -u {{ user }} /usr/local/rbenv/shims/bundle exec rake bower:install RAILS_ENV=production chdir=/var/share/jorurimail
+
+#- name: gemのインストール
+#  gem: name=shared-mime-info user_install=no
+
+#- name: shared-mime-infoがバイナリモードで動くようにソースを修正
+#  copy: src=shared-mime-info.rb dest=/usr/local/lib/ruby/gems/1.9.1/gems/shared-mime-info-0.2.5/lib/shared-mime-info.rb mode=0644
+
+#- name: Sendmail を使用時のスプールのパンク対応
+#  replace: " dest=/etc/aliases regexp='^#root:          marc' replace='root:          /dev/null'"
+
+#- name: newaliasesで設定反映
+#  command: newaliases
+
+- name: jorurimail.confを/etc/httpd/conf.d 配下に配置
+  copy: src=jorurimail.conf dest=/etc/httpd/conf.d/jorurimail.conf mode=0644
+
+- name: ログディレクトリの作成
+  file: path=/var/share/jorurimail/log state=directory owner={{ user }} group={{ group }} mode=0755
+
+#- name: DB初期化方法のメモを転送
+#  copy: src=init_db.txt dest=/root/init_db.txt mode=0644
+
+#- name: 起動スクリプトを転送
+#  copy: src=init_jorurimail_webdb.sh dest=/root/init_jorurimail_webdb.sh mode=0755
+
+- name: httpdの再起動
+  service: name=httpd state=restarted
