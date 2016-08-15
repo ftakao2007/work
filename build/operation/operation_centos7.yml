@@ -22,7 +22,7 @@
       }
 
     # rbenvのインストール
-    - {role: ../common-roles/ftakao2007.rbenv.centos, rbenv_ruby_version: 2.3.1,
+    - {role: ../common-roles/rbenv.centos7, rbenv_ruby_version: 2.3.1,
        tags: rbenv
       }
 

@@ -16,6 +16,6 @@ jorurigw_web_centos7:
    links:
      - jorurigw_db_centos7
    ports:
-     - "8084:80"
+     - "8095:80"
    command: /sbin/init && sh -c '/root/init_jorurigw_web_ldap_smtp.sh'
    #command: /sbin/init && systemctl httpd.service start
