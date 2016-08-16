@@ -6,11 +6,12 @@
 #  gem: name=rack user_install=no version=1.6.4
 
 - name: passengerをインストール
-  gem: name=passenger version={{ passenger_version }}
-  #gem: name=passenger user_install=no version={{ passenger_version }}
+  shell: gem install passenger -v {{ passenger_version }}
 
 - name: passenger module のインストール
-  shell: APXS2=/usr/bin/apxs PATH=/usr/bin:$PATH passenger-install-apache2-module --auto --languages=ruby
+  shell:  APXS2=/usr/bin/apxs /usr/local/rbenv/shims/passenger-install-apache2-module -a
+  #shell: APXS2=/usr/bin/apxs /usr/local/rbenv/shims/passenger-install-apache2-module --auto --languages=ruby,node.js
+  #shell: APXS2=/usr/bin/apxs PATH=/usr/bin:$PATH passenger-install-apache2-module --auto --languages=ruby
 
 - name: バーチャルホスト用confファイルの配置
   template: src={{ passenger_conf_template }} dest=/etc/httpd/conf.d//passenger.conf
