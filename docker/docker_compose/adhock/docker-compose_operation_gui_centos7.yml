@@ -7,4 +7,12 @@ operation_centos7_gui:
      - "2222:22"
      - "3000:3000"
      - "3389:3389"
-   command: /sbin/init && systemctl restart sshd && systemctl restart xrdp.service
+     - "5901:5901"
+   command: /sbin/init && systemctl restart sshd && systemctl restart xrdp.service 
+
+   ### How to use VNC
+   # [ftakao2007@vncserver]
+   # $ sudo systemctl restart vncserver@:1.service
+   # [VNC client]
+   # vnc://(docker host):5901
+   # ftakao2007/vagrant
