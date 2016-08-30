@@ -1,0 +1,30 @@
+---
+- name: epelリポジトリの追加
+  yum: name=epel-release state=present
+
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - Pound
+
+- name: pound.cfgの設置
+  template: src={{ pound_template }} dest=/etc/pound.cfg owner=root group=root mode=644
+
+- name: シェル制限値の設定 (/etc/security/limits.d/90-nproc.conf)
+  template: src={{ pound_limits_template }} dest=/etc/security/limits.d/90-nproc.conf owner=root group=root mode=644
+
+- name: rsyslogでmessagesにログを出力しない設定
+  lineinfile: dest=/etc/rsyslog.conf state=present backrefs=yes regexp='^\*.info;mail.none;authpriv.none;cron.none\s*/var/log/messages' line='*.info;mail.none;authpriv.none;cron.none;local1.none                /var/log/messages'
+
+- name: rsyslogで/var/log/pound.logに出力する設定
+  lineinfile: "dest=/etc/rsyslog.conf state=present regexp='^local1.*' line='local1.*                                                /var/log/pound.log'"
+
+- name: rsyslogの再起動
+  service: name=rsyslog state=restarted
+
+- name: poundの起動と自動起動設定
+  service: name=pound state=started enabled=yes
+
+- name: logrotateの設定
+  template: src={{ logrotate_pound_template }} dest=/etc/logrotate.d/pound owner=root group=root mode=644
+  tags: logrotate

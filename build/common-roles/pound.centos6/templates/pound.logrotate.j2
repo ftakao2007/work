@@ -1,0 +1,13 @@
+/var/log/pound.log {
+    daily
+    rotate 30
+    missingok
+    ifempty
+    compress
+    delaycompress
+    sharedscripts
+    postrotate
+        /sbin/service pound condrestart  > /tmp/logrotate_postrotate_pound.log 2>&1
+        #/bin/kill -HUP `cat /var/run/pound.pid 2> /dev/null` 2> /dev/null || true
+    endscript
+}

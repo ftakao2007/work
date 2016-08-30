@@ -1,0 +1,17 @@
+---
+- hosts: pound
+  become: yes
+  connection: docker
+  gather_facts: no
+  roles:
+    # Poundのインストール
+    - {role: ../common-roles/pound.centos6,
+       pound_template: pound.conf.tj2,
+       ap_server1_ip: 127.0.0.1,
+       ap_server2_ip: 127.0.0.1,
+       ap_server3_ip: 127.0.0.1,
+       ap_server4_ip: 127.0.0.1,
+       pound_limits_template: 90-nproc.conf.tj2,
+       logrotate_pound_template: pound.logrotate.j2,
+       tags: pound
+      }
