@@ -3,10 +3,13 @@ jorurigw_db:
    container_name: jorurigw_db
    tty: true
    environment:
-     - DOCKER_HOST_PORT_8082_TCP_ADDR=10.136.3.189
+     - DOCKER_HOST_PORT_8082_TCP_ADDR=192.168.109.11
      - DOCKER_HOST_PORT_8082_TCP_PORT=8082
    expose:
      - "3306"
+   ports:
+     - "3306:3306"
+     - "2227:22"
    command: sh -c '/bin/sh /root/init_compose_jorurigw_db.sh'
    #command: sh -c 'service mysqld restart && service rsyslog restart && /bin/bash --login'
 
@@ -14,6 +17,9 @@ jorurimail_db:
    image: ftakao2007/jorurimail_db:latest
    container_name: jorurimail_db
    tty: true
+   ports:
+     - "3307:3306"
+     - "2228:22"
    expose:
      - "3306"
    command: sh -c 'service mysqld restart && service rsyslog restart && /bin/bash --login'
@@ -24,6 +30,7 @@ ldap:
    tty: true
    ports:
      - "389:389"
+     - "2226:22"
    expose:
      - "389"
    command: sh -c 'service slapd restart && service rsyslog restart && /bin/bash --login'
@@ -40,6 +47,8 @@ smtp_ldap:
    expose:
      - "25"
      - "587"
+   ports:
+     - "2225:22"
    command: sh -c '/bin/sh /root/init_smtp_ldap.sh'
    #command: sh -c 'service postfix restart && service rsyslog restart && /bin/bash --login'
 
@@ -54,6 +63,8 @@ imap_ldap:
      - ldap
    expose:
      - "143"
+   ports:
+     - "2224:22"
    command: sh -c '/bin/sh /root/init_imap_ldap.sh'
    #command: sh -c 'service dovecot restart && service rsyslog restart && /bin/bash --login'
 
@@ -68,6 +79,7 @@ jorurimail_web:
      - ldap
    ports:
      - "8082:80"
+     - "2223:22"
    command: sh -c '/root/init_jorurimail_web_imap_smtp_ldap.sh'
    #command: sh -c '/root/init_jorurimail_web_imap_smtp.sh'
    #command: sh -c '/root/init_jorurimail_web_imap.sh'
@@ -84,6 +96,7 @@ jorurigw_web:
      - ldap
    ports:
      - "8084:80"
+     - "2222:22"
    command: sh -c '/root/init_jorurigw_web_ldap_smtp.sh'
    #command: sh -c '/root/init_jorurigw_web_ldap.sh'
    #command: sh -c '/root/init_jorurigw_web.sh'
