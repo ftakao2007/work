@@ -1,0 +1,38 @@
+pound:
+   image: ftakao2007/pound:latest
+   container_name: pound
+   tty: true
+   links:
+     - jorurimail_web1
+     - jorurimail_web2
+   ports:
+     - "8080:80"
+   command: sh -c 'service pound restart && /bin/bash --login'
+
+jorurimail_db:
+   image: ftakao2007/jorurimail_db:latest
+   container_name: jorurimail_db
+   tty: true
+   expose:
+     - "3306"
+   command: sh -c 'service mysqld restart && /bin/bash --login'
+
+jorurimail_web1:
+   image: ftakao2007/jorurimail_web:latest
+   container_name: jorurimail_web1
+   tty: true
+   links:
+     - jorurimail_db
+   ports:
+     - "8082:80"
+   command: sh -c '/root/init_jorurimail_web.sh'
+
+jorurimail_web2:
+   image: ftakao2007/jorurimail_web:latest
+   container_name: jorurimail_web2
+   tty: true
+   links:
+     - jorurimail_db
+   ports:
+     - "8083:80"
+   command: sh -c '/root/init_jorurimail_web.sh'
