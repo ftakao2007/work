@@ -10,7 +10,7 @@ jorurigw_db:
    ports:
      - "3306:3306"
      - "2227:22"
-   command: sh -c '/bin/sh /root/init_compose_jorurigw_db.sh'
+   command: sh -c 'service sshd restart && /bin/sh /root/init_compose_jorurigw_db.sh'
    #command: sh -c 'service mysqld restart && service rsyslog restart && /bin/bash --login'
 
 jorurimail_db:
@@ -22,7 +22,7 @@ jorurimail_db:
      - "2228:22"
    expose:
      - "3306"
-   command: sh -c 'service mysqld restart && service rsyslog restart && /bin/bash --login'
+   command: sh -c 'service sshd restart && service mysqld restart && service rsyslog restart && /bin/bash --login'
 
 ldap:
    image: ftakao2007/ldap:latest
@@ -33,7 +33,7 @@ ldap:
      - "2226:22"
    expose:
      - "389"
-   command: sh -c 'service slapd restart && service rsyslog restart && /bin/bash --login'
+   command: sh -c 'service sshd restart && service slapd restart && service rsyslog restart && /bin/bash --login'
 
 smtp_ldap:
    image: ftakao2007/smtp_ldap:latest
@@ -49,7 +49,7 @@ smtp_ldap:
      - "587"
    ports:
      - "2225:22"
-   command: sh -c '/bin/sh /root/init_smtp_ldap.sh'
+   command: sh -c 'service sshd restart && /bin/sh /root/init_smtp_ldap.sh'
    #command: sh -c 'service postfix restart && service rsyslog restart && /bin/bash --login'
 
 imap_ldap:
@@ -65,7 +65,7 @@ imap_ldap:
      - "143"
    ports:
      - "2224:22"
-   command: sh -c '/bin/sh /root/init_imap_ldap.sh'
+   command: sh -c 'service sshd restart && /bin/sh /root/init_imap_ldap.sh'
    #command: sh -c 'service dovecot restart && service rsyslog restart && /bin/bash --login'
 
 jorurimail_web:
@@ -80,7 +80,7 @@ jorurimail_web:
    ports:
      - "8082:80"
      - "2223:22"
-   command: sh -c '/root/init_jorurimail_web_imap_smtp_ldap.sh'
+   command: sh -c 'service sshd restart && /root/init_jorurimail_web_imap_smtp_ldap.sh'
    #command: sh -c '/root/init_jorurimail_web_imap_smtp.sh'
    #command: sh -c '/root/init_jorurimail_web_imap.sh'
    #command: sh -c '/root/init_jorurimail_web.sh'
@@ -97,7 +97,7 @@ jorurigw_web:
    ports:
      - "8084:80"
      - "2222:22"
-   command: sh -c '/root/init_jorurigw_web_ldap_smtp.sh'
+   command: sh -c 'service sshd restart && /root/init_jorurigw_web_ldap_smtp.sh'
    #command: sh -c '/root/init_jorurigw_web_ldap.sh'
    #command: sh -c '/root/init_jorurigw_web.sh'
    #command: sh -c ' service httpd start && /bin/bash --login'
