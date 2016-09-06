@@ -1,0 +1,13 @@
+redmine2.6.10_centos7:
+   image: ftakao2007/redmine2.6.10_centos7:latest
+   container_name: redmine2.6.10_centos7
+   tty: true
+   privileged: true
+   ports:
+     - "3306:3306"
+     - "8095:80"
+     - "2232:22"
+   expose:
+     - "3306"
+   command: /sbin/init && systemctl start mysqld.service && systemctl start httpd.service
+

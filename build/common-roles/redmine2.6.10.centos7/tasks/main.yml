@@ -1,0 +1,42 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - ImageMagick
+    - ImageMagick-devel
+    - ipa-pgothic-fonts
+
+- name: /var/shareディレクトリの作成
+  file: path=/var/share state=directory owner={{ user }} group={{ group }} mode=0755
+
+- name: redmineをcloneする
+  git: dest=/var/share/redmine repo=https://github.com/redmine/redmine.git
+
+- name: 2.6-stableブランチをチェックアウト
+  command: git checkout -b 2.6-stable origin/2.6-stable chdir=/var/share/redmine
+
+- name: /var/share/redmine/config配下にdatabase.ymlの設置
+  template: src=database.yml.tj2 dest=/var/share/redmine/config/database.yml owner={{ user }} group={{ group }} mode=644
+
+- name: /var/share/redmine/config配下にconfiguration.ymlの設置
+  template: src=configuration.yml.tj2 dest=/var/share/redmine/config/configuration.yml owner={{ user }} group={{ group }} mode=644
+
+- name: /etc/httpd/conf.d配下にredmine.confの設置
+  template: src=redmine.conf.tj2 dest=/etc/httpd/conf.d/redmine.conf owner=root group=root mode=644
+
+- name: bundle installの実行
+  shell: /usr/local/rbenv/shims/bundle install --without development test --path vendor/bundle chdir=/var/share/redmine
+
+- name: セッションデータ改竄防止用鍵の生成
+  shell: /usr/local/rbenv/shims/bundle exec rake generate_secret_token chdir=/var/share/redmine
+
+- name: テーブル作成
+  shell: RAILS_ENV=production /usr/local/rbenv/shims/bundle exec rake db:migrate chdir=/var/share/redmine
+
+- name: 所有者を変更
+  command: chown -R {{ user }}:{{ group }} /var/share/redmine
+  tags: dev
+
+- name: apacheの再起動
+  service: name=httpd state=started enabled=yes
+  tags: dev

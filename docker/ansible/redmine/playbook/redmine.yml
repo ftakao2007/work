@@ -1,0 +1,54 @@
+---
+- hosts: redmine
+  become: yes
+  connection: docker
+  gather_facts: no
+  vars:
+    user: redmine
+    group: redmine
+    ruby_version: 2.3.1
+    ruby_library_version: "2.3.0"
+    passenger_version: "5.0.30"
+    db_user: redmine
+    db_user_password: 'pass'
+    db_user_root_password: 'pass'
+  roles:
+
+    # mysql5.6.centos7のインストール
+    - {role: ../common-roles/mysql5.6.centos7,
+       my_conf_template: my.cnf.j2,
+       my_conf_server_id: 1123,
+       mysql_root_password: '{{ db_user_root_password }}',
+       mysql_operation_user: '{{ db_user }}',
+       mysql_operation_user_password: '{{ db_user_password }}',
+       create_database: 'redmine',
+       tags: mysql
+      }
+
+    # rbenvのインストール
+    - {role: ../common-roles/rbenv.centos7,
+       rbenv_ruby_version: "{{ ruby_version }}",
+       tags: rbenv
+      }
+
+    # httpdのインストール
+    - {role: ../common-roles/httpd2.4.centos7,
+       httpd_server_ip: "{{ web_server_ip }}",
+       apache_user: "{{ user }}",
+       apache_group: "{{ group }}",
+       httpd_logrotate_template: httpd.logrotate.j2,
+       httpd_conf_template: httpd.conf.j2,
+       tags: httpd
+      }
+
+    # passenger5.0.30のインストール
+    - {role: ../common-roles/passenger5.rbenv.centos7,
+       passenger_conf_template: passenger.conf.rbenv.tj2,
+       ruby_version: 2.3.1,
+       tags: passenger
+      }
+
+    # redmine2.6.10のインストール
+    - {role: ../common-roles/redmine2.6.10.centos7,
+       tags: redmine
+      }

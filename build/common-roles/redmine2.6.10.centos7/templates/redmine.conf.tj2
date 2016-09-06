@@ -1,0 +1,10 @@
+NameVirtualHost *:80
+
+<Directory "/var/share/redmine/public">
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+    ServerName default
+    DocumentRoot /var/share/redmine/public
+</VirtualHost>
