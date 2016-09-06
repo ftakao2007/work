@@ -1,6 +1,0 @@
-redmine:
-   image: redmine
-   container_name: redmine
-   tty: true
-   ports:
-     - "8089:3000"
