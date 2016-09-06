@@ -6,7 +6,7 @@
 #  gem: name=rack user_install=no version=1.6.4
 
 - name: passengerをインストール
-  shell: gem install passenger -v {{ passenger_version }}
+  shell: /usr/local/rbenv/shims/gem install passenger -v {{ passenger_version }}
 
 - name: passenger module のインストール
   shell:  APXS2=/usr/bin/apxs /usr/local/rbenv/shims/passenger-install-apache2-module -a
