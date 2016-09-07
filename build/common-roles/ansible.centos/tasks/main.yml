@@ -6,6 +6,7 @@
     - python-devel
     - python-yaml
     - openssl-devel
+    - libffi-devel
 
 - name: ansibleのインストール
   command: pip install ansible
