@@ -12,7 +12,7 @@ operation_centos7_gui:
 
    ### How to use VNC
    # [ftakao2007@vncserver]
-   # $ sudo systemctl restart vncserver@:1.service
+   # $ sudo systemctl restart vncserver@:2.service
    # [VNC client]
    # vnc://(docker host):5901
    # ftakao2007/vagrant
