@@ -1,0 +1,7 @@
+jupyter_iruby:
+   image: ftakao2007/jupyter_iruby:latest
+   container_name: jupyter_iruby
+   tty: true
+   ports:
+     - "8888:8888"
+   command: /sbin/init
