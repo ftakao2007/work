@@ -26,16 +26,6 @@
        tags: rbenv
       }
 
-    # dockerのインストール
-    - {role: ../common-roles/docker.ubuntu, docker_user: '{{ user_name }}',
-       tags: docker
-      }
-
-    # docker-composeのインストール
-    - {role: ../common-roles/docker-compose.ubuntu,
-       tags: docker-compose
-      }
-
   post_tasks:
     - name: ftakao2007/workをcloneする
       git: dest=/home/{{ user_name }}/work repo=https://github.com/ftakao2007/work.git

@@ -1,0 +1,16 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+
+  roles:
+    # open-vm-toolsのインストール
+    - {role: ../common-roles/open-vm-tools.centos7,
+       tags: open-vm-tools
+      }
+
+    # chronyの設定
+    - {role: ../common-roles/chrony.centos7,
+       ntp_server: ntp.nict.jp,
+       tags: chrony
+      }

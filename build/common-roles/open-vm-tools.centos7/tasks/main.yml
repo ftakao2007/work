@@ -1,0 +1,8 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - open-vm-tools.x86_64
+    - libdnet.x86_64
+    - libicu.x86_64
+    - libmspack.x86_64

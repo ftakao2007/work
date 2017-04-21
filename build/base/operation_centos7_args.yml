@@ -3,7 +3,7 @@
   gather_facts: yes
   become: yes
   vars:
-    user_name: jsd
+    user_name: '{{ user_name_arg }}'
   roles:
 
     # 基本設定
@@ -22,18 +22,8 @@
       }
 
     # rbenvのインストール
-    - {role: ../common-roles/rbenv.centos7, rbenv_ruby_version: 2.3.1,
+    - {role: ../common-roles/ftakao2007.rbenv.centos, rbenv_ruby_version: 2.3.1,
        tags: rbenv
-      }
-
-    # dockerのインストール
-    - {role: ../common-roles/docker.centos, docker_user: '{{ user_name }}',
-       tags: docker
-      }
-
-    # docker-composeのインストール
-    - {role: ../common-roles/docker-compose.centos,
-       tags: docker-compose
       }
 
   post_tasks:

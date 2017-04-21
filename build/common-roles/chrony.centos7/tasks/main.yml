@@ -1,0 +1,18 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - chrony
+
+- name: デフォルトの同期先を削除
+  replace: dest=/etc/chrony.conf regexp='^server ..centos.pool.ntp.org iburst\n' replace='' backup=no
+
+- name: IPv4のみ利用設定
+  replace: dest=/etc/chrony.conf regexp='^bindcmdaddress ::1$' replace='#bindcmdaddress ::1' backup=no
+
+- name: /etc/chrony.confの設定
+  lineinfile: 'dest=/etc/chrony.conf backup=no state=present regexp="server\s*{{ ntp_server }}" line="server {{ ntp_server }} iburst" owner=root group=root mode=644'
+  notify: restart chronyd
+
+- name: chronydの起動と自動起動設定
+  service: name=chronyd state=started enabled=yes
