@@ -1,0 +1,6 @@
+base_centos7:
+   image: ftakao2007/base_centos7:joruri
+   container_name: base_centos7
+   privileged: true
+   tty: true
+   command: /sbin/init
