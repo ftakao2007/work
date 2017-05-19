@@ -1,0 +1,11 @@
+openldap_joruri:
+   image: ftakao2007/openldap_centos7:joruri
+   container_name: openldap_joruri
+   privileged: true
+   tty: true
+   ports:
+     - "389:389"
+     - "2222:22"
+   command: sh -c '/sbin/init'
+   #command: sh -c 'exec /usr/sbin/init && systemctl restart sshd.service && systemctl restart slapd.service'
+   #command: sh -c 'exec /usr/sbin/init && /root/init.sh'

@@ -1,0 +1,4 @@
+dn: ou=001企画部,{{ openldap_base_dn }}
+ou: 001企画部
+objectClass: organizationalunit
+objectClass: top

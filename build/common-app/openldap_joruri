@@ -1,0 +1,25 @@
+#!/bin/sh
+
+### 作業ユーザ
+user="joruri"
+
+### LDAPサーバのIPアドレス
+server="127.0.0.1:2222,"
+
+### LDAP管理者パスワード
+ldapadminpasswdplain="pass"
+
+### LDAP管理者パスワード(ハッシュ値)
+ldapadminpasswd="{SSHA}7fRM4ZKTa7jMpZxJfJ7KIBkYPq7PPmla"
+
+### rootパスワード設定用テンプレート
+addrootpwtemplate="add_rootPw.ldif.j2"
+
+### ベースDN
+basedn="dc=joruri,dc=example,dc=com"
+
+### ベースDN設定用テンプレート
+changebasedntemplate="change_base_dn.ldif.j2"
+
+### ベースエントリ設定用テンプレート
+changebaseentrytemplate="change_base_entry_joruri.ldif.j2"

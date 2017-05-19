@@ -1,0 +1,68 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - openldap
+    - openldap-clients
+    - openldap-servers
+
+    #- compat-openldap
+    #- apr-util-ldap
+    #- nss-pam-ldapd
+    #- pam_ldap
+    #- openssh-clients
+
+- name: Berkeley DBのDB設定ファイルをサンプルからコピー
+  command: cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+
+- name: slapdの起動と自動起動設定
+  service: name=slapd state=started enabled=yes
+
+- name: LDAPのrootパスワード変更用ldifファイルを設置
+  template: src={{ openldap_add_root_pw_template }} dest=/root/add_rootPw.ldif owner=root group=root mode=0600
+
+- name: LDAPのrootパスワード変更
+  command: ldapadd -Y EXTERNAL -H ldapi:// -f /root/add_rootPw.ldif
+
+- name: ベースDN変更用ldifファイルを設置
+  template: src={{ openldap_change_base_dn_template }} dest=/root/change_base_dn.ldif owner=root group=root mode=0600
+
+- name: ベースDNの変更
+  command: ldapmodify -x -D cn=config -w {{ openldap_ldap_admin_passwd_plain }} -f /root/change_base_dn.ldif
+
+- name: ベースエントリ登録用ldifファイルを設置
+  template: src={{ openldap_change_base_entry_template }} dest=/root/change_base_entry.ldif owner=root group=root mode=0600
+
+- name: ベースエントリの登録
+  command: ldapadd -x -D "cn=Manager,{{ openldap_base_dn }}" -w {{ openldap_ldap_admin_passwd_plain }} -f /root/change_base_entry.ldif
+
+- name: nisスキーマを使うためにconsineスキーマ登録
+  command: ldapadd -x -w {{ openldap_ldap_admin_passwd_plain }} -D cn=config -f /etc/openldap/schema/cosine.ldif
+
+- name: posixAccountを使うためにnisスキーマ登録
+  command: ldapadd -x -w {{ openldap_ldap_admin_passwd_plain }} -D cn=config -f /etc/openldap/schema/nis.ldif
+
+- name: departmentNumberを使うためにinetorgpersonスキーマ登録
+  command: ldapadd -x -w {{ openldap_ldap_admin_passwd_plain }} -D cn=config -f /etc/openldap/schema/inetorgperson.ldif
+
+- name: 1階層目グループ作成のサンプルldifファイル配布
+  template: src=01_group.ldif dest=/root/01_group.ldif owner=root group=root mode=0600
+
+- name: 2階層目グループ作成のサンプルldifファイル配布
+  template: src=02_group.ldif dest=/root/02_group.ldif owner=root group=root mode=0600
+
+- name: 2階層目にユーザを作成するサンプルldifファイル配布
+  template: src=03_person.ldif dest=/root/03_person.ldif owner=root group=root mode=0600
+
+- name: 2階層目にユーザを作成するサンプルldifファイル配布
+  template: src=04_person.ldif dest=/root/04_person.ldif owner=root group=root mode=0600
+
+- name: 2階層目にユーザを作成するサンプルldifファイル配布
+  template: src=05_person.ldif dest=/root/05_person.ldif owner=root group=root mode=0600
+
+- name: 2階層目にユーザを作成するサンプルldifファイル配布
+  template: src=06_person.ldif dest=/root/06_person.ldif owner=root group=root mode=0600
+
+- name: 2階層目にユーザを作成するサンプルldifファイル配布
+  template: src=07_person.ldif dest=/root/07_person.ldif owner=root group=root mode=0600
+

@@ -1,0 +1,24 @@
+dn: uid=0050012,ou=001002秘書広報課,ou=001企画部,{{ openldap_base_dn }}
+o: 001企画部
+ou: 001002秘書広報課
+title: 一般社員
+departmentNumber: 001003001012
+givenName: joruri_test2
+givenName;lang-en: joruri_test2
+sn: ジョールリ
+sn;lang-en: joruri_test2
+cn: ジョールリテスト2
+cn;lang-en: joruri
+uidNumber: 10000002
+gidNumber: 20000001
+homeDirectory: /home/joruri_test12
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: posixAccount
+objectClass: shadowAccount
+preferredLanguage: ja
+st: joruri市
+mail: joruri_test12@joruri.example.com
+userPassword: {CRYPT}zi5safp/HyeXk
+### pass
