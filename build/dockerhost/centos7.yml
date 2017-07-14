@@ -3,7 +3,7 @@
   gather_facts: yes
   become: yes
   vars:
-    user_name: jsd
+    user_name: vagrant
   roles:
     # pipのインストール
     - {role: ../common-roles/pip.centos,
