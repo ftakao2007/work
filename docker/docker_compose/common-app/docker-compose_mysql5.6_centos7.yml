@@ -1,0 +1,10 @@
+mysql5.6_centos7:
+   image: ftakao2007/mysql5.6_centos7:base
+   container_name: mysql5.6_centos7
+   privileged: true
+   tty: true
+   ports:
+     - "3306:3306"
+     - "2222:22"
+   #command: sh -c '/sbin/init'
+   command: sh -c 'exec /usr/sbin/init && systemctl restart sshd.service && systemctl restart mysqld.service'

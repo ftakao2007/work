@@ -1,5 +1,5 @@
 base_centos7:
-   image: ftakao2007/base_centos7:joruri
+   image: ftakao2007/centos7:latest
    container_name: base_centos7
    privileged: true
    tty: true
