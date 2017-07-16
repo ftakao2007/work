@@ -1,0 +1,25 @@
+#!/bin/sh
+
+### 作業ユーザ
+user="root"
+
+### LDAPサーバのinventory
+inventory="inventory/base_centos7"
+
+### LDAP管理者パスワード
+ldapadminpasswdplain="pass"
+
+### LDAP管理者パスワード(ハッシュ値)
+ldapadminpasswd="{SSHA}7fRM4ZKTa7jMpZxJfJ7KIBkYPq7PPmla"
+
+### rootパスワード設定用テンプレート
+addrootpwtemplate="add_rootPw.ldif.j2"
+
+### ベースDN
+basedn="dc=dockernet,dc=co,dc=jp"
+
+### 総教用ベースDN設定用テンプレート
+changebasedntemplate="change_base_dn.ldif.j2"
+
+### 総教用ベースエントリ設定用テンプレート
+changebaseentrytemplate="change_base_entry_dockernet.ldif.j2"

@@ -1,0 +1,16 @@
+---
+- hosts: all
+  connection: docker
+  gather_facts: no
+  become: yes
+  roles:
+    # OpenLDAPインストール
+    - {role: ../common-roles/openldap.centos7,
+       openldap_ldap_admin_passwd_plain: "{{ ldap_admin_passwd_plain }}",
+       openldap_ldap_admin_passwd: "{{ ldap_admin_passwd }}",
+       openldap_add_root_pw_template: "{{ add_root_pw_template }}",
+       openldap_base_dn: "{{ base_dn }}",
+       openldap_change_base_dn_template: "{{ change_base_dn_template }}",
+       openldap_change_base_entry_template: "{{ change_base_entry_template }}",
+       tags: openldap
+      }

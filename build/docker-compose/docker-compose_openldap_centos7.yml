@@ -1,0 +1,10 @@
+openldap_centos7:
+   image: ftakao2007/openldap_centos7:latest
+   container_name: openldap_centos7
+   privileged: true
+   tty: true
+   ports:
+     - "389:389"
+     - "2223:22"
+   #command: sh -c '/sbin/init'
+   command: sh -c 'exec /usr/sbin/init && systemctl restart sshd.service && systemctl restart slapd.service'
