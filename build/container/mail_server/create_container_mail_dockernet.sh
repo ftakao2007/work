@@ -10,7 +10,7 @@ fi
 docker-compose -f docker-compose_base_centos7.yml up -d
 
 ### 設定ファイルの読み込み
-. ./setup_mail_virtual_dockernet
+. ./setup_mail_dockernet
 
 ### 1サーバでメール送受信。LDAP利用
 ansible-playbook -i "${inventory}" -c paramiko postfix_dovecot_ldap_centos7.yml -u ${user} -t add_vmail_user,smtp,ldap_smtp,imap,ldap_imap \
