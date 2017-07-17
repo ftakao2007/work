@@ -1,0 +1,15 @@
+---
+- include: smtp.yml
+  tags: smtp
+
+- include: virtual_mailbox.yml
+  tags: virtual_mailbox
+
+#- include: smtp_auth.yml
+#  tags: smtp_auth
+
+- include: ldap_smtp.yml
+  tags: ldap_smtp
+
+- include: ad_smtp.yml
+  tags: ad_smtp

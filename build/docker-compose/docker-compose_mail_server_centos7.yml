@@ -1,0 +1,11 @@
+mail_server_centos7:
+   image: ftakao2007/mail_centos7:latest
+   container_name: mail_server_centos7
+   privileged: true
+   tty: true
+   ports:
+     - "2525:25"
+     - "1143:143"
+     - "2224:22"
+   #command: sh -c '/sbin/init'
+   command: sh -c 'exec /usr/sbin/init && systemctl restart sshd.service && systemctl restart postfix.service && systemctl restart dovecot.service'

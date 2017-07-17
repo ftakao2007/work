@@ -1,0 +1,15 @@
+---
+- name: /etc/dovecot/conf.d/10-auth.confで/etc/dovecot/conf.d/auth-ldap.conf.extを読み込むように修正
+  replace: 'dest=/etc/dovecot/conf.d/10-auth.conf backup=no regexp="^#!include auth-ldap.conf.ext" replace="!include auth-ldap.conf.ext" owner=root group=root mode=600'
+
+- name: /etc/dovecot/conf.d/10-auth.confで/etc/dovecot/conf.d/auth-system.conf.extを読み込まないように修正
+  replace: 'dest=/etc/dovecot/conf.d/10-auth.conf backup=no regexp="^!include auth-system.conf.ext" replace="#!include auth-system.conf.ext" owner=root group=root mode=644'
+
+- name: /etc/dovecot/dovecot-ldap.conf.ext の作成
+  template: src={{ dovecot_ldap_conf_ext_template }} dest=/etc/dovecot/dovecot-ldap.conf.ext owner=root group=root mode=644
+
+- name: /etc/dovecot/conf.d/auth-ldap.conf.ext の設置
+  template: src={{ dovecot_auth_ldap_conf_ext_template }} dest=/etc/dovecot/conf.d/auth-ldap.conf.ext owner=root group=root mode=644
+
+- name: dovecotの再起動
+  service: name=dovecot state=restarted

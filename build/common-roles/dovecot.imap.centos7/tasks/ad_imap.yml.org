@@ -1,0 +1,11 @@
+---
+
+- name: /etc/dovecot/conf.d/10-auth.confで/etc/dovecot/conf.d/auth-ldap.conf.extを読み込むように修正
+  replace: 'dest=/etc/dovecot/conf.d/10-auth.conf backup=no regexp="^#!include auth-ldap.conf.ext" replace="!include auth-ldap.conf.ext" owner=root group=root mode=600'
+
+# https://blog.apar.jp/linux/678/
+- name: Dovecot SASL ライブラリの認証ソケットファイルを指定(/etc/dovecot/conf.d/10-master.conf)
+  template: src=10-master.conf.j2 dest=/etc/dovecot/conf.d/10-master.conf owner=root group=root mode=644
+
+- name: /etc/dovecot/dovecot-ldap.conf.ext の作成
+  template: src=dovecot-ldap.conf.ext.j2 dest=/etc/dovecot/dovecot-ldap.conf.ext owner=root group=root mode=644

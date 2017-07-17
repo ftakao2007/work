@@ -1,0 +1,23 @@
+---
+
+### postfix側で作成 ../../postfix.smtp.centos7/tasks/virtual_mailbox.yml
+### - name: メールボックスのディレクトリ作成
+###   file: path={{ postfix_virtual_mailbox_base }} state=directory owner={{ vmail_user }} group={{ vmail_group }} mode=755
+
+- name: 10-auth.confのauth_mechanismsにcram-md5を追加
+  replace: "dest=/etc/dovecot/conf.d/10-auth.conf regexp='^auth_mechanisms = plain login' replace='auth_mechanisms = cram-md5 plain login'"
+
+- name: 10-auth.confでauth-passwdfile.conf.extを読み込むように修正
+  replace: "dest=/etc/dovecot/conf.d/10-auth.conf regexp='^#!include auth-passwdfile.conf.ext' replace='!include auth-passwdfile.conf.ext'"
+
+- name: 10-auth.confでauth-static.conf.extを読み込むように修正
+  replace: "dest=/etc/dovecot/conf.d/10-auth.conf regexp='^#!include auth-static.conf.ext' replace='!include auth-static.conf.ext'"
+
+- name: auth-passwdfile.conf.extの設置
+  template: src={{ dovecot_conf_template }} dest=/etc/dovecot/conf.d/auth-passwdfile.conf.ext owner=root group=root mode=644
+
+- name: auth-static.conf.extの設置
+  template: src={{ dovecot_auth_static_conf_ext_template }} dest=/etc/dovecot/conf.d/auth-static.conf.ext owner=root group=root mode=644
+
+- name: etc/dovecot/passwdの設置
+  template: src={{ dovecot_etc_dovecot_passwd_template }} dest=/etc/dovecot/passwd owner=root group=root mode=600

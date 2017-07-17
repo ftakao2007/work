@@ -1,0 +1,65 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - openldap-clients
+    - nss-pam-ldapd
+
+#    - nscd
+
+- name: nslcd.confの設置
+  template: src={{ nslcd_conf_template }} dest=/etc/nslcd.conf owner=root group=root mode=600
+
+#- name: ldap.confの設置
+#  template: src={{ ldap_conf_template }} dest=/etc/openldap/ldap.conf owner=root group=root mode=644
+
+- name: system-authがsymlinkであることの確認
+  stat: path=/etc/pam.d/system-auth
+  register: st
+
+- fail:
+    msg: "/etc/pam.d/system-authがありません"
+  when: st.stat.islnk is not defined
+
+- fail:
+    msg: "/etc/pam.d/system-authはsymlinkではありません"
+  when: st.stat.islnk == False
+
+- name: system-auth-acの設置
+  template: src={{ system_auth_ac_template }} dest=/etc/pam.d/system-auth-ac owner=root group=root mode=644
+
+- name: password-authがsymlinkであることの確認
+  stat: path=/etc/pam.d/password-auth
+  register: st
+
+- fail:
+    msg: "/etc/pam.d/password-authがありません"
+  when: st.stat.islnk is not defined
+
+- fail:
+    msg: "/etc/pam.d/password-authはsymlinkではありません"
+  when: st.stat.islnk == False
+
+- name: password-auth-acの設置
+  template: src={{ password_auth_ac_template }} dest=/etc/pam.d/password-auth-ac owner=root group=root mode=644
+
+#- name: /etc/pam.d/sshdの設定
+#  lineinfile: dest=/etc/pam.d/sshd line='session     optional      pam_mkhomedir.so umask=0022'
+
+- name: nsswitch.confの設置
+  template: src={{ nsswitch_conf_template }} dest=/etc/nsswitch.conf owner=root group=root mode=644
+
+- name: ログインすると自動的にホームディレクトリが作成される設定
+  command: /usr/sbin/authconfig --enablemkhomedir --update
+
+- name: nslcdの起動と自動起動設定
+  service: name=nslcd state=started enabled=yes
+
+#- name: /etc/dovecot/conf.d/10-auth.confで/etc/dovecot/conf.d/auth-ldap.conf.extを読み込むように修正
+#  replace: 'dest=/etc/dovecot/conf.d/10-auth.conf backup=no regexp="^#!include auth-ldap.conf.ext" replace="!include auth-ldap.conf.ext" owner=root group=root mode=600'
+
+#- name: /etc/dovecot/dovecot-ldap.conf.ext の作成
+#  template: src=dovecot-ldap.conf.ext.j2 dest=/etc/dovecot/dovecot-ldap.conf.ext owner=root group=root mode=644
+
+- name: /homeの権限を777に設定
+  file: path=/home owner=root group=root mode=0777

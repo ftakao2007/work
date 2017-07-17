@@ -1,0 +1,8 @@
+---
+
+# https://blog.apar.jp/linux/678/
+- name: Dovecot SASL ライブラリの認証ソケットファイルを指定(/etc/dovecot/conf.d/10-master.conf)
+  template: src=10-master.conf.j2 dest=/etc/dovecot/conf.d/10-master.conf owner=root group=root mode=644
+
+- name: dovecotの再起動
+  service: name=dovecot state=restarted

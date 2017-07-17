@@ -1,0 +1,9 @@
+server_host = {{ postfix_server_host }}
+search_base = {{ postfix_search_base }}
+bind = yes
+bind_dn = {{ ad_dn }}
+bind_pw = {{ ad_dnpass }}
+scope = sub
+version = 3
+query_filter = (mail=%s)
+result_attribute = mail

@@ -1,0 +1,15 @@
+---
+- name: 必要なパッケージ(postfix)のインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - postfix
+
+- name: main.cfの設置
+  template: src={{ main_cf_template }} dest=/etc/postfix/main.cf owner=root group=root mode=644
+
+- name: postfixの起動と自動起動設定
+  service: name=postfix state=started enabled=yes
+
+- name: メールボックスのディレクトリ作成
+  file: path=/home/{{ mail_user }}/Maildir state=directory owner={{ mail_user }} group={{ mail_group }} mode=755
+#  when: tags != "virtual_mailbox"

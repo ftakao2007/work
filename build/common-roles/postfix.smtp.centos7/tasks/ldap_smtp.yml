@@ -1,0 +1,15 @@
+---
+#- name: ldap.confの設置
+#  template: src={{ ldap_conf_template }} dest=/etc/openldap/ldap.conf owner=root group=root mode=644
+
+- name: メールボックスのディレクトリ作成
+  file: path={{ postfix_virtual_mailbox_base }} state=directory owner={{ vmail_user }} group={{ vmail_group }} mode=755
+
+- name: main.cfの設置
+  template: src={{ main_cf_template }} dest=/etc/postfix/main.cf owner=root group=root mode=644
+
+- name: ldap-alias.cfの設置
+  template: src={{ ldap_alias_cf_template }} dest=/etc/postfix/ldap-alias.cf owner=root group=root mode=644
+
+- name: ldap-mailbox.cfの設置
+  template: src={{ ldap_mailbox_cf_template }} dest=/etc/postfix/ldap-mailbox.cf owner=root group=root mode=644

@@ -1,0 +1,8 @@
+hosts = {{ ad_hosts }}:{{ ad_port }}
+base = {{ ad_base }}
+dn = {{ ad_dn }}
+dnpass = {{ ad_dnpass }}
+auth_bind = yes
+ldap_version = 3
+pass_attrs = userPrincipalName=user
+pass_filter = (&(objectClass=person)(sAMAccountName=%n)(!(objectClass=computer)))

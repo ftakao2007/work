@@ -1,0 +1,60 @@
+#!/bin/sh
+
+### 作業ユーザ
+user="root"
+
+### メールサーバのinventory
+inventory="inventory/base_centos7"
+
+### メールサーバのFQDN
+hostname="mail.dockernet.co.jp"
+
+### メールサーバのドメイン名
+domainname="dockernet.co.jp"
+
+### メールサーバが信頼するネットワーク
+mynetworks='127.0.0.0/8, 172.17.0.0/16'
+
+### メール1通(本文+添付ファイル) の容量制限 : (10240000で10MB)
+messagesizelimit="10240000"
+
+### メールサーバのログイン用ユーザ
+mailuser=${user}
+
+### メールサーバのログイン用ユーザのグループ
+mailgroup=${user}
+
+### バーチャルメールボックス用ユーザ (グループもこの値が使われる)
+vmailuser="vmail"
+
+### バーチャルメールボックス用ユーザのuid (gidもこの値が使われる)
+vmailuid="501"
+
+### バーチャルメールボックス用ユーザのパスワード
+### pass
+vmailpasswd='$1$SomeSalt$GUy42a6HGn6DQTDpCPy200'
+
+### バーチャルメールボックスドメイン
+virtualmailboxdomains="${domainname}"
+
+### バーチャルメールボックスの保存ディレクトリbase
+virtualmailboxbase="/home/${vmailuser}/mailbox"
+
+### quota制限
+### 102400だと100MB
+quotarulestrage="10240000"
+
+### LDAPサーバのIPアドレス
+ldaphost="192.168.33.11"
+
+### LDAPサーバのport
+ldapport="389"
+
+### LDAPサーバのBASE DN
+ldapbase="dc=dockernet,dc=co,dc=jp"
+
+### 管理用バインドDN
+#ldapdn="Administrator@pref.tokushima.jp"
+
+### 管理用バインドDNパスワード
+#ldapdnpass="xxxxxxxx"

@@ -1,0 +1,7 @@
+hosts = {{ ldap_hosts }}:{{ ldap_port }}
+base = {{ ldap_base }}
+ldap_version = 3
+auth_bind = no
+pass_filter = (&(objectclass=person)(uid=%u))
+user_filter = (&(objectclass=person)(uid=%u))
+user_attrs =omeDirectory=home

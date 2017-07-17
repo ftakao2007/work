@@ -1,0 +1,27 @@
+---
+- name: 必要なパッケージ(cyrus-sasl)のインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - cyrus-sasl
+    - cyrus-sasl-*
+
+- name: main.cfの編集(smtpd_sasl_type)
+  lineinfile: dest=/etc/postfix/main.cf backup=no state=present regexp='^smtpd_sasl_type' line='smtpd_sasl_type = dovecot'
+
+- name: main.cfの編集(smtpd_sasl_path)
+  lineinfile: dest=/etc/postfix/main.cf backup=no state=present regexp='^smtpd_sasl_path' line='smtpd_sasl_path = private/auth'
+
+- name: main.cfの編集(smtpd_sasl_auth_enable)
+  lineinfile: dest=/etc/postfix/main.cf backup=no state=present regexp='^smtpd_sasl_auth_enable' line='smtpd_sasl_auth_enable = yes'
+
+- name: main.cfの編集(smtpd_sasl_security_options)
+  lineinfile: dest=/etc/postfix/main.cf backup=no state=present regexp='^smtpd_sasl_security_options' line='smtpd_sasl_security_options = noanonymous'
+
+- name: main.cfの編集(smtpd_sasl_local_domain)
+  lineinfile: dest=/etc/postfix/main.cf backup=no state=present regexp='^smtpd_sasl_local_domain' line='smtpd_sasl_local_domain = $myhostname'
+
+- name: main.cfの編集(smtpd_recipient_restrictions)
+  lineinfile: dest=/etc/postfix/main.cf backup=no state=present regexp='^smtpd_recipient_restrictions' line='smtpd_recipient_restrictions = permit_mynetworks,permit_auth_destination,permit_sasl_authenticated,reject'
+
+- name: saslauthdの起動と自動起動設定
+  service: name=saslauthd state=started enabled=yes

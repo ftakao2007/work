@@ -1,0 +1,57 @@
+---
+- hosts: containers
+  connection: docker
+  gather_facts: no
+  become: yes
+  roles:
+    # バーチャルメールボックス用ユーザの作成
+    - {role: ../common-roles/useradd.password.nokey.nosudo.centos,
+       user_name: "{{ vmail_user }}",
+       user_uid: "{{ vmail_uid }}",
+       user_gid: "{{ vmail_gid }}",
+       user_passwd: "{{ vmail_passwd }}",
+       tags: add_vmail_user
+      }
+
+    # postfix(smtp)のインストール (tags: smtp)
+    # postfixのldap連携設定 (tags: ldap_smtp)
+    - {role: ../common-roles/postfix.smtp.centos7,
+       vmail_user: "{{ vmail_user }}",
+       vmail_group: "{{ vmail_user }}",
+       main_cf_template: main.cf.ldap.j2,
+       postfix_myhostname: "{{ host_name }}",
+       postfix_mydomain: "{{ domain_name }}",
+       postfix_mydestination: '$myhostname, localhost.$mydomain, localhost',
+       postfix_mynetworks: "{{ my_networks }}",
+       postfix_message_size_limit: "{{ message_size_limit }}",
+       ### virtual_mailbox
+       postfix_virtual_mailbox_domains: "{{ postfix_mydomain }}",
+       postfix_virtual_mailbox_base: "{{ virtual_mailbox_base }}",
+       postfix_virtual_mailbox_maps: "ldap:/etc/postfix/ldap-mailbox.cf",
+       postfix_virtual_alias_maps: "ldap:/etc/postfix/ldap-alias.cf",
+       postfix_virtual_uid_maps: "static:{{ vmail_uid }}",
+       postfix_virtual_gid_maps: "static:{{ vmail_gid }}",
+       ### ldap_postfix
+       ldap_mailbox_cf_template: ldap-mailbox.cf.j2,
+       ldap_alias_cf_template: ldap-alias.cf.j2,
+       postfix_server_host: "{{ ldap_hosts }}:{{ ldap_port }}",
+       postfix_search_base: "{{ ldap_base }}"
+      }
+
+    # dovecot(imap)のインストール (tags: imap)
+    # dovecotxのldap連携設定 (tags: ldap_imap)
+    - {role: ../common-roles/dovecot.imap.centos7,
+       dovecot_mail_user: "{{ mail_user }}",
+       dovecot_10_auth_conf_template: 10-auth.conf.ldap.j2,
+       dovecot_10_mail_conf_template: 10-mail.conf.ldap.j2,
+       dovecot_10_ssl_conf_template: 10-ssl.conf.j2,
+       dovecot_20_imap_conf_template: 20-imap.conf.j2,
+       dovecot_90_quota_conf_template: 90-quota.conf.j2,
+       dovecot_conf_template: dovecot.conf.j2,
+       ### 102400(100MB)制限quota
+       dovecot_quota_rule_strage: 102400,
+       ### ldap_dovecot
+       dovecot_ldap_conf_ext_template: dovecot-ldap.conf.ext.ldap.j2,
+       dovecot_auth_ldap_conf_ext_template: auth-ldap.conf.ext.j2,
+       dovecot_auth_system_conf_ext_template: auth-system.conf.ext.j2
+      }

@@ -1,0 +1,30 @@
+---
+- name: メールボックスのディレクトリ作成
+  file: path={{ postfix_virtual_mailbox_base }} state=directory owner={{ vmail_user }} group={{ vmail_group }} mode=755
+
+- name: バーチャルメールボックスのドメイン設定
+  lineinfile: "dest=/etc/postfix/main.cf backup=no state=present line='virtual_mailbox_domains = {{ postfix_virtual_mailbox_domains }}'"
+
+- name: バーチャルメールボックスのメールボックス設定
+  lineinfile: "dest=/etc/postfix/main.cf backup=no state=present line='virtual_mailbox_base = {{ postfix_virtual_mailbox_base }}'"
+
+- name: バーチャルメールボックスのmapファイルの場所を設定
+  lineinfile: "dest=/etc/postfix/main.cf backup=no state=present line='virtual_mailbox_maps = hash:{{ postfix_virtual_mailbox_maps }}'"
+
+- name: バーチャルメールボックスのuid設定
+  lineinfile: "dest=/etc/postfix/main.cf backup=no state=present line='virtual_uid_maps = {{ postfix_virtual_uid_maps }}'"
+
+- name: バーチャルメールボックスのgid設定
+  lineinfile: "dest=/etc/postfix/main.cf backup=no state=present line='virtual_gid_maps = {{ postfix_virtual_gid_maps }}'"
+
+- name: バーチャルメールボックスのユーザのmapファイル作成
+  lineinfile: dest={{ postfix_virtual_mailbox_maps }} create=yes backup=no state=present line="{{ item }}"
+  with_items:
+    - "{{ postfix_virtual_mailbox_user1 }}"
+    - "{{ postfix_virtual_mailbox_user2 }}"
+    - "{{ postfix_virtual_mailbox_user3 }}"
+    - "{{ postfix_virtual_mailbox_user4 }}"
+
+- name: mapファイルをハッシュファイルに変換
+  shell: /usr/sbin/postmap hash:{{ postfix_virtual_mailbox_maps }}
+

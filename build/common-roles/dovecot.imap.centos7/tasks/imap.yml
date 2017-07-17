@@ -1,0 +1,40 @@
+---
+- name: 必要なパッケージ(dovecot)のインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - dovecot
+
+- name: /etc/hostsのIPv6設定を外す
+  replace: 'dest=/etc/hosts backup=no regexp="^::1" replace="#::1" owner=root group=root mode=644'
+  when: dovecot_mail_user != "root"
+
+- name: dovecot.confの設置
+  template: src={{ dovecot_conf_template }} dest=/etc/dovecot/dovecot.conf owner=root group=root mode=644
+
+- name: 10-auth.confの設置
+  template: src={{ dovecot_10_auth_conf_template }} dest=/etc/dovecot/conf.d/10-auth.conf owner=root group=root mode=644
+
+- name: 10-mail.confの設置
+  template: src={{ dovecot_10_mail_conf_template }} dest=/etc/dovecot/conf.d/10-mail.conf owner=root group=root mode=644
+
+- name: 10-ssl.confの設置
+  template: src={{ dovecot_10_ssl_conf_template }} dest=/etc/dovecot/conf.d/10-ssl.conf owner=root group=root mode=644
+
+#- name: 15-mailboxes.confの設定を削除
+#  command: mv /etc/dovecot/conf.d/15-mailboxes.conf /etc/dovecot/conf.d/15-mailboxes.conf.org creates=/etc/dovecot/conf.d/15-mailboxes.conf.org
+
+- name: 20-imap.confの設置
+  template: src={{ dovecot_20_imap_conf_template }} dest=/etc/dovecot/conf.d/20-imap.conf owner=root group=root mode=644
+
+#- name: 20-pop3.confの設置
+#  template: src={{ dovecot_20_pop3_conf_template }} dest=/etc/dovecot/conf.d/20-pop3.conf owner=root group=root mode=644
+
+- name: 90-quota.confの設置
+  template: src={{ dovecot_90_quota_conf_template }} dest=/etc/dovecot/conf.d/90-quota.conf owner=root group=root mode=644
+
+- name: dovecotの起動と自動起動設定
+  service: name=dovecot state=started enabled=yes
+
+- name: メールボックスのディレクトリ作成
+  file: path=/home/{{ mail_user }}/Maildir state=directory owner={{ mail_user }} group={{ mail_group }} mode=755
+#  when: tags != "virtual_mailbox"

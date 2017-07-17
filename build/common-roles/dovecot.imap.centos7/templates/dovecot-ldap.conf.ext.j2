@@ -1,0 +1,7 @@
+hosts = {{ ad_hosts }}
+dn = {{ ad_dn }}
+dnpass = {{ ad_dnpass }}
+base = {{ ad_base }}
+ldap_version = 3
+auth_bind = yes
+pass_filter = (&(objectclass=person)(uid=%u))

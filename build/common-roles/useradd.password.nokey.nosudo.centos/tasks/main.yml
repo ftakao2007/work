@@ -1,0 +1,10 @@
+---
+- name: グループを作成
+  group: name={{ user_name }} gid={{ user_gid }}
+
+- name: ユーザを作成
+  user: name={{ user_name }}
+        uid={{ user_uid }}
+        group={{ user_name }}
+        password="{{ user_passwd }}"
+        state=present

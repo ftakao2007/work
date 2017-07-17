@@ -1,0 +1,15 @@
+---
+- include: imap.yml
+  tags: imap
+
+#- include: smtp_auth.yml
+#  tags: smtp_auth
+
+- include: virtual_mailbox.yml
+  tags: virtual_mailbox
+
+- include: ldap_imap.yml
+  tags: ldap_imap
+
+- include: ad_imap.yml
+  tags: ad_imap
