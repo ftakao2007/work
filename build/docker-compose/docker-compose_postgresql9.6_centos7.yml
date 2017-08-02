@@ -1,0 +1,9 @@
+postgresql9.6_centos7:
+   image: ftakao2007/postgresql9.6:latest
+   container_name: postgresql9.6_centos7
+   privileged: true
+   tty: true
+   ports:
+     - "2223:22"
+     - "5432:5432"
+   command: /sbin/init
