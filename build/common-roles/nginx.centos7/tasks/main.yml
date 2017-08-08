@@ -1,0 +1,22 @@
+---
+
+- name: nginxのリポジトリ設定ファイルを追加
+  copy: src=nginx.repo dest=/etc/yum.repos.d/nginx.repo owner=root group=root mode=644
+
+- name: nginxをインストール
+  yum: name=nginx enablerepo=nginx state=latest
+
+- name: /etc/nginx/conf.d/http.conf の設置
+  copy: src=http.conf dest=/etc/nginx/conf.d/http.conf owner=root group=root mode=644
+
+- name: /etc/nginx/conf.d/header.conf の設置
+  copy: src=header.conf dest=/etc/nginx/conf.d/header.conf owner=root group=root mode=644
+
+- name: /etc/nginx/conf.d/common ディレクトリの作成
+  file: path=/etc/nginx/conf.d/common state=directory owner=root group=root mode=0755
+
+- name: /etc/nginx/conf.d/common/drop.conf の設置
+  copy: src=drop.conf dest=/etc/nginx/conf.d/common/drop.conf owner=root group=root mode=644
+
+- name: nginxの起動と自動起動設定
+  service: name=nginx  state=started enabled=yes
