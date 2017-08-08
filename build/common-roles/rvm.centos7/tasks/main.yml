@@ -1,0 +1,17 @@
+---
+- name: 公開鍵を取得する
+  shell: curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+
+- name: rvmのインストール
+  shell: curl -sSL https://get.rvm.io | sudo bash -s stable
+
+- name: Rubyのインストール
+  shell: |
+   . /etc/profile &&
+   /usr/local/rvm/bin/rvm install {{ rvm_ruby_version }}
+
+- name: 利用するRubyの設定
+  command: /usr/local/rvm/bin/rvm alias create default {{ rvm_ruby_version }}
+
+- name: bundlerのインストール
+  shell: PATH=/usr/local/rvm/rubies/ruby-2.3.4/bin:${PATH} && gem install bundler

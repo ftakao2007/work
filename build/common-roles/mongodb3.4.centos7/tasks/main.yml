@@ -1,0 +1,10 @@
+---
+
+- name: MongoDB3.4のリポジトリ設定ファイルを追加
+  copy: src=mongodb-org-3.4.repo dest=/etc/yum.repos.d/mongodb-org-3.4.repo owner=root group=root mode=644
+
+- name: MongoDB3.4をインストール
+  yum: name=mongodb-org enablerepo=mongodb-org-3.4 state=latest
+
+- name: MongoDBの起動と自動起動設定
+  service: name=mongod  state=started enabled=yes
