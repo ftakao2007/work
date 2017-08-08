@@ -1,0 +1,15 @@
+sirasagi_centos7:
+   image: ftakao2007/sirasagi_centos7:latest
+   container_name: sirasagi_centos7
+   privileged: true
+   tty: true
+   ports:
+     - "2222:22"
+     - "3333:3000"
+     - "8001:8001"
+     - "8002:8002"
+     - "8003:8003"
+     - "8080:80"
+     - "27017:27017"
+   command: sh -c '/sbin/init'
+   #command: sh -c 'exec /usr/sbin/init && systemctl restart sshd.service && systemctl restart mysqld.service'

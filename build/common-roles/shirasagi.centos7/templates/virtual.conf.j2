@@ -1,0 +1,23 @@
+server {
+    include conf.d/server/shirasagi.conf;
+    server_name {{ web_address }};
+    root {{ install_path }}/public/sites/w/w/w/_/;
+}
+server {
+    listen  {{ comp_port }};
+    include conf.d/server/shirasagi.conf;
+    server_name {{ web_address }}:{{ comp_port }};
+    root {{ install_path }}/public/sites/c/o/m/p/a/n/y/_/;
+}
+server {
+    listen  {{ child_port }};
+    include conf.d/server/shirasagi.conf;
+    server_name {{ web_address }}:{{ child_port }};
+    root {{ install_path }}/public/sites/c/h/i/l/d/c/a/r/e/_/;
+}
+server {
+    listen  {{ opend_port }};
+    include conf.d/server/shirasagi.conf;
+    server_name {{ web_address }}:{{ opend_port }};
+    root {{ install_path }}/public/sites/o/p/e/n/d/a/t/a/_/;
+}

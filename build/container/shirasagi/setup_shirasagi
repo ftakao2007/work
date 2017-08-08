@@ -1,0 +1,35 @@
+#!/bin/sh
+
+### 作業ユーザ
+user="root"
+
+### SHIRASAGIユーザ
+app_user="shirasagi"
+
+### SHIRASAGIグループ
+app_group="shirasagi"
+
+### inventory
+inventory="inventory/base_centos7"
+
+### rvmのRubyのバージョン
+rvm_ruby_version="2.3.4"
+
+### rvmのホームディレクトリ
+rvm_home="/usr/local/rvm"
+
+### shirasagiインストールディレクトリ
+install_path="/var/www/shirasagi"
+
+### shirasagiのIPアドレス or ドメイン名
+web_address="10.136.3.189"
+
+### サンプル企業サイトのport
+comp_port="8001"
+
+### サンプル子育て支援サイトのport
+child_port="8002"
+
+### サンプルオープンデータサイトのport
+opend_port="8003"
+

@@ -1,0 +1,13 @@
+---
+# tasks file for ansible-role-shirasagi
+- include: furigana.yml
+  tags: furigana
+
+- include: voice.yml
+  tags: voice
+
+- include: shirasagi.yml
+  tags: shirasagi_only
+
+- include: init.yml
+  tags: init

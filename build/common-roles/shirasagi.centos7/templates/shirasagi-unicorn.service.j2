@@ -1,0 +1,15 @@
+[Unit]
+Description=Shirasagi Unicorn Server
+After=mongod.service
+
+[Service]
+User={{ app_user }}
+WorkingDirectory={{ install_path }}
+ExecStart={{ rvm_home }}/wrappers/default/bundle exec rake unicorn:start
+ExecStop={{ rvm_home }}/wrappers/default/bundle exec rake unicorn:stop
+ExecReload={{ rvm_home }}/wrappers/default/bundle exec rake unicorn:restart
+Type=forking
+PIDFile={{ install_path }}/tmp/pids/unicorn.pid
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,2 @@
+*/15 * * * * /bin/bash -l -c 'cd {{ install_path }} && {{ rvm_home }}/rubies/ruby-{{ rvm_ruby_version }}/bin/bundle exec rake cms:release_pages && {{ rvm_home }}/rubies/ruby-{{ rvm_ruby_version }}/bin/bundle exec rake cms:generate_nodes' >/dev/null
+0 * * * * /bin/bash -l -c 'cd {{ install_path }} && {{ rvm_home }}/rubies/ruby-{{ rvm_ruby_version }}/bin/bundle exec rake cms:generate_pages' >/dev/null

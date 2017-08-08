@@ -1,0 +1,74 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - gcc
+    - gcc-c++
+    - glibc-headers
+    - openssl-devel
+    - readline
+    - libyaml-devel
+    - readline-devel
+    - zlib
+    - zlib-devel
+    - wget
+    - git
+    - ImageMagick
+    - ImageMagick-devel
+
+- name: ImageMagick ポリシー修正用パッチの転送
+  copy: src=ImageMagick.patch dest=/usr/local/src/ImageMagick.patch owner=root group=root mode=644
+
+- name: ImageMagick ポリシー修正用パッチの適用
+  shell: patch < /usr/local/src/ImageMagick.patch chdir=/etc/ImageMagick
+
+- name: /var/wwwディレクトリの作成
+  file: path=/var/www state=directory owner=root group=root mode=0755
+
+- name: shirasagiをcloneする
+  git: dest=/var/www/shirasagi repo=https://github.com/shirasagi/shirasagi depth=1 version=stable
+
+- name: mongoid.ymlの設置
+  template: src=mongoid.yml.j2 dest={{ install_path }}/config/mongoid.yml owner=root group=root mode=644
+
+- name: secrets.ymlの設置
+  template: src=secrets.yml.j2 dest={{ install_path }}/config/secrets.yml owner=root group=root mode=644
+
+- name: unicorn.rbの設置
+  template: src=unicorn.rb.j2 dest={{ install_path }}/config/unicorn.rb owner=root group=root mode=644
+
+- name: recommend.ymlの設置
+  template: src=recommend.yml.j2 dest={{ install_path }}/config/recommend.yml owner=root group=root mode=644
+
+- name: APPディレクトリ配下をSHIRASAGI用ユーザに権限を変更
+  shell: chown -R {{ app_user }}:{{ app_group }} {{ install_path }}
+
+- name: bundle installの実行
+  shell: bundle install --path vendor/bundle chdir={{ install_path }}
+  become: true
+  become_user: "{{ app_user }}"
+
+- name: /etc/nginx/conf.d/virtual.confの設置
+  template: src=virtual.conf.j2 dest=/etc/nginx/conf.d/virtual.conf owner=root group=root mode=644
+
+- name: /etc/nginx/conf.d/serverディレクトリの作成
+  file: path=/etc/nginx/conf.d/server state=directory owner=root group=root mode=0755
+
+- name: /etc/nginx/conf.d/server/shirasagi.confの設置
+  template: src=shirasagi.conf.j2 dest=/etc/nginx/conf.d/server/shirasagi.conf owner=root group=root mode=644
+
+- name: nginxの再起動
+  service: name=nginx state=restarted
+
+- name: /etc/systemd/system/shirasagi-unicorn.serviceの設置
+  template: src=shirasagi-unicorn.service.j2 dest=/etc/systemd/system/shirasagi-unicorn.service owner=root group=root mode=644
+
+- name: systemctl daemon-reload を実行
+  shell: systemctl daemon-reload
+
+- name: APPディレクトリ配下をSHIRASAGI用ユーザに権限を変更
+  shell: chown -R {{ app_user }}:{{ app_group }} {{ install_path }}
+
+
+- name: shirasagi-unicornの起動と自動起動設定
+  service: name=shirasagi-unicorn  state=started enabled=yes

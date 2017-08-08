@@ -1,0 +1,55 @@
+---
+- name: rake db:dropの実行
+  shell: bundle exec rake db:drop chdir={{ install_path }}
+
+- name: rake db:create_indexesの実行
+  shell: bundle exec rake db:create_indexes chdir={{ install_path }}
+
+- name: rake ss:create_siteの実行(自治体)
+  shell: bundle exec rake ss:create_site data='{ name{{ colon }} "自治体サンプル", host{{ colon }} "www", domains{{ colon }} "{{ web_address }}" }' chdir={{ install_path }}
+
+- name: rake ss:create_siteの実行(企業)
+  shell: bundle exec rake ss:create_site data='{ name{{ colon }} "企業サンプル", host{{ colon }} "company", domains{{ colon }} "{{ web_address }}{{ colon }}{{ comp_port }}" }' chdir={{ install_path }}
+
+- name: rake ss:create_siteの実行(子育て支援)
+  shell: bundle exec rake ss:create_site data='{ name{{ colon }} "子育て支援サンプル", host{{ colon }} "childcare", domains{{ colon }} "{{ web_address }}{{ colon }}{{ child_port }}" }' chdir={{ install_path }}
+
+- name: rake ss:create_siteの実行(オープンデータ)
+  shell: bundle exec rake ss:create_site data='{ name{{ colon }} "オープンデータサンプル", host{{ colon }} "opendata", domains{{ colon }} "{{ web_address }}{{ colon }}{{ opend_port }}" }' chdir={{ install_path }}
+
+- name: rake db:seedの実行(自治体サンプルデータ投入)
+  shell: bundle exec rake db:seed name=demo site=www chdir={{ install_path }}
+
+- name: rake db:seedの実行(企業サンプルデータ投入)
+  shell: bundle exec rake db:seed name=company site=company chdir={{ install_path }}
+
+- name: rake db:seedの実行(子育て支援サンプルデータ投入)
+  shell: bundle exec rake db:seed name=childcare site=childcare chdir={{ install_path }}
+
+- name: rake db:seedの実行(オープンデータサンプルデータ投入)
+  shell: bundle exec rake db:seed name=opendata site=opendata chdir={{ install_path }}
+
+- name: rake db:seedの実行(Gwサンプルデータ投入)
+  shell: bundle exec rake db:seed name=gws chdir={{ install_path }}
+
+- name: rake db:seedの実行(Mailサンプルデータ投入)
+  shell: bundle exec rake db:seed name=webmail chdir={{ install_path }}
+
+- name: デフォルトマップとしてオープンレイアウトを使う
+  shell: echo 'db.ss_sites.update({}, { $set{{ colon }} { map_api{{ colon }} "openlayers" } }, { multi{{ colon }} true });' | mongo ss > /dev/null
+
+- name: rake cms:generate_nodesの実行
+  shell: bundle exec rake cms:generate_nodes chdir={{ install_path }}
+
+- name: rake cms:generate_pagesの実行
+  shell: bundle exec rake cms:generate_pages chdir={{ install_path }}
+
+- name: cronの設定
+  template: src=crontab.j2 dest=/var/spool/cron/{{ app_user }} owner={{ app_user }} group={{ app_group }} mode=600
+  
+- name: crondの再起動
+  service: name=crond state=restarted
+
+- name: APPディレクトリ配下をSHIRASAGI用ユーザに権限を変更
+  shell: chown -R {{ app_user }}:{{ app_group }} {{ install_path }}
+  tags: dev

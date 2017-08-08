@@ -1,0 +1,57 @@
+---
+- name: mecab-0.996.tar.gzのダウンロード
+  get_url: url=https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE dest=/usr/local/src/mecab-0.996.tar.gz mode=0644
+
+- name: mecab-0.996.tar.gzの展開
+  unarchive: src=/usr/local/src/mecab-0.996.tar.gz dest=/usr/local/src copy=no
+
+- name: ./configureの実行
+  shell: ./configure --with-charset=UTF-8 chdir=/usr/local/src/mecab-0.996
+
+- name: makeの実行
+  shell: make chdir=/usr/local/src/mecab-0.996
+
+- name: make installの実行
+  shell: make install chdir=/usr/local/src/mecab-0.996
+
+- name: mecab-ruby-0.996.tar.gzのダウンロード
+  get_url: url=https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7VUNlczBWVDZJbE0 dest=/usr/local/src/mecab-ruby-0.996.tar.gz mode=0644
+
+- name: mecab-ruby-0.996.tar.gzの展開
+  unarchive: src=/usr/local/src/mecab-ruby-0.996.tar.gz dest=/usr/local/src copy=no
+
+- name: ruby extconf.rbの実行
+  shell: PATH=/usr/local/rvm/rubies/ruby-2.3.4/bin:${PATH} && ruby extconf.rb chdir=/usr/local/src/mecab-ruby-0.996
+
+- name: makeの実行
+  shell: make chdir=/usr/local/src/mecab-ruby-0.996
+
+- name: make installの実行
+  shell: make install chdir=/usr/local/src/mecab-ruby-0.996
+
+- name: mecab-ipadic-2.7.0-20070801.patchのダウンロード
+  get_url: url=https://raw.githubusercontent.com/shirasagi/shirasagi/stable/vendor/mecab/mecab-ipadic-2.7.0-20070801.patch dest=/usr/local/src/mecab-ipadic-2.7.0-20070801.patch mode=0644
+
+- name: mecab-ipadic-2.7.0-20070801.tar.gzのダウンロード
+  get_url: url=https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7MWVlSDBCSXZMTXM dest=/usr/local/src/mecab-ipadic-2.7.0-20070801.tar.gz mode=0644
+
+- name: mecab-ipadic-2.7.0-20070801.tar.gzの展開
+  unarchive: src=/usr/local/src/mecab-ipadic-2.7.0-20070801.tar.gz dest=/usr/local/src copy=no
+
+- name: patchの実行
+  shell: patch -p1 < ../mecab-ipadic-2.7.0-20070801.patch chdir=/usr/local/src/mecab-ipadic-2.7.0-20070801
+
+- name: ./configureの実行
+  shell: ./configure --with-charset=UTF-8 chdir=/usr/local/src/mecab-ipadic-2.7.0-20070801
+
+- name: makeの実行
+  shell: make chdir=/usr/local/src/mecab-ipadic-2.7.0-20070801
+
+- name: make installの実行
+  shell: make install chdir=/usr/local/src/mecab-ipadic-2.7.0-20070801
+
+- name: /etc/ld.so.confに/usr/local/libを追加する
+  lineinfile: dest=/etc/ld.so.conf state=present line='/usr/local/lib'
+
+- name: ldconfigの実行
+  command: ldconfig
