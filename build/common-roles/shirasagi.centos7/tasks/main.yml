@@ -11,3 +11,6 @@
 
 - include: init.yml
   tags: init
+
+- include: daemonize.yml
+  tags: daemonize

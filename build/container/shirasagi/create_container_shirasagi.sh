@@ -16,11 +16,11 @@ fi
 ### 設定ファイルの読み込み
 . ./setup_shirasagi
 
-### "shirasagi"タグは"furigana"+"voice"+"shirasagi_only"+"init"
+### "shirasagi"タグは"furigana"+"voice"+"shirasagi_only"+"init"+"daemonize"
 ### 開発用
 #tags="dev"
 ### init初期化非実施
-#tags="mongodb,rvm,nginx,furigana,voice,shirasagi_only"
+#tags="mongodb,rvm,nginx,furigana,voice,shirasagi_only,daemonize"
 ### 全ての設定を実施
 tags="mongodb,rvm,nginx,shirasagi"
 

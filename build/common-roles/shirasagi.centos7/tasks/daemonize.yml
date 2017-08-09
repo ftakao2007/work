@@ -1,0 +1,18 @@
+---
+#- name: 念のためunicorn:stopを実行
+#  shell: /usr/local/rvm/rubies/ruby-{{ shirasagi_rvm_ruby_version }}/bin/bundle exec rake unicorn:stop chdir={{ install_path }}
+#  become: true
+#  become_user: "{{ app_user }}"
+#  ignore_errors: True
+
+- name: /etc/systemd/system/shirasagi-unicorn.serviceの設置
+  template: src=shirasagi-unicorn.service.j2 dest=/etc/systemd/system/shirasagi-unicorn.service owner=root group=root mode=644
+
+- name: /etc/sysconfig/rvmの設置
+  template: src=rvm.j2 dest=/etc/sysconfig/rvm owner=root group=root mode=644
+
+- name: systemctl daemon-reload を実行
+  shell: systemctl daemon-reload
+
+- name: shirasagi-unicornの起動と自動起動設定
+  service: name=shirasagi-unicorn  state=started enabled=yes

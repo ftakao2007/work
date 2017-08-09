@@ -59,16 +59,3 @@
 
 - name: nginxの再起動
   service: name=nginx state=restarted
-
-- name: /etc/systemd/system/shirasagi-unicorn.serviceの設置
-  template: src=shirasagi-unicorn.service.j2 dest=/etc/systemd/system/shirasagi-unicorn.service owner=root group=root mode=644
-
-- name: systemctl daemon-reload を実行
-  shell: systemctl daemon-reload
-
-- name: APPディレクトリ配下をSHIRASAGI用ユーザに権限を変更
-  shell: chown -R {{ app_user }}:{{ app_group }} {{ install_path }}
-
-
-- name: shirasagi-unicornの起動と自動起動設定
-  service: name=shirasagi-unicorn  state=started enabled=yes

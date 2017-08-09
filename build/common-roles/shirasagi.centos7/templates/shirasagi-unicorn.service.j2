@@ -3,11 +3,12 @@ Description=Shirasagi Unicorn Server
 After=mongod.service
 
 [Service]
+EnvironmentFile=-/etc/sysconfig/rvm
 User={{ app_user }}
 WorkingDirectory={{ install_path }}
-ExecStart={{ rvm_home }}/wrappers/default/bundle exec rake unicorn:start
-ExecStop={{ rvm_home }}/wrappers/default/bundle exec rake unicorn:stop
-ExecReload={{ rvm_home }}/wrappers/default/bundle exec rake unicorn:restart
+ExecStart={{ rvm_home }}/rubies/ruby-{{ rvm_ruby_version }}/bin/bundle exec rake unicorn:start
+ExecStop={{ rvm_home }}/rubies/ruby-{{ rvm_ruby_version }}/bin/bundle exec rake unicorn:stop
+ExecReload={{ rvm_home }}/rubies/ruby-{{ rvm_ruby_version }}/bin/bundle exec rake unicorn:restart
 Type=forking
 PIDFile={{ install_path }}/tmp/pids/unicorn.pid
 
