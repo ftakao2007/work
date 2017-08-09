@@ -1,6 +1,6 @@
-sirasagi_centos7:
-   image: ftakao2007/sirasagi_centos7:latest
-   container_name: sirasagi_centos7
+shirasagi_centos7:
+   image: ftakao2007/shirasagi_centos7:latest
+   container_name: shirasagi_centos7
    privileged: true
    tty: true
    ports:
