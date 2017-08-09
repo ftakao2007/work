@@ -52,4 +52,8 @@
 
 - name: APPディレクトリ配下をSHIRASAGI用ユーザに権限を変更
   shell: chown -R {{ app_user }}:{{ app_group }} {{ install_path }}
-  tags: dev
+
+- name: rake assets:precompileの実行
+  shell: bundle exec rake assets:precompile chdir={{ install_path }}
+  become: true
+  become_user: "{{ app_user }}"

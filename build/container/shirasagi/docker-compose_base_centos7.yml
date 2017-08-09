@@ -1,1 +1,14 @@
-../../docker-compose/docker-compose_base_centos7.yml
+base_centos7:
+   image: ftakao2007/centos7:latest
+   container_name: base_centos7
+   privileged: true
+   tty: true
+   ports:
+     - "2222:22"
+     - "3333:3000"
+     - "8001:8001"
+     - "8002:8002"
+     - "8003:8003"
+     - "8080:80"
+     - "27017:27017"
+   command: /sbin/init
