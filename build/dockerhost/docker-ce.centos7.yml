@@ -1,0 +1,21 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+  vars:
+    user_name: jsd
+  roles:
+    # pipのインストール
+    - {role: ../common-roles/pip.centos,
+       tags: pip
+      }
+
+    # dockerのインストール
+    - {role: ../common-roles/docker-ce.centos, docker_user: '{{ user_name }}',
+       tags: docker
+      }
+
+    # docker-composeのインストール
+    - {role: ../common-roles/docker-compose.centos,
+       tags: docker-compose
+      }

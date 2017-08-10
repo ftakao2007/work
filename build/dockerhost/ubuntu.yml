@@ -16,6 +16,11 @@
        tags: pip
       }
 
+    # ansibleのインストール
+    - {role: ../common-roles/ansible.ubuntu,
+       tags: ansible
+      }
+
     # dockerのインストール
     - {role: ../common-roles/docker.ubuntu, docker_user: '{{ user_name }}',
        tags: docker
