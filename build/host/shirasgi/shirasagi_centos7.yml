@@ -1,0 +1,38 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    colon: ':'
+  environment:
+    PATH: /usr/local/rvm/rubies/ruby-{{ shirasagi_rvm_ruby_version }}/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+  roles:
+    # mongodb3.4のインストール
+    - {role: ../common-roles/mongodb3.4.centos7,
+       tags: mongodb
+      }
+
+    # rvmのインストール
+    - {role: ../common-roles/rvm.centos7,
+       rvm_ruby_version: "{{ shirasagi_rvm_ruby_version }}",
+       tags: rvm
+      }
+
+    # nginxのインストール
+    - {role: ../common-roles/nginx.centos7,
+       tags: nginx
+      }
+
+    # shirasagiのインストール
+    - {role: ../common-roles/shirasagi.centos7,
+       app_user: "{{ shirasagi_app_user }}",
+       app_group: "{{ shirasagi_app_group }}",
+       install_path: "{{ shirasagi_install_path }}",
+       rvm_ruby_version: "{{ shirasagi_rvm_ruby_version }}",
+       rvm_home: "{{ shirasagi_rvm_home }}",
+       web_address: "{{ shirasagi_web_address }}",
+       comp_port: "{{ shirasagi_comp_port }}",
+       child_port: "{{ shirasagi_child_port }}",
+       opend_port: "{{ shirasagi_opend_port }}",
+       tags: shirasagi
+      }

@@ -3,11 +3,11 @@
   gather_facts: yes
   become: yes
   vars:
-    user_base: "ftakao2007"
-    host_name: "dockerdevelop"
-    network_device: "ens192"
+    user_base: "jsd"
+    host_name: "production3"
+    network_device: "eno16780032"
     domain: "dockernet.co.jp"
-    sub_domain: "develop.dockernet.co.jp"
+    sub_domain: "production3.dockernet.co.jp"
 
   pre_tasks:
     - name: /etc/systemd/logind.confでKillUserProcessesをnoにする
