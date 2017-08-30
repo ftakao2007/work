@@ -1,0 +1,11 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    user: redmine
+    group: redmine
+  roles:
+
+    # Redmineのインストール
+    - { role: ../common-roles/redmine2.6.10.centos7 }

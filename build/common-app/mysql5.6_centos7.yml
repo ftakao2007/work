@@ -1,0 +1,18 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  roles:
+
+    # mysqlサーバの設定
+    - {role: ../common-roles/mysql5.6.centos7,
+       my_conf_server_id: 3166,
+       my_conf_template: 'my.cnf.j2',
+       mysql_root_password: '4mWqvu3',
+       mysql_operation_user: redmine,
+       mysql_operation_user_password: '4mWqvu3',
+       #mysql_repl_user: repl,
+       #mysql_repl_user_password: '4mWqvu3',
+       create_database: redmine,
+       tags: mysql
+      }

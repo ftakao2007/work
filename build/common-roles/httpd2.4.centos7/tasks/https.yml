@@ -1,0 +1,21 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - mod_ssl
+
+- name: /etc/httpd/conf.d/ssl.confの設置
+  template: src={{ https_conf_template }} dest=/etc/httpd/conf.d/ssl.conf owner=root group=root mode=644
+  notify: restart httpd
+
+- name: /etc/httpd/conf.d/sslディレクトリの作成
+  file: path=/etc/httpd/conf.d/ssl state=directory owner=root group=root mode=0755
+
+- name: 秘密鍵の設置(key)
+  copy: src={{ https_ssl_certificate_name }}.key dest=/etc/httpd/conf.d/ssl/{{ https_ssl_certificate_name }}.key owner=root group=root mode=644
+
+- name: サーバ証明書の設置(crt)
+  copy: src={{ https_ssl_certificate_name }}.crt dest=/etc/httpd/conf.d/ssl/{{ https_ssl_certificate_name }}.crt owner=root group=root mode=644
+
+#- name: サーバ証明書の設置(cer)(中身はcrtと同じ)
+#  copy: src={{ https_ssl_certificate_name }}.cer dest=/etc/httpd/conf.d/ssl/{{ https_ssl_certificate_name }}.cer owner=root group=root mode=644

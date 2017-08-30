@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  roles:
+
+    # rbenvのインストール
+    - {role: ../common-roles/rbenv.centos7, rbenv_ruby_version: 2.3.4 }

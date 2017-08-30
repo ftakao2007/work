@@ -1,0 +1,27 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    httpd_logrotate_template: httpd.logrotate.j2
+    httpd_conf_template: httpd.conf.j2
+    httpd_listen_port: 80
+    httpd_server_ip: 10.136.3.166
+    ### https
+    https_conf_template: ssl.conf.j2
+    https_listen_port: 443
+    https_server_name: redmine.example.com
+    https_ssl_certificate_name: secret
+    # secret.crt, secret.key, secret.cer
+    https_document_root: /var/share/redmine/public
+
+  roles:
+    # Apacheのインストール
+    - { role: ../common-roles/httpd2.4.centos7,
+        tags: http
+      }
+
+    # httpsの設定
+    - { role: ../common-roles/httpd2.4.centos7,
+        tags: https
+      }

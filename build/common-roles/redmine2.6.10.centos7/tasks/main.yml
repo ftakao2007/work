@@ -35,8 +35,6 @@
 
 - name: 所有者を変更
   command: chown -R {{ user }}:{{ group }} /var/share/redmine
-  tags: dev
 
 - name: apacheの再起動
   service: name=httpd state=started enabled=yes
-  tags: dev
