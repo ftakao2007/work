@@ -30,4 +30,4 @@
 
 - name: デフォルトで入れるgemパッケージをインストール
   gem: name={{ item }} user_install=no executable={{ rbenv_root }}/shims/gem
-  with_items: rbenv_gems
+  with_items: "{{ rbenv_gems }}"
