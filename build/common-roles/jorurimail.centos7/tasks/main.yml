@@ -9,7 +9,6 @@
     - libjpeg-devel
     - libpng-devel
     - librsvg2-devel
-    - ghostscript-devel
     - ImageMagick
     - ImageMagick-devel
     - shared-mime-info
