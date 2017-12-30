@@ -1,0 +1,33 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  connection: docker
+  vars:
+    _user: ftakao2007
+    _user_uid: 1000
+    _user_passwd: $1$SomeSalt$xg7BaTdMtPm8RHKM70Veb0
+    # pass
+
+  roles:
+    # 個人ユーザ作成とパスワード設定(ログインユーザ)
+    - { role: ../common-roles/useradd.password.nokey.ubuntu, user_name: "{{ _user }}", user_passwd: "{{ _user_passwd }}", user_uid: "{{ _user_uid }}", tags: useradd }
+
+    # sshd_configの設定(rootログインの禁止,DNSを使わない)
+    #- {role: ../common-roles/sshd_config.centos, user_name: "{{ _user }}", tags: sshd }
+
+    # pipのインストール
+    - {role: ../common-roles/pip.ubuntu,
+       tags: pip
+      }
+
+    # ansibleのインストール
+    - {role: ../common-roles/ansible.ubuntu,
+       tags: ansible
+      }
+
+    # rbenvのインストール
+    - {role: ../common-roles/ftakao2007.rbenv.ubuntu, rbenv_ruby_version: 2.5.0,
+       tags: rbenv
+      }
+
