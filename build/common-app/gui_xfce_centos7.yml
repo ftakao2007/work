@@ -5,4 +5,4 @@
   roles:
 
     # CentOS7 guiのインストール (パスワードは「vagrant」固定)
-    - {role: ../common-roles/gui_mate.centos7, gui_user: vagrant, gui_group: vagrant }
+    - {role: ../common-roles/gui_xfce.centos7, gui_user: vagrant, gui_group: vagrant }
