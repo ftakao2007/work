@@ -2,13 +2,13 @@
 - name: epelリポジトリの追加
   yum: name=epel-release state=present
 
-#- name: guiのインストール
-#  yum: name="{{ item }}" state=present
-#  with_items:
-#    - "@X Window System"
-#    - "@General Purpose Desktop"
-#    - "@Desktop"
-#    - "@Japanese Support"
+- name: guiのインストール
+  yum: name="{{ item }}" state=present
+  with_items:
+    - "@X Window System"
+    - "@General Purpose Desktop"
+    - "@Desktop"
+    - "@Japanese Support"
 
 - name: Xfce Desktopのインストール
   shell: yum -y groupinstall "Xfce"
