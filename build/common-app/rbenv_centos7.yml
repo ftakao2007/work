@@ -5,4 +5,4 @@
   roles:
 
     # rbenvのインストール
-    - {role: ../common-roles/rbenv.centos7, rbenv_ruby_version: 2.3.4 }
+    - {role: ../common-roles/rbenv.centos7, rbenv_ruby_version: 2.5.1 }
