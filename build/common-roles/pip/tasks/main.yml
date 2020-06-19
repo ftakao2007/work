@@ -1,3 +1,4 @@
 ---
+
 - name: pipのインストール
-  shell: curl -kL https://bootstrap.pypa.io/get-pip.py | python
+  apt: name=python-pip state=latest
