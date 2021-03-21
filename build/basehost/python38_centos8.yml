@@ -1,0 +1,9 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    user_name: centos
+  tasks:
+    - name: install python38
+      raw: yum install -y python38
