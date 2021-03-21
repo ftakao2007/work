@@ -22,9 +22,9 @@
       }
 
     # rbenvのインストール
-    - {role: ../common-roles/rbenv.centos7, rbenv_ruby_version: 2.3.1,
-       tags: rbenv
-      }
+    #- {role: ../common-roles/rbenv.centos7, rbenv_ruby_version: 2.3.1,
+    #   tags: rbenv
+    #  }
 
   post_tasks:
     - name: ftakao2007/workをcloneする

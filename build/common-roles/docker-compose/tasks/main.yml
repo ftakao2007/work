@@ -1,6 +1,6 @@
 ---
 - name: docker-composeのインストール(スクリプト設置)
-  shell: curl -L https://github.com/docker/compose/releases/download/1.6.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+  shell: curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 - name: docker-composeのインストール(権限の設定)
   file: path=/usr/local/bin/docker-compose state=touch mode=0755
