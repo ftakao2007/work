@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+  roles:
+
+    # symbol-bootstrapのインストール
+    - {role: ../common-roles/symbol-bootstrap.centos }

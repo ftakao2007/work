@@ -3,22 +3,20 @@
   yum: name=* state=latest
 
 - name: install packages
-  yum: name={{ item }} state=latest
-  with_items:
-    - yum-utils
+  yum: name=yum-utils state=latest
 
 - name: add docker-ce.repo
   shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
-- name: update index
-  shell: yum makecache fast
+  #- name: update index
+  #shell: yum makecache fast
 
 - name: install docker
   yum: name={{ item }} state=latest
   with_items:
     - docker-ce
     - docker-ce-cli
-    - docker-ce-containerd.io
+    - containerd.io
 
 - name: enable and start docker
   service: name=docker state=started enabled=yes
@@ -27,5 +25,5 @@
 - name: add user to docker group
   shell: usermod -aG docker {{ docker_user }}
 
-  #- name: install docker-py
-  #  pip: name=docker-py 
+- name: install docker-py
+  pip: name=docker-py 

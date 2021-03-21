@@ -1,0 +1,6 @@
+---
+- name: ansibleのインストール
+  command: pip3 install ansible
+
+- name: setuptoolsのupgrade
+  command: pip3 install --upgrade setuptools

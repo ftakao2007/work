@@ -1,0 +1,40 @@
+---
+- name: yum update
+  yum: name=* state=latest
+  tags: only_update
+
+- name: epelリポジトリの追加
+  yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm state=present
+  tags: epel
+
+- name: 必要なパッケージのインストール
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - gcc
+      - make
+      - gcc-c++
+      - wget
+      - git
+      - openssh-clients
+      - openssh-server
+      - telnet
+      - traceroute
+      - perl
+      - patch
+      - tcpdump
+      - screen
+      - bind-utils
+      - strace
+      - sysstat
+      - lsof
+      - mailx
+      - zip
+      - bzip2
+      - unzip
+      - net-tools
+      - sudo
+      - pv
+      - which
+      - rsyslog

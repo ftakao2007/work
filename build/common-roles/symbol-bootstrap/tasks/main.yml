@@ -1,0 +1,14 @@
+---
+
+- name: homeにbinディレクトリが無ければ作
+  file: path=/home/{{ ansible_ssh_user }}/bin state=directory owner=root group=root mode=0755
+
+- name: symbol-bootstrapのインストール設定
+  npm: name=symbol-bootstrap path=/home/{{ ansible_ssh_user }}/symbol-bootstrap state=latest
+  tags: symbolbootstrap_install
+
+- name: binディレクトリにsymlinkを発行する
+  file:
+      src: "/home/{{ ansible_ssh_user }}/symbol-bootstrap/node_modules/.bin/symbol-bootstrap"
+      dest: "/home/{{ ansible_ssh_user }}/bin/symbol-bootstrap"
+      state: link

@@ -1,0 +1,13 @@
+---
+
+- name: nodejs14のインストール設定
+  shell: curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -
+  tags: nodejs_setup
+
+- name: nodejs14のインストール
+  yum: name=nodejs state=latest
+  tags: nodejs_install
+
+- name: npmアップデート
+  shell: npm i -g npm
+  tags: npm_update

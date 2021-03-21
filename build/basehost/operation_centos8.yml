@@ -1,0 +1,34 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+  vars:
+    user_name: ec2-user
+  roles:
+
+    # 基本設定
+    - {role: ../common-roles/base.centos8,
+       tags: base
+      }
+
+    # pipのインストール
+    - {role: ../common-roles/pip.centos,
+       tags: pip
+      }
+
+    # ansibleのインストール
+    - {role: ../common-roles/ansible.centos8,
+       tags: ansible
+      }
+
+    # rbenvのインストール
+    #- {role: ../common-roles/rbenv.centos7, rbenv_ruby_version: 2.3.1,
+    #   tags: rbenv
+    #  }
+
+  post_tasks:
+    - name: ftakao2007/workをcloneする
+      git: dest=/home/{{ user_name }}/work repo=https://github.com/ftakao2007/work.git
+
+    - name: ディレクトリの権限をユーザにする
+      shell: chown -R {{ user_name }}:{{ user_name }} /home/{{ user_name }}/work
