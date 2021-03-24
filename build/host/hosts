@@ -1,0 +1,11 @@
+[t4vps]
+symbol_main01_ftakao2007 ansible_ssh_host=127.0.0.1
+
+[sakura]
+symbol_main01_ftakao2007 ansible_ssh_host=127.0.0.1
+
+[digitalocean]
+symbol_dev01_centos ansible_ssh_host=127.0.0.1
+
+[aws]
+symbol_dev01_ec2-user ansible_ssh_host=127.0.0.1

@@ -1,0 +1,12 @@
+---
+- hosts: t4vps
+  gather_facts: yes
+  become: yes
+  vars:
+    user_name: ftakao2007
+  roles:
+
+    # 基本設定
+    - {role: ../common-roles/base.centos8,
+       tags: base
+      }

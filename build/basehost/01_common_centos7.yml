@@ -13,6 +13,9 @@
     - name: /etc/systemd/logind.confでKillUserProcessesをnoにする
       replace: 'dest=/etc/systemd/logind.conf backup=no regexp="^#KillUserProcesses=no$" replace="KillUserProcesses=no" owner=root group=root mode=644'
 
+    - name: SELinuxを無効にする
+      replace: 'dest=/etc/selinux/config backup=no regexp="^SELINUX=enforcing$" replace="SELINUX=disabled" owner=root group=root mode=644'
+
     - name: IPv6無効化(/etc/modprobe.d/disable-ipv6.conf)
       lineinfile: "dest=/etc/modprobe.d/disable-ipv6.conf backup=no state=present create=yes regexp='^options ipv6 disable=1' line='options ipv6 disable=1'"
 

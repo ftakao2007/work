@@ -1,14 +1,26 @@
 ---
+- name: homeにbinディレクトリが無ければ作る
+  file: path=/home/{{ user_name }}/bin state=directory owner={{ user_name }} group={{ user_name }} mode=0755
 
-- name: homeにbinディレクトリが無ければ作
-  file: path=/home/{{ ansible_ssh_user }}/bin state=directory owner=root group=root mode=0755
+- name: homeにsrcディレクトリが無ければ作る
+  file: path=/home/{{ user_name }}/src state=directory owner={{ user_name }} group={{ user_name }} mode=0755
+
+- name: srcに対象のバージョンが存在するか確認
+  stat: path=/home/{{ user_name }}/src/symbol-cli{{ symbol_cli_version }}
+  register: fm
+  tags: symbolcli_install
 
 - name: symbol-cliのインストール設定
-  npm: name=symbol-cli path=/home/{{ ansible_ssh_user }}/symbol-cli state=latest
+  become: yes
+  become_user: '{{ user_name }}'
+  npm: name=symbol-cli path=/home/{{ user_name }}/src/symbol-cli{{ symbol_cli_version }} version={{ symbol_cli_version }} state=latest
+  when: not fm.stat.exists
   tags: symbolcli_install
 
 - name: binディレクトリにsymlinkを発行する
+  become: yes
+  become_user: '{{ user_name }}'
   file:
-      src: "/home/{{ ansible_ssh_user }}/symbol-cli/node_modules/.bin/symbol-cli"
-      dest: "/home/{{ ansible_ssh_user }}/bin/symbol-cli"
+      src: "/home/{{ user_name }}/src/symbol-cli{{ symbol_cli_version }}/node_modules/.bin/symbol-cli"
+      dest: "/home/{{ user_name }}/bin/symbol-cli"
       state: link

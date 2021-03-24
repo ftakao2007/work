@@ -1,14 +1,27 @@
 ---
 
-- name: homeにbinディレクトリが無ければ作
-  file: path=/home/{{ ansible_ssh_user }}/bin state=directory owner=root group=root mode=0755
+- name: homeにbinディレクトリが無ければ作る
+  file: path=/home/{{ user_name }}/bin state=directory owner={{ user_name }} group={{ user_name }} mode=0755
+
+- name: homeにsrcディレクトリが無ければ作る
+  file: path=/home/{{ user_name }}/src state=directory owner={{ user_name }} group={{ user_name }} mode=0755
+
+- name: srcに対象のバージョンが存在するか確認
+  stat: path=/home/{{ user_name }}/src/symbol-bootstrap{{ symbol_bootstrap_version }}
+  register: fm
+  tags: symbolbootstrap_install
 
 - name: symbol-bootstrapのインストール設定
-  npm: name=symbol-bootstrap path=/home/{{ ansible_ssh_user }}/symbol-bootstrap state=latest
+  become: yes
+  become_user: '{{ user_name }}'
+  npm: name=symbol-bootstrap path=/home/{{ user_name }}/src/symbol-bootstrap{{ symbol_bootstrap_version }} version={{ symbol_bootstrap_version }} state=latest
+  when: not fm.stat.exists
   tags: symbolbootstrap_install
 
 - name: binディレクトリにsymlinkを発行する
+  become: yes
+  become_user: '{{ user_name }}'
   file:
-      src: "/home/{{ ansible_ssh_user }}/symbol-bootstrap/node_modules/.bin/symbol-bootstrap"
-      dest: "/home/{{ ansible_ssh_user }}/bin/symbol-bootstrap"
+      src: "/home/{{ user_name }}/src/symbol-bootstrap{{ symbol_bootstrap_version }}/node_modules/.bin/symbol-bootstrap"
+      dest: "/home/{{ user_name }}/bin/symbol-bootstrap"
       state: link
