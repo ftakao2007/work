@@ -1,9 +1,9 @@
 ---
-- hosts: all
+- hosts: aws
   gather_facts: yes
   become: yes
   vars:
-    user_name: vagrant
+    user_name: ec2-user
   roles:
 
     # pipのインストール

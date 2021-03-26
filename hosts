@@ -1,0 +1,11 @@
+[t4vps]
+t4vps01 ansible_ssh_host=127.0.0.1
+
+[sakura]
+sakura01 ansible_ssh_host=127.0.0.1
+
+[digitalocean]
+ocean01 ansible_ssh_host=127.0.0.1
+
+[aws]
+ocean01 ansible_ssh_host=127.0.0.1
