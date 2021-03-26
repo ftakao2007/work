@@ -38,3 +38,4 @@
       - pv
       - which
       - rsyslog
+      - jq
