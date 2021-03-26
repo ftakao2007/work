@@ -1,0 +1,28 @@
+---
+- hosts: aws
+  gather_facts: yes
+  become: yes
+  vars:
+    user_name: ec2-user
+  roles:
+    # dockerのインストール
+    - {role: ../common-roles/docker-ce.centos, docker_user: '{{ user_name }}',
+       tags: docker
+      }
+
+    # docker-composeのインストール
+    - {role: ../common-roles/docker-compose.centos,
+       tags: docker-compose
+      }
+
+    # nodejs14のインストール
+    - {role: ../common-roles/nodejs.centos,
+       tags: nodejs14 }
+
+    # symbol-bootstrapのインストール
+    - {role: ../common-roles/symbol-bootstrap.centos, symbol_bootstrap_version: 1.0.2,
+       tags: symbol-bootstrap }
+
+    # symbol-cliのインストール
+    - {role: ../common-roles/symbol-cli.centos, symbol_cli_version: 1.0.0,
+       tags: symbol-cli }

@@ -1,12 +1,12 @@
 ---
-- hosts: digitalocean
+- hosts: aws
   gather_facts: yes
   #become: yes
   vars:
-    user_name: centos
+    user_name: ec2-user
     beneficiaryAddress: TBHQGWBYM2CIIS7KMVDLNXXVQKH3YAYPJXR36TA
     my_preset: my-preset-testnet.yml
-    passwd: {{ ex_var_passwd }}
+    passwd: '{{ ex_var_passwd }}'
 
   tasks:
     - name: symbol_testnetディレクトリの作成
