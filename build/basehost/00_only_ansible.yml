@@ -40,11 +40,13 @@
         path: /home/{{ user_name }}/.ssh/id_rsa
         size: 2048
       notify:
+        - id_rsaの所有者をユーザにする
         - authorized_keysに公開鍵を追加
-      tags: dev
 
   handlers:
+    - name: id_rsaの所有者をユーザにする
+      file: path=/home/{{ user_name }}/.ssh/id_rsa owner={{ user_name }} group={{ user_name }} mode=0600
+
     - name: authorized_keysに公開鍵を追加
       shell: cat /home/{{ user_name }}/.ssh/id_rsa.pub >> /home/{{ user_name }}/.ssh/authorized_keys
-      tags: dev
 
