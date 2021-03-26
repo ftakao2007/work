@@ -1,0 +1,10 @@
+---
+- hosts: t4vps
+  gather_facts: yes
+  become: yes
+  vars:
+    user_name: ftakao2007
+  roles:
+    # symbol-bootstrapのインストール
+    - {role: ../common-roles/symbol-bootstrap.centos, symbol_bootstrap_version: 1.0.2,
+       tags: symbol-bootstrap }

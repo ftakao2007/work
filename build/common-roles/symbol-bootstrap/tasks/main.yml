@@ -9,14 +9,14 @@
 - name: srcに対象のバージョンが存在するか確認
   stat: path=/home/{{ user_name }}/src/symbol-bootstrap{{ symbol_bootstrap_version }}
   register: fm
-  tags: symbolbootstrap_install
+  tags: symbolbootstrap_install_preset
 
 - name: symbol-bootstrapのインストール設定
   become: yes
   become_user: '{{ user_name }}'
   npm: name=symbol-bootstrap path=/home/{{ user_name }}/src/symbol-bootstrap{{ symbol_bootstrap_version }} version={{ symbol_bootstrap_version }} state=latest
   when: not fm.stat.exists
-  tags: symbolbootstrap_install
+  tags: symbolbootstrap_install_preset
 
 - name: binディレクトリにsymlinkを発行する
   become: yes
@@ -25,3 +25,4 @@
       src: "/home/{{ user_name }}/src/symbol-bootstrap{{ symbol_bootstrap_version }}/node_modules/.bin/symbol-bootstrap"
       dest: "/home/{{ user_name }}/bin/symbol-bootstrap"
       state: link
+  tags: symbolbootstrap_install_set_symlink
