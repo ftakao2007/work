@@ -20,13 +20,24 @@ echo ""
 #exit
 
 # init_base
-ansible-playbook -i ~/hosts aws_centos8_symbolnode.yml -u ${user} --extra-vars "ex_var_passwd=${pass}" --private-key=~/.ssh/${key}
-exit
+#ansible-playbook -i ~/hosts aws_centos8_symbolnode.yml -u ${user} --private-key=~/.ssh/${key}
 
 # init_bootstrap
 echo "------------------------"
-echo "passwd?"
+echo "bootstrap passwd?"
 read pass
 echo ""
-ansible-playbook -i ~/hosts aws_centos8_symbolnode_bootstrap_testnet.yml -u ${user} --extra-vars "ex_var_passwd=${pass}" --private-key=~/.ssh/${key}
-#ansible-playbook -i ~/hosts aws_centos8_symbolnode_bootstrap_mainnet.yml -u ${user} --extra-vars "ex_var_passwd=${pass}" --private-key=~/.ssh/${key}
+echo "------------------------"
+echo "beneficiaryAddress?"
+read bfaddress
+echo ""
+echo "------------------------"
+echo "symbol_network? [ mainnet / testnet ]"
+read symbol_network
+echo ""
+
+ansible-playbook -i ~/hosts aws_centos8_symbolnode_bootstrap_make_workdir.yml -u ${user} --private-key=~/.ssh/${key} \
+                 --extra-vars "ex_var_passwd=${pass} \
+                               ex_var_bfaddress=${bfaddress} \
+                               ex_var_symbol_network=${symbol_network} \
+                              "
