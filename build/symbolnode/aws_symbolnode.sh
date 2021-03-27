@@ -20,7 +20,8 @@ echo ""
 #exit
 
 # init_base
-# ansible-playbook -i ~/hosts aws_centos8_symbolnode.yml -u ${user} --extra-vars "ex_var_passwd=${pass} --private-key=~/.ssh/${key}
+ansible-playbook -i ~/hosts aws_centos8_symbolnode.yml -u ${user} --extra-vars "ex_var_passwd=${pass}" --private-key=~/.ssh/${key}
+exit
 
 # init_bootstrap
 echo "------------------------"
