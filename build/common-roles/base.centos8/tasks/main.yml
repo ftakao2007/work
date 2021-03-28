@@ -5,7 +5,11 @@
 
 - name: epelリポジトリの追加
   yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm state=present
-  tags: epel
+  tags: rep
+
+- name: PowerToolsリポジトリの追加
+  yum: name=http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/perl-NKF-2.1.4-8.el8.x86_64.rpm state=present
+  tags: rep
 
 - name: 必要なパッケージのインストール
   yum:
@@ -39,3 +43,4 @@
       - which
       - rsyslog
       - jq
+      - w3m
