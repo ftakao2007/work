@@ -4,8 +4,8 @@ user=ec2-user
 #key=
 #address=
 
-echo "private key path?"
-ls ~/.ssh
+echo "private key?"
+ls ~/.ssh | egrep -v "known_hosts|authorized_keys"
 read key
 echo ""
 
@@ -20,6 +20,6 @@ echo ""
 #exit
 
 # common
-#ansible-playbook -i ~/hosts 00_only_ansible_aws.yml -u ${user} --private-key=~/.ssh/${key}
-ansible-playbook -i ~/hosts 01_common_centos8_aws.yml -u ${user} --private-key=~/.ssh/${key}
+ansible-playbook -i ~/hosts 00_only_ansible_aws.yml -u ${user} --private-key=~/.ssh/${key}
+#ansible-playbook -i ~/hosts 01_common_centos8_aws.yml -u ${user} --private-key=~/.ssh/${key}
 

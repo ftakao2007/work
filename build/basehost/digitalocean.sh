@@ -4,8 +4,8 @@ user=centos
 #key=
 #address=
 
-echo "private key path?"
-ls ~/.ssh
+echo "private key?"
+ls ~/.ssh | egrep -v "known_hosts|authorized_keys"
 read key
 echo ""
 
