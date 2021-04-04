@@ -1,0 +1,39 @@
+---
+- hosts: digitalocean
+  gather_facts: yes
+  #become: yes
+  vars:
+    user_name: centos
+    beneficiaryAddress: '{{ ex_var_bfaddress }}'
+    my_preset: my-preset-{{ ex_var_symbol_network }}.yml
+    passwd: '{{ ex_var_passwd }}'
+
+  tasks:
+    - name: symbol用ディレクトリの作成
+      file: path=/home/{{ user_name }}/symbol_{{ ex_var_symbol_network }} state=directory owner={{ user_name }} group={{ user_name }} mode=0755
+      tags: dev
+
+    - name: my-preset.ymlの設置
+      template: src={{ my_preset }}.j2 dest=/home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}/{{ my_preset }} owner={{ user_name }} group={{ user_name }} mode=644
+
+    - name: symbol-bootstrap configの実行
+      shell: symbol-bootstrap config -p {{ ex_var_symbol_network }} -a dual -c {{ my_preset }} --password={{ passwd }}
+      args:
+        chdir: /home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}
+        creates: target
+
+    - name: symbol-bootstrap composeの実行
+      shell: symbol-bootstrap compose --password={{ passwd }}
+      args:
+        chdir: /home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}
+
+    #- name: symbol-bootstrap startの実行
+    #  shell: symbol-bootstrap start -d --password={{ passwd }}
+    #  args:
+    #    chdir: /home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}
+
+    #- name: testnet用data.tar.gzのダウンロード
+    #  get_url: url="https://symbol-archives.s3-ap-northeast-1.amazonaws.com/archives/data.tar.gz" dest=/home/{{ user_name }}
+
+    #- name: testnet用databases.tar.gzのダウンロード
+    #  get_url: url="https://symbol-archives.s3-ap-northeast-1.amazonaws.com/archives/databases.tar.gz" dest=/home/{{ user_name }}

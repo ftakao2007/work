@@ -20,7 +20,7 @@
        tags: nodejs14 }
 
     # symbol-bootstrapのインストール
-    - {role: ../common-roles/symbol-bootstrap.centos, symbol_bootstrap_version: 1.0.2,
+    - {role: ../common-roles/symbol-bootstrap.centos, symbol_bootstrap_version: 1.0.3,
        tags: symbol-bootstrap }
 
     # symbol-cliのインストール

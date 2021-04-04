@@ -1,12 +1,43 @@
 #!/bin/sh
 
-### init
-ansible-playbook -i ~/hosts digitalocean_centos8_symbolnode.yml -u centos --private-key=~/.ssh/id_rsa
+user=centos
+#key=
+#address=
 
-### setup_testnet
-#ansible-playbook -i ~/hosts digitalocean_centos8_symbolnode_testnet.yml -u centos --private-key=~/.ssh/id_rsa
+echo "private key path?"
+ls ~/.ssh
+read key
+echo ""
 
-### setup_mainnet
-#ansible-playbook -i ~/hosts symbolnode.centos8_digitalocean.yml -u centos --private-key=~/.ssh/id_rsa
+echo "------------------------"
+echo "address?"
+cat ~/hosts
+read address
+echo ""
 
+# test
+#ssh -i ~/.ssh/${key} ${user}@${address}
+#exit
 
+# init_base
+ansible-playbook -i ~/hosts digitalocean_centos8_symbolnode.yml -u ${user} --private-key=~/.ssh/${key}
+exit
+
+# init_bootstrap
+echo "------------------------"
+echo "bootstrap passwd?"
+read pass
+echo ""
+echo "------------------------"
+echo "beneficiaryAddress?"
+read bfaddress
+echo ""
+echo "------------------------"
+echo "symbol_network? [ mainnet / testnet ]"
+read symbol_network
+echo ""
+
+ansible-playbook -i ~/hosts digitalocean_centos8_symbolnode_bootstrap_make_workdir.yml -u ${user} --private-key=~/.ssh/${key} \
+                 --extra-vars "ex_var_passwd=${pass} \
+                               ex_var_bfaddress=${bfaddress} \
+                               ex_var_symbol_network=${symbol_network} \
