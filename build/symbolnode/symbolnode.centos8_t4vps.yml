@@ -16,7 +16,7 @@
       }
 
     # nodejs14のインストール
-    - {role: ../common-roles/nodejs.centos,
+    - {role: ../common-roles/nodejs14.centos,
        tags: nodejs14 }
 
     # symbol-bootstrapのインストール

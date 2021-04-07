@@ -1,0 +1,31 @@
+#!/bin/sh
+
+echo "------------------------"
+echo "bootstrap passwd? [password]"
+read pass
+if [ -z "$pass" ]; then pass="password"; fi
+echo "=========================="
+echo "pass = $pass"
+echo "=========================="
+echo ""
+sleep 1
+
+echo "------------------------"
+echo "beneficiaryAddress? [(ftakao2007 testnet address)]"
+read bfaddress
+if [ -z "$bfaddress" ]; then bfaddress="TBHQGWBYM2CIIS7KMVDLNXXVQKH3YAYPJXR36TA"; fi
+echo "=========================="
+echo "bfaddress = $bfaddress"
+echo "=========================="
+echo ""
+sleep 1
+
+echo "------------------------"
+echo "symbol_network? (mainnet/testnet) [testnet]"
+read symbol_network
+if [ -z "$symbol_network" ]; then symbol_network="testnet"; fi
+echo "=========================="
+echo "symbol_network = $symbol_network"
+echo "=========================="
+echo ""
+sleep 1
