@@ -4,8 +4,6 @@ user=centos
 #key=
 #address=
 . ./setup_params_basehost
-echo $key
-echo $address
 
 # test
 ssh -i ~/.ssh/${key} ${user}@${address}

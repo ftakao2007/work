@@ -4,10 +4,18 @@ echo "private key? [id_rsa]"
 ls ~/.ssh | egrep -v "known_hosts|authorized_keys"
 read key
 if [ -z "$key" ]; then key="id_rsa"; fi
+echo "=========================="
+echo "key = $key"
+echo "=========================="
 echo ""
+sleep 1
 
 echo "------------------------"
 echo "address? [127.0.0.1]"
 cat ~/hosts
 read address
 if [ -z "$address" ]; then address="127.0.0.1"; fi
+echo "=========================="
+echo "address = $address"
+echo "=========================="
+sleep 1
