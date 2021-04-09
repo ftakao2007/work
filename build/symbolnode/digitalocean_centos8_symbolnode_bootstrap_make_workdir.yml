@@ -11,29 +11,52 @@
   tasks:
     - name: symbol用ディレクトリの作成
       file: path=/home/{{ user_name }}/symbol_{{ ex_var_symbol_network }} state=directory owner={{ user_name }} group={{ user_name }} mode=0755
-      tags: dev
+      tags: mainnet,testnet
 
     - name: my-preset.ymlの設置
       template: src={{ my_preset }}.j2 dest=/home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}/{{ my_preset }} owner={{ user_name }} group={{ user_name }} mode=644
+      tags: mainnet,testnet
 
     - name: symbol-bootstrap configの実行
       shell: symbol-bootstrap config -p {{ ex_var_symbol_network }} -a dual -c {{ my_preset }} --password={{ passwd }}
       args:
         chdir: /home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}
         creates: target
+      tags: mainnet,testnet
 
     - name: symbol-bootstrap composeの実行
       shell: symbol-bootstrap compose --password={{ passwd }}
       args:
         chdir: /home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}
+      tags: mainnet,testnet
 
-    #- name: symbol-bootstrap startの実行
-    #  shell: symbol-bootstrap start -d --password={{ passwd }}
-    #  args:
-    #    chdir: /home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}
+    - name: testnet用databases.tar.gzのダウンロード
+      get_url: url="https://symbol-archives.s3-ap-northeast-1.amazonaws.com/archives/databases.tar.gz" dest=/home/{{ user_name }}
+      tags: testnet
 
-    #- name: testnet用data.tar.gzのダウンロード
-    #  get_url: url="https://symbol-archives.s3-ap-northeast-1.amazonaws.com/archives/data.tar.gz" dest=/home/{{ user_name }}
+    - name: databases.tar.gzの展開
+      unarchive: src=/home/{{ user_name }}/databases.tar.gz dest=/home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}/target
+      tags: testnet
 
-    #- name: testnet用databases.tar.gzのダウンロード
-    #  get_url: url="https://symbol-archives.s3-ap-northeast-1.amazonaws.com/archives/databases.tar.gz" dest=/home/{{ user_name }}
+    - name: databases.tar.gzの削除
+      file: src=/home/{{ user_name }}/databases.tar.gz state=absent
+      tags: testnet
+
+    - name: testnet用data.tar.gzのダウンロード
+      get_url: url="https://symbol-archives.s3-ap-northeast-1.amazonaws.com/archives/data.tar.gz" dest=/home/{{ user_name }}
+      tags: testnet
+
+    - name: data.tar.gzの展開
+      unarchive: src=/home/{{ user_name }}/data.tar.gz dest=/home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}/target/nodes/api-node
+      tags: testnet
+
+    - name: data.tar.gzの削除
+      file: src=/home/{{ user_name }}/data.tar.gz state=absent
+      tags: testnet
+
+    - name: bootstrap開始
+      shell: symbol-bootstrap start -d --password={{ passwd }}
+      args:
+        chdir: /home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}
+      tags: mainnet,testnet
+
