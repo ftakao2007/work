@@ -39,7 +39,7 @@
       tags: testnet
 
     - name: databases.tar.gzの削除
-      file: src=/home/{{ user_name }}/databases.tar.gz state=absent
+      file: file=/home/{{ user_name }}/databases.tar.gz state=absent
       tags: testnet
 
     - name: testnet用data.tar.gzのダウンロード
@@ -51,7 +51,7 @@
       tags: testnet
 
     - name: data.tar.gzの削除
-      file: src=/home/{{ user_name }}/data.tar.gz state=absent
+      file: file=/home/{{ user_name }}/data.tar.gz state=absent
       tags: testnet
 
     - name: bootstrap開始
