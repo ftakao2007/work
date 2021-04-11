@@ -1,9 +1,11 @@
 #!/bin/sh
 
 user=centos
-#key=
-#address=
-. ./setup_params_symbolnode
+# $1 key=
+# $2 address=
+# . ./setup_params_symbolnode
+if [ -n "$1" ]; then key=$1; fi
+if [ -n "$2" ]; then address=$2; fi
 
 # test
 #ssh -i ~/.ssh/${key} ${user}@${address}

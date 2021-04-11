@@ -11,10 +11,10 @@ user=centos
 
 
 # 基本的なソフトウェアのインストール
-./digitalocean_centos8_symbolnode_base.sh
+#./digitalocean_centos8_symbolnode_base.sh $key $address
 
 # symbol_bootstrapの設定と起動
-#./digitalocean_centos8_symbolnode_bootstrap.sh
+./digitalocean_centos8_symbolnode_bootstrap.sh $key $address
 
 # symbol-cliの設定
 #./digitalocean_centos8_symbolnode_cli.sh
