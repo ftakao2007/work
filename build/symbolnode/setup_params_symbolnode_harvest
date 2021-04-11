@@ -1,0 +1,30 @@
+#!/bin/sh
+
+echo "------------------------"
+echo "bootstrap passwd? [password]"
+read bootstrap_pass
+if [ -z "$bootstrap_pass" ]; then bootstrap_pass="password"; fi
+echo "=========================="
+echo "bootstrap_pass = $bootstrap_pass"
+echo "=========================="
+echo ""
+sleep 1
+
+echo "wallet passwd? [password]"
+read wallet_pass
+if [ -z "$wallet_pass" ]; then wallet_pass="password"; fi
+echo "=========================="
+echo "wallet_pass = $wallet_pass"
+echo "=========================="
+echo ""
+sleep 1
+
+echo "------------------------"
+echo "symbol_network? (mainnet/testnet) [testnet]"
+read symbol_network
+if [ -z "$symbol_network" ]; then symbol_network="testnet"; fi
+echo "=========================="
+echo "symbol_network = $symbol_network"
+echo "=========================="
+echo ""
+sleep 1

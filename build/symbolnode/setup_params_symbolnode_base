@@ -1,0 +1,14 @@
+#!/bin/sh
+
+### symbol_bootstrapのバージョン
+symbol_bootstrap_version="1.0.3"
+
+### symbol_cliのバージョン
+symbol_cli_version="1.0.0"
+
+echo "=========================="
+echo "symbol_bootstrap_version = $symbol_bootstrap_version"
+echo "symbol_cli_version = $symbol_cli_version"
+echo "=========================="
+echo ""
+sleep 1
