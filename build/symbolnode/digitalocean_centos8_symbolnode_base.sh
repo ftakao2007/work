@@ -12,9 +12,11 @@ if [ -n "$2" ]; then address=$2; fi
 #exit
 
 ### 必要なソフトのインストール
-#symbol_bootstrap_version="1.0.3"
-#symbol_cli_version="1.0.0"
-. ./setup_params_symbolnode_base
+# $3 symbol_bootstrap_version="1.0.3"
+# $4 symbol_cli_version="1.0.0"
+#. ./setup_params_symbolnode_base
+if [ -n "$3" ]; then symbol_bootstrap_version=$3; fi
+if [ -n "$4" ]; then symbol_cli_version=$4; fi
 
 # init_base
 ansible-playbook -i ~/hosts digitalocean_centos8_symbolnode_base.yml -u ${user} --private-key=~/.ssh/${key} \

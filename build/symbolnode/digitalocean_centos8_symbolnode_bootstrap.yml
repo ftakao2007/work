@@ -32,27 +32,27 @@
 
     - name: testnet用databases.tar.gzのダウンロード
       get_url: url="https://symbol-archives.s3-ap-northeast-1.amazonaws.com/archives/databases.tar.gz" dest=/home/{{ user_name }}
-      tags: testnet
+      tags: testnetdb
 
     - name: databases.tar.gzの展開
       unarchive: src=/home/{{ user_name }}/databases.tar.gz dest=/home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}/target
-      tags: testnet
+      tags: testnetdb
 
     - name: databases.tar.gzの削除
       file: path=/home/{{ user_name }}/databases.tar.gz state=absent
-      tags: testnet
+      tags: testnetdb
 
     - name: testnet用data.tar.gzのダウンロード
       get_url: url="https://symbol-archives.s3-ap-northeast-1.amazonaws.com/archives/data.tar.gz" dest=/home/{{ user_name }}
-      tags: testnet
+      tags: testnetdb
 
     - name: data.tar.gzの展開
-      unarchive: src=/home/{{ user_name }}/data.tar.gz dest=/home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}/target/nodes/api-node
-      tags: testnet
+      unarchive: src=/home/{{ user_name }}/data.tar.gz dest=/home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}/target/nodes/node
+      tags: testnetdb
 
     - name: data.tar.gzの削除
       file: path=/home/{{ user_name }}/data.tar.gz state=absent
-      tags: testnet
+      tags: testnetdb
 
     - name: bootstrap開始
       shell: symbol-bootstrap start -d --password={{ passwd }}
