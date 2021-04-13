@@ -38,7 +38,6 @@ grep -B 1 $vrf_priv add.yml
 
 if [ -f "add.yml" ]; then rm add.yml; fi
 
-
 ### ハーベスト設定
 
 ### accountkeylink
@@ -68,8 +67,8 @@ fi
 ### persistentharvestdelegation
 
 if [ ${symbol_network} == "testnet" ]; then
-  if grep harvesterSigningPrivateKey target/nodes/api-node/server-config/resources/config-harvesting.properties | awk '{print $3}' | grep -w ${remote_priv}; then
-    if grep harvesterVrfPrivateKey target/nodes/api-node/server-config/resources/config-harvesting.properties | awk '{print $3}' | grep -w ${vrf_priv}; then
+  if grep harvesterSigningPrivateKey target/nodes/node/server-config/resources/config-harvesting.properties | awk '{print $3}' | grep -w ${remote_priv}; then
+    if grep harvesterVrfPrivateKey target/nodes/node/server-config/resources/config-harvesting.properties | awk '{print $3}' | grep -w ${vrf_priv}; then
       symbol-cli transaction persistentharvestdelegation --password ${wallet_pass} --remote-private-key ${remote_priv} --recipient-public-key ${transport_pub} --vrf-private-key ${vrf_priv} --max-fee 1000000 --mode normal --sync --announce
     else
       echo "vrf private key error"
