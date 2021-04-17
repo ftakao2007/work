@@ -1,0 +1,35 @@
+---
+- hosts: t4vps
+  gather_facts: yes
+  become: yes
+  vars:
+    user_base: "ftakao2007"
+
+  pre_tasks:
+    - name: /etc/systemd/logind.confでKillUserProcessesをnoにする
+      replace: 'dest=/etc/systemd/logind.conf backup=no regexp="^#KillUserProcesses=no$" replace="KillUserProcesses=no" owner=root group=root mode=644'
+
+    - name: SELinuxを無効にする
+      replace: 'dest=/etc/selinux/config backup=no regexp="^SELINUX=enforcing$" replace="SELINUX=disabled" owner=root group=root mode=644'
+
+      #- name: IPv6無効化(/etc/modprobe.d/disable-ipv6.conf)
+      #lineinfile: "dest=/etc/modprobe.d/disable-ipv6.conf backup=no state=present create=yes regexp='^options ipv6 disable=1' line='options ipv6 disable=1'"
+
+      #- name: IPv6無効化(/etc/sysctl.conf net.ipv6.conf.all.disable_ipv6 = 1)
+      #lineinfile: "dest=/etc/sysctl.conf backup=no state=present regexp='^net.ipv6.conf.all.disable_ipv6 = 1' line='net.ipv6.conf.all.disable_ipv6 = 1'"
+
+      #- name: IPv6無効化(/etc/sysctl.conf net.ipv6.conf.default.disable_ipv6 = 1)
+      #lineinfile: "dest=/etc/sysctl.conf backup=no state=present regexp='^net.ipv6.conf.default.disable_ipv6 = 1' line='net.ipv6.conf.default.disable_ipv6 = 1'"
+
+      #- name: firewalldをoffにする
+      #service: name=firewalld state=stopped enabled=no
+
+      #- name: /etc/hostsのIPv6設定を外す
+      #replace: 'dest=/etc/hosts backup=no regexp="^::1" replace="#::1" owner=root group=root mode=644'
+
+  roles:
+    # 最新にupdate、必要なパッケージのインストール
+    - { role: ../common-roles/base.centos8, tags: update }
+
+    # sshd_configの設定(IPv4のみ利用,rootログインの禁止,パスワード認証,GSSAPI,DNSを使わない,対象ユーザのみssh可能)
+    - {role: ../common-roles/sshd_config.centos, user_name: "{{ user_base }}", tags: sshd }
