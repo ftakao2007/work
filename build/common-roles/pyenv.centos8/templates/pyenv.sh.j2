@@ -1,3 +1,3 @@
 export PYENV_ROOT="{{ pyenv_root }}"
-export PATH="{{ pyenv_root }}/bin:$PATH"
-#eval "$(pyenv init -)"
+export PATH="{{ pyenv_root }}/shims:{{ pyenv_root }}/bin:$PATH"
+#eval "$(pyenv init - --no-rehash)"

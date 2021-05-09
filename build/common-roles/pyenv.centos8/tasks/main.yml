@@ -11,6 +11,7 @@
     - openssl-devel
     - sqlite-devel
     - readline-devel
+    - libffi-devel
 
 - name: pyenvをcloneする
   git: dest={{ pyenv_root }} repo=https://github.com/yyuu/pyenv.git depth=1
