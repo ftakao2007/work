@@ -22,5 +22,5 @@ $ pyenv local pyenv-virtualenv
 ================================================
 
 ### pipとsetuptoolsをupgradeしておく
-(pyenv-virtualenv)$ sudo pip install --upgrade pip
-(pyenv-virtualenv)$ sudo pip install --upgrade setuptools
+(pyenv-virtualenv)$ sudo python -m pip install --upgrade pip
+(pyenv-virtualenv)$ sudo python -m pip install --upgrade setuptools
