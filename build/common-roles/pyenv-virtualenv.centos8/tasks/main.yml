@@ -1,0 +1,14 @@
+---
+- name: pyenv環境下にvirtualenvをcloneする
+  git: dest={{ pyenv_root }}/plugins/pyenv-virtualenv repo=https://github.com/yyuu/pyenv-virtualenv.git depth=1
+
+- name: profile.d配下にpyenv-virtualenvが使う環境変数を設定
+  template: src=pyenv-virtualenv.sh.j2 dest=/etc/profile.d/pyenv-virtualenv.sh owner=root group=root mode=0644
+
+- name: pyenv-virtualenv テストディレクトリの作成
+  file: path={{ user_home }}/pyenv-virtualenv state=directory owner={{ user }} group={{ user_group }} mode=0755
+  become: no
+
+- name: pyenv-virtualenv.READMEの転送
+  copy: src=pyenv-virtualenv.README dest={{ user_home }}/pyenv-virtualenv/pyenv-virtualenv.README mode=0644
+  become: no

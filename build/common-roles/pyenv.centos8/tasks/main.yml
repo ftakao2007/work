@@ -1,0 +1,33 @@
+---
+- name: 必要なパッケージのインストール
+  yum: name={{ item }} state=latest
+  with_items:
+    - git
+    - gcc
+    - gcc-c++
+    - make
+    - bzip2-devel
+    - zlib-devel
+    - openssl-devel
+    - sqlite-devel
+    - readline-devel
+
+- name: pyenvをcloneする
+  git: dest={{ pyenv_root }} repo=https://github.com/yyuu/pyenv.git depth=1
+
+- name: profile.d配下にpyenvが使う環境変数を設定
+  template: src=pyenv.sh.j2 dest=/etc/profile.d/pyenv.sh owner=root group=root mode=0644
+
+- name: sudoersの設定(secure_path)
+  lineinfile: dest=/etc/sudoers state=present backrefs=yes regexp='^Defaults\s*secure_path' line='Defaults        secure_path="/usr/local/pyenv/bin:/usr/local/pyenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'
+
+- name: sudoersの設定(env_keep)
+  lineinfile: dest=/etc/sudoers line='Defaults        env_keep += "PATH PYENV_ROOT"'
+
+- name: pyenv install {{ pyenv_python_version }}
+  args:
+    creates: "{{ pyenv_root }}/versions/{{ pyenv_python_version }}/bin/python"
+  shell: |
+   . /etc/profile.d/pyenv.sh &&
+   pyenv install {{ pyenv_python_version }} &&
+   pyenv global {{ pyenv_python_version }}

@@ -1,0 +1,26 @@
+### 現在利用しているPythonのバージョンを確認
+$ pyenv versions
+================================================
+  system
+* 2.7.11 (set by /usr/local/pyenv/version)
+================================================
+
+### Python 3.5.1 のインストールする例
+$ sudo pyenv install 3.5.1
+
+### pyenv-virtualenvで仮想環境の構築
+$ cd ${HOME}/pyenv-virtualenv
+$ sudo pyenv virtualenv 3.5.1 pyenv-virtualenv
+$ pyenv local pyenv-virtualenv
+(pyenv-virtualenv) $ pyenv versions
+================================================
+  system
+  2.7.11
+  3.5.1
+  3.5.1/envs/pyenv-virtualenv
+* pyenv-virtualenv (set by /home/vagrant/pyenv-virtualenv/.python-version)
+================================================
+
+### pipとsetuptoolsをupgradeしておく
+(pyenv-virtualenv)$ sudo pip install --upgrade pip
+(pyenv-virtualenv)$ sudo pip install --upgrade setuptools
