@@ -1,0 +1,19 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    pyenv_root: /usr/local/pyenv
+    user: vagrant
+    user_group: vagrant
+    user_home: /home/vagrant
+  roles:
+    # pyenvのインストール
+    - {role: ../common-roles/pyenv.ubuntu18, pyenv_python_version: 3.9.5, tags: pyenv }
+
+    # pyenv-virtualenvのインストール
+    - {role: ../common-roles/pyenv-virtualenv.ubuntu18, tags: pyenv-virtualenv }
+
+    # pyenv環境下でpipのインストール
+    #- {role: ../common-roles/pip_use_pyenv_python.centos8, tags: pip }
+
