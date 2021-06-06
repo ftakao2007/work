@@ -2,6 +2,9 @@
 
 user=centos
 openjdk_version="1.8.0"
+forge_version="1.13.2-25.0.209"
+ms_memory_mb="1024"
+mx_memory_mb="1024"
 
 #key=
 #address=
@@ -13,12 +16,12 @@ openjdk_version="1.8.0"
 
 
 # 基本的なソフトウェアのインストール
-./digitalocean_centos8_minecraft_base.sh $key $address $openjdk_version
+#./digitalocean_centos8_minecraft_base.sh $key $address $openjdk_version
 
-# mincraftのインストール
-./digitalocean_centos8_minecraft_install.sh $key $address
+# minecraftのインストール
+./digitalocean_centos8_minecraft_install.sh $key $address $forge_version $ms_memory_mb $mx_memory_mb
 
-# symbol-cliの設定
+# minecraft forgeのインストール
 #./digitalocean_centos8_symbolnode_cli.sh
 
 # ハーベストの設定
