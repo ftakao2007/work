@@ -20,6 +20,3 @@ mx_memory_mb="1024"
 
 # minecraftのインストール
 ./digitalocean_centos8_minecraft_install.sh $key $address $forge_version $ms_memory_mb $mx_memory_mb
-
-# minecraft forgeのインストール
-./digitalocean_centos8_symbolnode_cli.sh
