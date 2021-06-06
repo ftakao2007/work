@@ -1,0 +1,10 @@
+#!/bin/sh
+
+### openjdkのバージョン
+#openjdk_version="1.8.0"
+
+echo "=========================="
+echo "openjdk_version = $openjdk_version"
+echo "=========================="
+echo ""
+sleep 1
