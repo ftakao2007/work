@@ -50,38 +50,4 @@
 
     - name: bedrock_serverに実行権限付与
       file: path=/home/{{ user_name }}/bedrock/bedrock_server owner={{ user_name }} group={{ user_name }} mode=0775
-      tags: dev,mode
-
-
-
-
-
-
-    - name: 起動スクリプトの編集(MCPATH)
-      lineinfile: dest=/home/{{ user_name }}/minecraft/bin/minecraft state=present backrefs=yes regexp='^\s*MCPATH=' line=" MCPATH='/home/{{ user_name }}/minecraft'"
-      tags: edit_startup_script
-
-    - name: 起動スクリプトの編集(USERNAME)
-      lineinfile: dest=/home/{{ user_name }}/minecraft/bin/minecraft state=present backrefs=yes regexp='^\s*USERNAME=' line=" USERNAME='{{ user_name }}'"
-      tags: edit_startup_script
-
-    - name: Forgeのダウンロード
-      get_url: url="https://files.minecraftforge.net/maven/net/minecraftforge/forge/{{ forge_version }}/forge-{{ forge_version }}-installer.jar" dest=/home/{{ user_name }}/minecraft mode=0664
-      tags: download_forge
-
-    - name: Forgeのインストール
-      shell: java -jar forge-{{ forge_version }}-installer.jar nogui --installServer chdir=/home/{{ user_name }}/minecraft
-      tags: install_forge
-
-    - name: minecraft_server.jarとしてsymlinkをはる
-      file: src=/home/{{ user_name }}/minecraft/forge-{{ forge_version }}.jar dest=/home/{{ user_name }}/minecraft/minecraft_server.jar owner={{ user_name }} group={{ user_name }} state=link
-      tags: symlink_forge
-
-    - name: いったん起動してeula.txtを作成
-      shell: java -Xmx'{{ mx_memory_mb }}'M -Xms'{{ ms_memory_mb }}'M -jar minecraft_server.jar nogui chdir=/home/{{ user_name }}/minecraft
-      ignore_errors: yes
-      tags: create_eula
-
-    - name: eula.txtをtrueにする
-      lineinfile: dest=/home/{{ user_name }}/minecraft/eula.txt state=present backrefs=yes regexp='^eula=' line="eula=true"
-      tags: edit_eula
+      tags: mode
