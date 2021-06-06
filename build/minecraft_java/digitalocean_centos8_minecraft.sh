@@ -16,13 +16,10 @@ mx_memory_mb="1024"
 
 
 # 基本的なソフトウェアのインストール
-#./digitalocean_centos8_minecraft_base.sh $key $address $openjdk_version
+./digitalocean_centos8_minecraft_base.sh $key $address $openjdk_version
 
 # minecraftのインストール
 ./digitalocean_centos8_minecraft_install.sh $key $address $forge_version $ms_memory_mb $mx_memory_mb
 
 # minecraft forgeのインストール
-#./digitalocean_centos8_symbolnode_cli.sh
-
-# ハーベストの設定
-#./digitalocean_centos8_symbolnode_harvest.sh
+./digitalocean_centos8_symbolnode_cli.sh
