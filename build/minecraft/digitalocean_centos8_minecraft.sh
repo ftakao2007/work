@@ -5,7 +5,7 @@ openjdk_version="1.8.0"
 
 #key=
 #address=
-. ./setup_params_mincraft
+. ./setup_params_minecraft
 
 # test
 #ssh -i ~/.ssh/${key} ${user}@${address}
@@ -13,7 +13,7 @@ openjdk_version="1.8.0"
 
 
 # 基本的なソフトウェアのインストール
-./digitalocean_centos8_mincraft_base.sh $key $address $openjdk_version
+./digitalocean_centos8_minecraft_base.sh $key $address $openjdk_version
 
 # symbol_bootstrapの設定と起動
 #./digitalocean_centos8_symbolnode_bootstrap.sh $key $address
