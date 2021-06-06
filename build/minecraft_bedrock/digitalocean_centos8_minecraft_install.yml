@@ -1,0 +1,87 @@
+---
+- hosts: digitalocean
+  gather_facts: yes
+  #become: yes
+  vars:
+    user_name: centos
+    minecraft_version: '{{ ex_var_minecraft_version }}'
+
+  tasks:
+    - name: libnslのインストール
+      yum: name=libnsl state=latest
+      become: yes
+      tags: lib
+
+    - name: minecraft用ディレクトリの作成
+      file: path=/home/{{ user_name }}/bedrock state=directory owner={{ user_name }} group={{ user_name }} mode=0755
+      tags: mkdir
+
+    - name: binディレクトリの作成
+      file: path=/home/{{ user_name }}/bedrock/bin state=directory owner={{ user_name }} group={{ user_name }} mode=0755
+      tags: mkdir
+
+    - name: binディレクトリ内に起動ファイルを設置
+      file: path=/home/{{ user_name }}/bedrock/bin/mincraft state=touch owner={{ user_name }} group={{ user_name }} mode=0775
+      tags: create_start_file
+
+    - name: 起動ファイルを作成
+      lineinfile: path=/home/{{ user_name }}/bedrock/bin/mincraft line={{ item }}
+      with_items:
+        - '#!/bin/sh'
+        - 'cd /home/{{ user_name }}/bedrock'
+        - 'LD_LIBRARY_PATH=. /home/{{ user_name }}/bedrock/bedrock_server'
+      tags: create_start_file
+
+    #- name: 起動ファイルを作成1
+    #  lineinfile: path=/home/{{ user_name }}/bedrock/bin/mincraft line: '#!/bin/sh'
+    #  tags: create_start_file
+
+    #- name: 起動ファイルを作成2
+    #  lineinfile: path=/home/{{ user_name }}/bedrock/bin/mincraft line: 'LD_LIBRARY_PATH=. /home/{{ user_name }}/bedrock/bedrock_server'
+    #  tags: create_start_file
+
+    #- name: サーバのダウンロード
+    #  get_url: url="https://minecraft.azureedge.net/bin-linux/bedrock-server-{{ minecraft_version }}.zip" dest=/home/{{ user_name }}/bedrock mode=0775
+    #  tags: get_server
+
+    - name: サーバのダウンロードと設置
+      unarchive: src="https://minecraft.azureedge.net/bin-linux/bedrock-server-{{ minecraft_version }}.zip" dest=/home/{{ user_name }}/bedrock remote_src=yes
+      tags: set_server
+
+    - name: bedrock_serverに実行権限付与
+      file: path=/home/{{ user_name }}/bedrock/bedrock_server owner={{ user_name }} group={{ user_name }} mode=0775
+      tags: dev,mode
+
+
+
+
+
+
+    - name: 起動スクリプトの編集(MCPATH)
+      lineinfile: dest=/home/{{ user_name }}/minecraft/bin/minecraft state=present backrefs=yes regexp='^\s*MCPATH=' line=" MCPATH='/home/{{ user_name }}/minecraft'"
+      tags: edit_startup_script
+
+    - name: 起動スクリプトの編集(USERNAME)
+      lineinfile: dest=/home/{{ user_name }}/minecraft/bin/minecraft state=present backrefs=yes regexp='^\s*USERNAME=' line=" USERNAME='{{ user_name }}'"
+      tags: edit_startup_script
+
+    - name: Forgeのダウンロード
+      get_url: url="https://files.minecraftforge.net/maven/net/minecraftforge/forge/{{ forge_version }}/forge-{{ forge_version }}-installer.jar" dest=/home/{{ user_name }}/minecraft mode=0664
+      tags: download_forge
+
+    - name: Forgeのインストール
+      shell: java -jar forge-{{ forge_version }}-installer.jar nogui --installServer chdir=/home/{{ user_name }}/minecraft
+      tags: install_forge
+
+    - name: minecraft_server.jarとしてsymlinkをはる
+      file: src=/home/{{ user_name }}/minecraft/forge-{{ forge_version }}.jar dest=/home/{{ user_name }}/minecraft/minecraft_server.jar owner={{ user_name }} group={{ user_name }} state=link
+      tags: symlink_forge
+
+    - name: いったん起動してeula.txtを作成
+      shell: java -Xmx'{{ mx_memory_mb }}'M -Xms'{{ ms_memory_mb }}'M -jar minecraft_server.jar nogui chdir=/home/{{ user_name }}/minecraft
+      ignore_errors: yes
+      tags: create_eula
+
+    - name: eula.txtをtrueにする
+      lineinfile: dest=/home/{{ user_name }}/minecraft/eula.txt state=present backrefs=yes regexp='^eula=' line="eula=true"
+      tags: edit_eula
