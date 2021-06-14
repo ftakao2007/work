@@ -9,7 +9,7 @@
     passwd: '{{ ex_var_passwd }}'
 
   tasks:
-    - name: symbol用ディレクトリの作成
+    - name: dhealth用ディレクトリの作成
       file: path=/home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }} state=directory owner={{ user_name }} group={{ user_name }} mode=0755
       tags: mainnet,testnet,dhealth
 
@@ -18,14 +18,14 @@
       tags: mainnet,testnet,dhealth
 
     - name: yourdlt configの実行
-      shell: yourdlt config -t dual-node -p {{ ex_var_dhealth_network }} -a dual -c {{ my_preset }} --password={{ passwd }}
+      shell: yourdlt config -p {{ ex_var_dhealth_network }} -a dual -c {{ my_preset }} --password={{ passwd }}
       args:
         chdir: /home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}
         creates: target
       tags: mainnet,testnet,dhealth
 
     - name: yourdlt composeの実行
-      shell: yourdlt compose -t dual-node --password={{ passwd }}
+      shell: yourdlt compose --password={{ passwd }}
       args:
         chdir: /home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}
       tags: mainnet,testnet,dhealth
@@ -54,14 +54,14 @@
       file: path=/home/{{ user_name }}/data.tar.gz state=absent
       tags: testnetdb
 
-    - name: yourdlt link
-      shell: yourdlt link -t dual-node --url http://dual-01.dhealth.cloud:3000 --password={{ passwd }}
-      args:
-        chdir: /home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}
-      tags: mainnet,testnet,dhealth
+    #- name: yourdlt link
+    #  shell: yourdlt link --url http://dual-01.dhealth.cloud:3000 --password={{ passwd }}
+    #  args:
+    #    chdir: /home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}
+    #  tags: mainnet,testnet,dhealth
 
     #- name: yourdlt開始
-    #  shell: yourdlt run -t dual-node --password={{ passwd }}
+    #  shell: yourdlt run -d --password={{ passwd }}
     #  args:
     #    chdir: /home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}
     #  tags: mainnet,testnet,dhealth
