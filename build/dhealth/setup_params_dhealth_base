@@ -1,0 +1,14 @@
+#!/bin/sh
+
+### yourdltのバージョン
+#yourdlt_version="1.2.1"
+
+### symbol_cliのバージョン
+#symbol_cli_version="1.0.0"
+
+echo "=========================="
+echo "yourdlt_version = $yourdlt_version"
+echo "symbol_cli_version = $symbol_cli_version"
+echo "=========================="
+echo ""
+sleep 1

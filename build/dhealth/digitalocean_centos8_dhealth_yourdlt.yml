@@ -1,0 +1,68 @@
+---
+- hosts: digitalocean
+  gather_facts: yes
+  #become: yes
+  vars:
+    user_name: centos
+    beneficiaryAddress: '{{ ex_var_bfaddress }}'
+    my_preset: my-preset-{{ ex_var_dhealth_network }}.yml
+    passwd: '{{ ex_var_passwd }}'
+
+  tasks:
+    - name: symbol用ディレクトリの作成
+      file: path=/home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }} state=directory owner={{ user_name }} group={{ user_name }} mode=0755
+      tags: mainnet,testnet,dhealth
+
+    - name: my-preset.ymlの設置
+      template: src={{ my_preset }}.j2 dest=/home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}/{{ my_preset }} owner={{ user_name }} group={{ user_name }} mode=644
+      tags: mainnet,testnet,dhealth
+
+    - name: yourdlt configの実行
+      shell: yourdlt config -t dual-node -p {{ ex_var_dhealth_network }} -a dual -c {{ my_preset }} --password={{ passwd }}
+      args:
+        chdir: /home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}
+        creates: target
+      tags: mainnet,testnet,dhealth
+
+    - name: yourdlt composeの実行
+      shell: yourdlt compose -t dual-node --password={{ passwd }}
+      args:
+        chdir: /home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}
+      tags: mainnet,testnet,dhealth
+
+    - name: testnet用databases.tar.gzのダウンロード
+      get_url: url="https://symbol-archives.s3-ap-northeast-1.amazonaws.com/archives/databases.tar.gz" dest=/home/{{ user_name }}
+      tags: testnetdb
+
+    - name: databases.tar.gzの展開
+      unarchive: src=/home/{{ user_name }}/databases.tar.gz dest=/home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}/target
+      tags: testnetdb
+
+    - name: databases.tar.gzの削除
+      file: path=/home/{{ user_name }}/databases.tar.gz state=absent
+      tags: testnetdb
+
+    - name: testnet用data.tar.gzのダウンロード
+      get_url: url="https://symbol-archives.s3-ap-northeast-1.amazonaws.com/archives/data.tar.gz" dest=/home/{{ user_name }}
+      tags: testnetdb
+
+    - name: data.tar.gzの展開
+      unarchive: src=/home/{{ user_name }}/data.tar.gz dest=/home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}/target/nodes/node
+      tags: testnetdb
+
+    - name: data.tar.gzの削除
+      file: path=/home/{{ user_name }}/data.tar.gz state=absent
+      tags: testnetdb
+
+    - name: yourdlt link
+      shell: yourdlt link -t dual-node --url http://dual-01.dhealth.cloud:3000 --password={{ passwd }}
+      args:
+        chdir: /home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}
+      tags: mainnet,testnet,dhealth
+
+    #- name: yourdlt開始
+    #  shell: yourdlt run -t dual-node --password={{ passwd }}
+    #  args:
+    #    chdir: /home/{{ user_name }}/symbol_{{ ex_var_dhealth_network }}
+    #  tags: mainnet,testnet,dhealth
+

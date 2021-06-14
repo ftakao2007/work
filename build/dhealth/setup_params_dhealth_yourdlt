@@ -1,0 +1,31 @@
+#!/bin/sh
+
+echo "------------------------"
+echo "yourdlt passwd? [password]"
+read pass
+if [ -z "$pass" ]; then pass="password"; fi
+echo "=========================="
+echo "pass = $pass"
+echo "=========================="
+echo ""
+sleep 1
+
+echo "------------------------"
+echo "beneficiaryAddress? [(ftakao2007 dhealth address)]"
+read bfaddress
+if [ -z "$bfaddress" ]; then bfaddress="NBMUNLKLI3OY2QCJY3FMTIXVCOU2NEDUPNEOGHA"; fi
+echo "=========================="
+echo "bfaddress = $bfaddress"
+echo "=========================="
+echo ""
+sleep 1
+
+echo "------------------------"
+echo "dhealth_network? (mainnet/testnet/dhealth) [dhealth]"
+read dhealth_network
+if [ -z "$dhealth_network" ]; then dhealth_network="dhealth"; fi
+echo "=========================="
+echo "dhealth_network = $dhealth_network"
+echo "=========================="
+echo ""
+sleep 1

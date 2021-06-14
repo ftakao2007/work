@@ -1,0 +1,30 @@
+---
+- hosts: digitalocean
+  gather_facts: yes
+  become: yes
+  vars:
+    user_name: centos
+    yourdltversion: '{{ ex_var_yourdlt_version }}'
+    symbolcliversion: '{{ ex_var_symbol_cli_version }}'
+  roles:
+    # dockerのインストール
+    - {role: ../common-roles/docker-ce.centos, docker_user: '{{ user_name }}',
+       tags: docker
+      }
+
+    # docker-composeのインストール
+    - {role: ../common-roles/docker-compose.centos,
+       tags: docker-compose
+      }
+
+    # nodejs14のインストール
+    - {role: ../common-roles/nodejs14.centos,
+       tags: nodejs14 }
+
+    # yourdltのインストール
+    - {role: ../common-roles/yourdlt.centos, yourdlt_version: '{{ yourdltversion }}',
+       tags: yourdlt }
+
+    # symbol-cliのインストール
+    #- {role: ../common-roles/symbol-cli.centos, symbol_cli_version: '{{ symbolcliversion }}',
+    #   tags: symbol-cli }
