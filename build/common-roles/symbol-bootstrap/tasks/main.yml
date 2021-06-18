@@ -7,22 +7,22 @@
   file: path=/home/{{ user_name }}/src state=directory owner={{ user_name }} group={{ user_name }} mode=0755
 
 - name: srcに対象のバージョンが存在するか確認
-  stat: path=/home/{{ user_name }}/src/yourdlt{{ yourdlt_version }}
+  stat: path=/home/{{ user_name }}/src/symbol-bootstrap{{ symbol_bootstrap_version }}
   register: fm
-  tags: yourdlt_install_preset
+  tags: symbol-bootstrap_install_preset
 
-- name: yourdltのインストール設定
+- name: symbol-bootstrapのインストール設定
   become: yes
   become_user: '{{ user_name }}'
-  npm: name=yourdlt path=/home/{{ user_name }}/src/yourdlt{{ yourdlt_version }} version={{ yourdlt_version }} state=latest
+  npm: name=symbol-bootstrap path=/home/{{ user_name }}/src/symbol-bootstrap{{ symbol_bootstrap_version }} version={{ symbol_bootstrap_version }} state=latest
   when: not fm.stat.exists
-  tags: yourdlt_install_preset
+  tags: symbol-bootstrap_install_preset
 
 - name: binディレクトリにsymlinkを発行する
   become: yes
   become_user: '{{ user_name }}'
   file:
-      src: "/home/{{ user_name }}/src/yourdlt{{ yourdlt_version }}/node_modules/.bin/yourdlt"
-      dest: "/home/{{ user_name }}/bin/yourdlt"
+      src: "/home/{{ user_name }}/src/symbol-bootstrap{{ symbol_bootstrap_version }}/node_modules/.bin/symbol-bootstrap"
+      dest: "/home/{{ user_name }}/bin/symbol-bootstrap"
       state: link
-  tags: yourdlt_install_set_symlink
+  tags: symbol-bootstrap_install_set_symlink
