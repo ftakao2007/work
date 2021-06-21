@@ -1,0 +1,11 @@
+---
+- name: id_rsaの所有者をユーザにする
+  file: path=/home/{{ user_name }}/.ssh/id_rsa owner={{ user_name }} group={{ user_name }} mode=0600
+  become_user: "{{ user_name }}"
+
+- name: authorized_keysに公開鍵を追加
+  shell: cat /home/{{ user_name }}/.ssh/id_rsa.pub >> /home/{{ user_name }}/.ssh/authorized_keys
+  become_user: "{{ user_name }}"
+
+- name: authorized_keysに外部から接続するための公開鍵を追加
+  shell: cat /root/.ssh/authorized_keys >> /home/{{ user_name }}/.ssh/authorized_keys

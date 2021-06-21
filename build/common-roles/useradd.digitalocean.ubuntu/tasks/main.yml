@@ -1,0 +1,47 @@
+---
+- name: ubuntuグループ追加
+  group: name=ubuntu gid=1000
+
+- name: パスワード入力
+  pause:
+    prompt: "ubuntuユーザのパスワードしてください [password]"
+  register: user_passwd_input
+
+- name: パスワード設定
+  set_fact:
+    user_passwd: "{{ user_passwd_input.user_input | default('password', true) }}"
+
+    #- debug:
+    #    msg: "{{ user_passwd }}"
+
+- name: ユーザを作成
+  user: name=ubuntu
+        uid=1000
+        group=ubuntu
+        groups="sudo"
+        shell="/bin/bash"
+        generate_ssh_key=yes
+        ssh_key_bits=2048
+        state=present
+        append=yes
+        password="{{ user_passwd | password_hash('sha512') }}"
+
+- name: 自分自身に接続するためのssh鍵設定
+  openssh_keypair:
+    path: /home/{{ user_name }}/.ssh/id_rsa
+    size: 2048
+  become_user: "{{ user_name }}"
+
+- name: authorized_keysに公開鍵を追加
+  shell: cat /home/{{ user_name }}/.ssh/id_rsa.pub >> /home/{{ user_name }}/.ssh/authorized_keys
+  become_user: "{{ user_name }}"
+
+- name: authorized_keysに外部から接続するための公開鍵を追加
+  shell: cat /root/.ssh/authorized_keys >> /home/{{ user_name }}/.ssh/authorized_keys
+
+#- name: sudoers設定
+#  lineinfile: "dest=/etc/sudoers backup=no state=present regexp='^ubuntu' line='ubuntu ALL=(ALL) ALL'"
+#
+#- name: sudoersの設定(secure_path)
+#  lineinfile: dest=/etc/sudoers state=present backrefs=yes regexp='^Defaults\s*secure_path' line='Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"'
+#  tags: secure_path
