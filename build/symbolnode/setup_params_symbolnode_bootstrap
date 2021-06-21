@@ -29,3 +29,13 @@ echo "symbol_network = $symbol_network"
 echo "=========================="
 echo ""
 sleep 1
+
+echo "------------------------"
+echo "use backup DB?(y/n)[n]"
+read db_flag
+if [ -z "$db_flag" ]; then db_flag="n"; fi
+echo "=========================="
+echo "db_flag = $db_flag"
+echo "=========================="
+echo ""
+sleep 1
