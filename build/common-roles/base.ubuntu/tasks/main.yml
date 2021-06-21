@@ -1,12 +1,21 @@
 ---
-- name: updates a server
-  apt: update_cache=yes
+# update and upgrade
+- name: Update and upgrade apt packages
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+  become: true
+  tags: update
 
-- name: install apt requirements
-  apt: pkg=aptitude
-
-- name: upgrade a server
-  apt: upgrade=full
+#- name: updates a server
+#  apt: update_cache=yes
+#
+#- name: install apt requirements
+#  apt: pkg=aptitude
+#
+#- name: upgrade a server
+#  apt: upgrade=full
 
 - name: 必要なパッケージのインストール
   apt: name={{ item }} state=latest
