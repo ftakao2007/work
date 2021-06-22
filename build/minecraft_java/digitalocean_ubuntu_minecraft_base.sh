@@ -12,7 +12,7 @@ if [ -n "$2" ]; then address=$2; fi
 #exit
 
 ### 必要なソフトのインストール
-# $3 openjdk_version="1.8.0"
+# $3 openjdk_version="8"
 #. ./setup_params_minecraft_base
 if [ -n "$3" ]; then openjdk_version=$3; fi
 

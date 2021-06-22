@@ -7,6 +7,7 @@
     forge_version: '{{ ex_var_forge_version }}'
     mx_memory_mb: '{{ ex_var_mx_memory_mb }}'
     ms_memory_mb: '{{ ex_var_ms_memory_mb }}'
+    forge_url: '{{ ex_var_forge_url }}'
 
   tasks:
     - name: minecraft用ディレクトリの作成
@@ -30,7 +31,7 @@
       tags: edit_startup_script
 
     - name: Forgeのダウンロード
-      get_url: url="https://files.minecraftforge.net/maven/net/minecraftforge/forge/{{ forge_version }}/forge-{{ forge_version }}-installer.jar" dest=/home/{{ user_name }}/minecraft mode=0664
+      get_url: url="{{ forge_url }}" dest=/home/{{ user_name }}/minecraft mode=0664
       tags: download_forge
 
     - name: Forgeのインストール
