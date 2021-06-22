@@ -1,4 +1,4 @@
 ---
 - name: openjdkのインストール
-  yum: name=java-{{ openjdk_version }}-openjdk state=present
+  apt: name=openjdk-{{ openjdk_version }}-jdk state=present
 
