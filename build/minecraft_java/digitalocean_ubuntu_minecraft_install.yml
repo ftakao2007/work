@@ -1,0 +1,51 @@
+---
+- hosts: digitalocean
+  gather_facts: yes
+  #become: yes
+  vars:
+    user_name: ubuntu
+    forge_version: '{{ ex_var_forge_version }}'
+    mx_memory_mb: '{{ ex_var_mx_memory_mb }}'
+    ms_memory_mb: '{{ ex_var_ms_memory_mb }}'
+
+  tasks:
+    - name: minecraft用ディレクトリの作成
+      file: path=/home/{{ user_name }}/minecraft state=directory owner={{ user_name }} group={{ user_name }} mode=0755
+      tags: mkdir
+
+    - name: binディレクトリの作成
+      file: path=/home/{{ user_name }}/minecraft/bin state=directory owner={{ user_name }} group={{ user_name }} mode=0755
+      tags: mkdir
+
+    - name: 起動スクリプトのダウンロード
+      get_url: url="http://minecraft.gamepedia.com/Tutorials/Server_startup_script/Script?action=raw" dest=/home/{{ user_name }}/minecraft/bin/minecraft mode=0775
+      tags: startup_script
+
+    - name: 起動スクリプトの編集(MCPATH)
+      lineinfile: dest=/home/{{ user_name }}/minecraft/bin/minecraft state=present backrefs=yes regexp='^\s*MCPATH=' line=" MCPATH='/home/{{ user_name }}/minecraft'"
+      tags: edit_startup_script
+
+    - name: 起動スクリプトの編集(USERNAME)
+      lineinfile: dest=/home/{{ user_name }}/minecraft/bin/minecraft state=present backrefs=yes regexp='^\s*USERNAME=' line=" USERNAME='{{ user_name }}'"
+      tags: edit_startup_script
+
+    - name: Forgeのダウンロード
+      get_url: url="https://files.minecraftforge.net/maven/net/minecraftforge/forge/{{ forge_version }}/forge-{{ forge_version }}-installer.jar" dest=/home/{{ user_name }}/minecraft mode=0664
+      tags: download_forge
+
+    - name: Forgeのインストール
+      shell: java -jar forge-{{ forge_version }}-installer.jar nogui --installServer chdir=/home/{{ user_name }}/minecraft
+      tags: install_forge
+
+    - name: minecraft_server.jarとしてsymlinkをはる
+      file: src=/home/{{ user_name }}/minecraft/forge-{{ forge_version }}.jar dest=/home/{{ user_name }}/minecraft/minecraft_server.jar owner={{ user_name }} group={{ user_name }} state=link
+      tags: symlink_forge
+
+    - name: いったん起動してeula.txtを作成
+      shell: java -Xmx'{{ mx_memory_mb }}'M -Xms'{{ ms_memory_mb }}'M -jar minecraft_server.jar nogui chdir=/home/{{ user_name }}/minecraft
+      ignore_errors: yes
+      tags: create_eula
+
+    - name: eula.txtをtrueにする
+      lineinfile: dest=/home/{{ user_name }}/minecraft/eula.txt state=present backrefs=yes regexp='^eula=' line="eula=true"
+      tags: edit_eula
