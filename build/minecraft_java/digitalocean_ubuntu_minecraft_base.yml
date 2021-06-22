@@ -1,0 +1,12 @@
+---
+- hosts: digitalocean
+  gather_facts: yes
+  become: yes
+  vars:
+    user_name: ubuntu
+    openjdkversion: '{{ ex_var_openjdk_version }}'
+  roles:
+    # openjdkのインストール
+    - {role: ../common-roles/openjdk.ubuntu, openjdk_version: '{{ openjdkversion }}',
+       tags: openjdk
+      }
