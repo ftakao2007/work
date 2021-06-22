@@ -6,6 +6,9 @@
     user_name: ubuntu
 
   pre_tasks:
+    - name: updates a server
+      apt: update_cache=yes
+
     - name: 必要なパッケージのインストール
       apt:
         name: "{{ packages }}"

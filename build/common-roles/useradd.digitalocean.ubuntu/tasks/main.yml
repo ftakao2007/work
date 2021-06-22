@@ -1,10 +1,7 @@
 ---
-- name: ubuntuグループ追加
-  group: name=ubuntu gid=1000
-
 - name: パスワード入力
   pause:
-    prompt: "ubuntuユーザのパスワードしてください [password]"
+    prompt: "ユーザのパスワードしてください [password]"
   register: user_passwd_input
 
 - name: パスワード設定
@@ -14,10 +11,13 @@
     #- debug:
     #    msg: "{{ user_passwd }}"
 
+- name: グループ追加
+  group: name={{ user_name }} gid=1000
+
 - name: ユーザを作成
-  user: name=ubuntu
+  user: name={{ user_name }}
         uid=1000
-        group=ubuntu
+        group={{ user_name }}
         groups="sudo"
         shell="/bin/bash"
         generate_ssh_key=yes

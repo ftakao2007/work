@@ -6,7 +6,7 @@
     user_name: '{{ ex_var_user }}'
 
   roles:
-    # ubuntuユーザの作成
+    # ユーザの作成
     - {role: ../common-roles/useradd.digitalocean.ubuntu,
        tags: useradd
       }
