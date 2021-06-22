@@ -41,6 +41,7 @@
     - curl
     - vim
     - net-tools
+    - jq
 
 - name: sudoersの設定(requiretty)
   lineinfile: dest=/etc/sudoers state=present backrefs=yes regexp='^Defaults\s*requiretty' line='#Defaults requiretty'
