@@ -18,4 +18,5 @@ user=ubuntu
 ansible-playbook -i ~/hosts 00_only_ansible_digitalocean_ubuntu.yml -u ${user} -K --private-key=~/.ssh/${key}
 
 # common
-ansible-playbook -i ~/hosts 01_common_ubuntu_digitalocean.yml -u ${user} -K --private-key=~/.ssh/${key}
+ansible-playbook -i ~/hosts 01_common_ubuntu_digitalocean.yml -u ${user} -K --private-key=~/.ssh/${key} \
+	                 --extra-vars "ex_var_user=${user}" \

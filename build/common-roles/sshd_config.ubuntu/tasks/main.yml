@@ -1,0 +1,25 @@
+---
+
+- name: IPv4のみ利用
+  replace: 'dest=/etc/ssh/sshd_config backup=no regexp="^#ListenAddress 0.0.0.0$" replace="ListenAddress 0.0.0.0" owner=root group=root mode=644'
+  notify: reload sshd
+
+- name: DNSは使わない
+  replace: 'dest=/etc/ssh/sshd_config backup=no regexp="^#UseDNS\sno$" replace="UseDNS no" owner=root group=root mode=644'
+  notify: reload sshd
+
+- name: rootでのsshログインを禁止する
+  replace: 'dest=/etc/ssh/sshd_config backup=no regexp="^PermitRootLogin yes$" replace="PermitRootLogin no" owner=root group=root mode=644'
+  notify: reload sshd
+
+- name: GSSAPIAuthenticationを利用しない
+  replace: 'dest=/etc/ssh/sshd_config backup=no regexp="^#GSSAPIAuthentication\sno$" replace="GSSAPIAuthentication no" owner=root group=root mode=644'
+  notify: reload sshd
+
+#- name: PAMを利用しない
+#  replace: 'dest=/etc/ssh/sshd_config backup=no regexp="^UsePAM yes$" replace="UsePAM no" owner=root group=root mode=644'
+#  notify: reload sshd
+
+- name: sshでログインできるユーザをオペレーションユーザのみに限定する
+  lineinfile: "dest=/etc/ssh/sshd_config backup=no state=present regexp='^AllowUsers {{ user_name }}' line='AllowUsers {{ user_name }}'"
+  notify: reload sshd
