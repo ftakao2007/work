@@ -3,7 +3,7 @@
   gather_facts: yes
   #become: yes
   vars:
-    user_name: centos
+    user_name: ubuntu
     beneficiaryAddress: '{{ ex_var_bfaddress }}'
     my_preset: my-preset-{{ ex_var_symbol_network }}.yml
     passwd: '{{ ex_var_passwd }}'
@@ -55,7 +55,7 @@
       tags: db
 
     - name: bootstrap開始
-      shell: /home/{{ user_name }}/bin/symbol-bootstrap start -d --password={{ passwd }}
+      shell:  /home/{{ user_name }}/bin/symbol-bootstrap start -d --password={{ passwd }}
       args:
         chdir: /home/{{ user_name }}/symbol_{{ ex_var_symbol_network }}
       tags: mainnet,testnet
