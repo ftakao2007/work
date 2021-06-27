@@ -1,1 +1,22 @@
 java -Xmx1024M -Xms1024M -jar minecraft_server.jar nogui
+
+ops.txt
+=========================
+-> [username]
+=========================
+
+server.properties
+=========================
+enable-command-block=true
+gamemode=1
+op-permission-level=4
+=========================
+
+command
+=========================
+/op [usename]
+/gamerule doDaylightCycle false
+/time set day
+=========================
+
+
