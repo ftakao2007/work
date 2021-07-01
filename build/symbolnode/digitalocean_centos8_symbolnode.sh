@@ -14,10 +14,10 @@ symbol_cli_version="1.0.0"
 
 
 # 基本的なソフトウェアのインストール
-./digitalocean_centos8_symbolnode_base.sh $key $address $symbol_bootstrap_version $symbol_cli_version
+./digitalocean_centos8_symbolnode_base.sh $key $address $user $symbol_bootstrap_version $symbol_cli_version
 
 # symbol_bootstrapの設定と起動
-#./digitalocean_centos8_symbolnode_bootstrap.sh $key $address
+#./digitalocean_centos8_symbolnode_bootstrap.sh $key $address $user
 
 # symbol-cliの設定
 #./digitalocean_centos8_symbolnode_cli.sh
