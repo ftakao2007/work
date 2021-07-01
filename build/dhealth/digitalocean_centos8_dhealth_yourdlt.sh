@@ -1,11 +1,12 @@
 #!/bin/sh
 
-user=centos
 # $1 key=
 # $2 address=
 # . ./setup_params_dhealth
 if [ -n "$1" ]; then key=$1; fi
 if [ -n "$2" ]; then address=$2; fi
+
+user=$3
 
 # test
 #ssh -i ~/.ssh/${key} ${user}@${address}
