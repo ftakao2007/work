@@ -3,7 +3,7 @@
   gather_facts: yes
   become: yes
   vars:
-    user_name: ftakao2007
+    user_name: '{{ ex_var_user }}'
     symbolbootstrapversion: '{{ ex_var_symbol_bootstrap_version }}'
     symbolcliversion: '{{ ex_var_symbol_cli_version }}'
   roles:

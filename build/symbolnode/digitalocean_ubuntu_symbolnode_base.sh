@@ -1,6 +1,5 @@
 #!/bin/sh
 
-user=ubuntu
 # $1 key=
 # $2 address=
 # . ./setup_params_symbolnode
@@ -18,8 +17,12 @@ if [ -n "$2" ]; then address=$2; fi
 if [ -n "$3" ]; then symbol_bootstrap_version=$3; fi
 if [ -n "$4" ]; then symbol_cli_version=$4; fi
 
+#user=ubuntu
+user=$5
+
 # init_base
 ansible-playbook -i ~/hosts digitalocean_ubuntu_symbolnode_base.yml -u ${user} -K --private-key=~/.ssh/${key} \
                  --extra-vars "ex_var_symbol_bootstrap_version=${symbol_bootstrap_version} \
                                ex_var_symbol_cli_version=${symbol_cli_version} \
+                               ex_var_user=${user} \
                               "

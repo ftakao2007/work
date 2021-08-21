@@ -14,7 +14,7 @@ symbol_cli_version="1.0.0"
 
 
 # 基本的なソフトウェアのインストール
-#./t4vps_testnet_centos8_symbolnode_base.sh $key $address $symbol_bootstrap_version $symbol_cli_version
+./t4vps_testnet_centos8_symbolnode_base.sh $key $address $symbol_bootstrap_version $symbol_cli_version $user
 
 # symbol_bootstrapの設定と起動
 #./t4vps_testnet_centos8_symbolnode_bootstrap.sh $key $address
