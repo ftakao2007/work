@@ -66,6 +66,11 @@ fi
 
 ### persistentharvestdelegation
 
+if [ -z "${symbol_network}" ]; then
+  echo "network?(mainnet/testnet)"
+  read symbol_network
+fi
+
 if [ ${symbol_network} == "testnet" ]; then
   if grep harvesterSigningPrivateKey target/nodes/node/server-config/resources/config-harvesting.properties | awk '{print $3}' | grep -w ${remote_priv}; then
     if grep harvesterVrfPrivateKey target/nodes/node/server-config/resources/config-harvesting.properties | awk '{print $3}' | grep -w ${vrf_priv}; then
