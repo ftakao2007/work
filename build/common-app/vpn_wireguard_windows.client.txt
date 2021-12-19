@@ -1,0 +1,17 @@
+### https://www.wireguard.com/install/
+### Windows
+[Interface]
+# デフォルトで入っているクライアントのPrivateKey
+PrivateKey = yOYrTzO7RAaq4mkN2al4+Sjmpfq+Vzx2dS1/aB/ecH0=
+Address = 10.0.0.2/32
+# PowerShellで ipconfig /all で表示されるDNSアドレス
+DNS = 10.16.70.41
+
+[Peer]
+# サーバのPublicKey
+PublicKey = wvett6BPdkUWmwNvdwf+b28JZpsi6QmoYqllEP1pPAM=
+AllowedIPs = 0.0.0.0/0, ::/0
+# サーバのIPアドレスとポート
+Endpoint = 159.65.153.118:51820
+PersistentKeepalive = 30
+

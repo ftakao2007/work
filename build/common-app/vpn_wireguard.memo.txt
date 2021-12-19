@@ -1,0 +1,5 @@
+https://qiita.com/monakaJP/items/032ccba08331b172853c
+https://www.virment.com/how-to-setup-wireguard-server-and-connect-from-client/
+
+Windows
+https://chirashi.twittospia.com/%E6%8A%80%E8%A1%93/windows%E3%81%A7wireguard%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/2021-02-26/

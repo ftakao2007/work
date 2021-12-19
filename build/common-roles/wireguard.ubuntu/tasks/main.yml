@@ -1,0 +1,54 @@
+---
+- name: クライアントの公開鍵の入力
+  pause:
+    prompt: "クライアントの公開鍵を入力してください"
+  register: client_publick_key
+
+- name: サーバのインターフェイス名の入力
+  pause:
+    prompt: "クライアントのインターフェイス名を入力してください (EX: eth0)"
+  register: if1
+  #register: "{{ client_publick_key | default('eth0') }}"
+
+- name: 必要なパッケージのインストール
+  apt: name={{ item }} state=latest
+  with_items:
+    - wireguard 
+
+- name: 秘密鍵の作成
+  shell: wg genkey | tee /etc/wireguard/server.key
+
+- name: 権限の変更
+  file: path=/etc/wireguard/server.key owner=root group=root mode=0600
+
+- name: 公開鍵の作成
+  shell: cat /etc/wireguard/server.key | wg pubkey | tee /etc/wireguard/server.pub
+
+- name: 権限の変更
+  file: path=/etc/wireguard/server.pub owner=root group=root mode=0600
+
+- name: 秘密鍵の取得
+  shell: cat /etc/wireguard/server.key
+  register: host_private_key
+
+- name: /etc/wireguard/wg0.confの設置
+  template: src=wg0.conf.tj2 dest=/etc/wireguard/wg0.conf owner=root group=root mode=600
+
+- name: パケットのフォワーディングを許可
+  lineinfile: dest=/etc/sysctl.conf line='net.ipv4.ip_forward=1'
+
+- name: フォワーディングの有効化
+  shell: sysctl -p
+
+- name: サービスの起動
+  service:
+    name: wg-quick@wg0
+    state: started
+
+- name: サーバの公開鍵の取得
+  shell: cat /etc/wireguard/server.pub
+  register: host_public_key
+
+- name: サーバの公開鍵の表示
+  debug:
+    msg: "{{ host_public_key.stdout }}"

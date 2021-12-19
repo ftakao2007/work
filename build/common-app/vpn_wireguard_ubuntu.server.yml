@@ -1,0 +1,9 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  user: ubuntu
+  roles:
+
+    # wireguardのインストール
+          - {role: ../common-roles/wireguard.ubuntu, user_name: root }
