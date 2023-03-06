@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  roles:
+
+    # rbenvのインストール
+    - {role: ../common-roles/rbenv.ubuntu, rbenv_ruby_version: 3.2.1 }
