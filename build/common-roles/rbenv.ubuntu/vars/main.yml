@@ -25,6 +25,7 @@ rbenv_packages:
 - libpng-dev
 - libyaml-dev
 - libffi-dev
+- libzmq3-dev
 
 
 # defaults file for ansible-role-rbenv
