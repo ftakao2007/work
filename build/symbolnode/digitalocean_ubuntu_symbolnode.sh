@@ -1,7 +1,7 @@
 #!/bin/sh
 
 user=ubuntu
-symbol_bootstrap_version="1.0.7"
+symbol_bootstrap_version="1.1.10"
 symbol_cli_version="1.0.0"
 
 #key=
