@@ -4,9 +4,9 @@
   become: yes
   vars:
     pyenv_root: /usr/local/pyenv
-    user: ftakao2007
-    user_group: ftakao2007
-    user_home: /home/ftakao2007
+    user: '{{ ex_var_user }}'
+    user_group: '{{ ex_var_user }}'
+    user_home: '{{ ex_var_user_home }}'
   roles:
     # pyenvのインストール
     - {role: ../common-roles/pyenv.ubuntu18, pyenv_python_version: 3.9.6, tags: pyenv }
