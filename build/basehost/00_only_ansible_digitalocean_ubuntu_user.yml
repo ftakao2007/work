@@ -4,6 +4,8 @@
   become: yes
   vars:
     user_name: '{{ ex_var_user }}'
+    user_id: '{{ ex_var_user_id }}'
+    group_id: '{{ ex_var_group_id }}'
 
   roles:
     # ユーザの作成

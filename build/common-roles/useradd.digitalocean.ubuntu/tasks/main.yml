@@ -12,11 +12,11 @@
     #    msg: "{{ user_passwd }}"
 
 - name: グループ追加
-  group: name={{ user_name }} gid=1000
+  group: name={{ user_name }} gid={{ group_id }}
 
 - name: ユーザを作成
   user: name={{ user_name }}
-        uid=1000
+        uid={{ user_id }}
         group={{ user_name }}
         groups="sudo"
         shell="/bin/bash"
