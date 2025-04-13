@@ -1,0 +1,16 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    pyenv_root: /usr/local/pyenv
+    user: '{{ ex_var_user }}'
+    user_group: '{{ ex_var_user_group }}'
+    user_home: '{{ ex_var_user_home }}'
+    pyenv_python_version: '{{ ex_pyenv_python_version }}'
+  roles:
+    # pyenvのインストール
+    - {role: ../common-roles/pyenv.ubuntu, tags: pyenv }
+
+    # pyenv-virtualenvのインストール
+    - {role: ../common-roles/pyenv-virtualenv.ubuntu, tags: pyenv-virtualenv }

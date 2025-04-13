@@ -1,5 +1,5 @@
 ---
 
 - name: python38のインストール
-  yum: name=python38 state=latest
+  apt: name=python38 state=latest
   tags: python38
