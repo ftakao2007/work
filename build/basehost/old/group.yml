@@ -1,0 +1,6 @@
+- hosts: localhost
+  tasks:
+    - name: Test group module
+      ansible.builtin.group:
+        name: testgroup
+        state: present
