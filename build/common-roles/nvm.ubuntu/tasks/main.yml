@@ -1,0 +1,22 @@
+---
+
+- name: Install nvm
+  ansible.builtin.shell: |
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v{{ nvm_version }}/install.sh | bash
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+- name: Install Node.js 20.16.0
+  ansible.builtin.shell: |
+    source {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install {{ node_version }}
+  args:
+    executable: /bin/bash
+
+- name: Verify Node.js version
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/node -v"
+  register: node_version
+
+- name: Display Node.js version
+  ansible.builtin.debug:
+    msg: "Node.js version: {{ node_version.stdout }}"
+    #msg: "Node.js version: {{ node_version }}"
