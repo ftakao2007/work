@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  gather_facts: no
+  gather_facts: yes
   become: yes
   vars:
     user_name: '{{ ex_var_user }}'
@@ -12,6 +12,6 @@
       }
 
     # docker-composeのインストール
-    - {role: ../common-roles/docker-compose.ubuntu, docker_compose_version: '{{ ex_var_docker_compose_version }}',
-       tags: docker-compose
-      }
+    #- {role: ../common-roles/docker-compose.ubuntu, docker_compose_version: '{{ ex_var_docker_compose_version }}',
+    #   tags: docker-compose
+    #  }
