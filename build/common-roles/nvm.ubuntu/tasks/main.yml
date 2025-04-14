@@ -6,7 +6,7 @@
   args:
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
 
-- name: Install Node.js 20.16.0
+- name: Install Node.js {{ node_version }}
   ansible.builtin.shell: |
     source {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install {{ node_version }}
   args:

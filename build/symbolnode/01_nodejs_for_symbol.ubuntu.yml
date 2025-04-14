@@ -3,11 +3,11 @@
   gather_facts: yes
   become: no
   vars:
-    ansible_python_interpreter: /usr/local/pyenv/shims/python
+    #ansible_python_interpreter: /usr/local/pyenv/shims/python
     nvm_version: '{{ ex_var_nvm_version }}'
     node_version: '{{ ex_var_node_version }}'
-    #nvm_version: "0.40.1"
-    #node_version: "20.16.0"
+    #nvm_version: "0.40.2"
+    #node_version: "22.14.0"
   roles:
     # nvmのインストール
     - {role: ../common-roles/nvm.ubuntu,
