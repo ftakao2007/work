@@ -17,6 +17,8 @@
     - libssl-dev
     - zlib1g-dev
     - uuid-dev
+    - tk-dev
+    - python3-tk
 
 - name: pyenvをcloneする
   git: dest={{ pyenv_root }} repo=https://github.com/yyuu/pyenv.git depth=1

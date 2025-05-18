@@ -1,10 +1,10 @@
 #!/bin/sh
 
-IP_ADDR=",68.183.182.199"
+IP_ADDR=",185.250.37.179"
 user=ubuntu
 user_group=ubuntu
 user_home="/home/ubuntu"
-pyenv_python_version=3.11
+pyenv_python_version=3.11.10
 
 #PLAYBOOK_COMMAND="ansible-playbook"
 PLAYBOOK_COMMAND="/usr/local/pyenv/shims/python -m ansible playbook"
