@@ -6,7 +6,7 @@ $ pyenv versions
 ================================================
 
 ### Python 3.5.1 のインストールする例
-$ sudo pyenv install 3.5.1
+$ sudo /usr/local/pyenv/bin/pyenv install 3.5.1
 
 ### pyenv-virtualenvで仮想環境の構築
 $ cd ${HOME}/pyenv-virtualenv
@@ -22,8 +22,8 @@ $ pyenv local pyenv-virtualenv
 ================================================
 
 ### pipとsetuptoolsをupgradeしておく
-(pyenv-virtualenv)$ sudo python -m pip install --upgrade pip
-(pyenv-virtualenv)$ sudo python -m pip install --upgrade setuptools
+(pyenv-virtualenv)$ sudo /usr/local/pyenv/shims/python -m pip install --upgrade pip
+(pyenv-virtualenv)$ sudo /usr/local/pyenv/shims/python -m pip install --upgrade setuptools
 
 ### ansibleをインストールする場合
 (pyenv-virtualenv)$ sudo python -m pip install ansible six passlib
